@@ -1,1 +1,1 @@
-export 'package:event_bus/event_bus.dart';
+export 'event_system.dart';

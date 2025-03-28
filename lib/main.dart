@@ -1,10 +1,35 @@
+import 'dart:async';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'package:talker_flutter/talker_flutter.dart';
+import 'package:watch_it/watch_it.dart';
 
 import 'ui_layer/ui.dart';
 
-void main() {
-  runApp(const TarotAgainApp());
+void main() async {
+  runZonedGuarded(
+        () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      // serviceLocatorConfig();
+
+      ErrorWidget.builder = (FlutterErrorDetails details) {
+        // If we're in debug mode, use the normal error widget which shows the error
+        // message:
+        return ErrorWidget(details.exception);
+      };
+
+      // Bloc.observer = const AppBlocObserver();
+
+      // await _initFirebase();
+      runApp(TarotAgainApp());
+    },
+        (Object error, StackTrace stack) {
+      di<Talker>().handle(error, stack, 'Uncaught app exception');
+    },
+  );
 }
+
 
 class TarotAgainApp extends StatelessWidget {
   const TarotAgainApp({super.key});
