@@ -12,21 +12,30 @@ import 'package:watch_it/watch_it.dart';
 // bus.
 // Messages are immutable and Equatable.
 
+
 @immutable
 class MessageEvent extends Equatable {
-  final Object sender;
+  // some messages are sent by the app itself, without needing a source.
+  // In those cases, the sender may be null.
+  // if you're expecting a reply, make sure to create or copyWith using sender: this
+  // could also, conceivably, use the sender field as a "reply to" if you want the
+  // response message to go to a particular object that is expecting it.
+  final Object? sender;
 
-  const MessageEvent({required this.sender});
+  const MessageEvent({this.sender});
 
   MessageEvent copyWith({Object? sender}) =>
-    MessageEvent(sender: sender ?? this.sender);
-
+      MessageEvent(
+        sender: sender ?? this.sender
+      );
   @override
-  List<Object> get props => [ sender ];
+  List<Object?> get props => [ sender ];
 }
 
+
 extension EventMessages on Object {
-  void eventSend(MessageEvent message) => di<EventBus>().fire(message);
+  void eventSend(MessageEvent message) =>
+      di<EventBus>().fire(message.copyWith(sender: this));
 
   // convenience function - any object can receive events  by using onEvent,
   // like
@@ -68,11 +77,56 @@ extension EventMessages on Object {
   //     onEvent<SellStuff>(sellBigStuff, (SellStuff event) => event.howMany > 500);
   //   }
   // }
+
+  // for onEvent, you can use the fromSource parameter to indicate that you only
+  // want to receive the messages of your type that come from a particular sender.
+  // Useful when you have multiple senders of the same type, and you want to be
+  // corresponding with a particular sender.
+  // the corresponding sendEvent type makes sure to set the sender on your outgoing
+  // messages.
+  // Leaving fromSource blank indicates that you don't care about the sender.
+  // Likewise, the filter function can take a closer look inside events for
+  // parameters other than the sender (Or, omit sender in the onEvent call and
+  // set up your filter to check that, too.
   StreamSubscription<T> onEvent<T extends MessageEvent>({
     required void Function(T event) onData,
+    Object? fromSource,
     bool Function(T)? filter,
-  }) => getEventBusStream<T>(filter).listen(onData);
+  }) {
+    var newFilter = filter;
+
+    if (fromSource != null) { // if fromSource is null, newFilter is already set
+      // to what it needs to be
+      if (filter != null) {
+        newFilter = (T event) => (event.sender == this) && filter(event);
+      } else {
+        newFilter = (T event) => (event.sender == this);
+      }
+    }
+
+    return getEventBusStream<T>(newFilter).listen(onData);
+  }
 }
+
+sealed class SystemMessage extends MessageEvent {
+  const SystemMessage({super.sender});
+}
+
+class AppInitialize extends SystemMessage {
+  const AppInitialize({super.sender});
+
+  @override copyWith({Object? sender}) =>
+      AppInitialize(sender: sender ?? this.sender);
+}
+
+class AppInitializationFinished extends SystemMessage {
+  const AppInitializationFinished({super.sender});
+
+  @override copyWith({Object? sender}) =>
+      AppInitializationFinished(sender: sender ?? this.sender);
+}
+
+
 
 class EventSystem {
   late final StreamQueue eventBusQueue;

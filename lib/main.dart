@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:watch_it/watch_it.dart';
 
+import 'util/event_system.dart';
+
 import 'ui_layer/ui.dart';
 
 void main() async {
@@ -28,6 +30,12 @@ void main() async {
       di<Talker>().handle(error, stack, 'Uncaught app exception');
     },
   );
+}
+
+void initializeEverything() {
+  final es = EventSystem(); // registers EventBus and EventSystem with GetIt.
+  // only saving that object into es so this can happen:
+
 }
 
 
