@@ -7,6 +7,7 @@ import 'package:watch_it/watch_it.dart';
 
 import 'util/util.dart';
 
+import 'data_layer/data_layer.dart';
 import 'ui_layer/ui.dart';
 
 void main() async {
@@ -21,6 +22,8 @@ void main() async {
         return ErrorWidget(details.exception);
       };
 
+      await initializeEverything();
+
       // Bloc.observer = const AppBlocObserver();
 
       // await _initFirebase();
@@ -32,19 +35,15 @@ void main() async {
   );
 }
 
-void initializeEverything() {
-  final EventSystem es = di<EventSystem>();
-  // final es = EventSystem(); // registers EventBus and EventSystem with GetIt.
-  // only saving that object into es so this can happen:
-  es.eventSend(AppInitialize());
+Future<void> initializeEverything() async {
   registerLoggingService();
+
+  await initializeDataLayer();
 }
 
 
 class TarotAgainApp extends StatelessWidget {
-  const TarotAgainApp({super.key}) {
-    onEvent<InitializeApp>
-  }
+  const TarotAgainApp({super.key});
 
   // This widget is the root of your application.
   @override

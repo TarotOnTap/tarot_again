@@ -1,8 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-// import 'package:flutter/foundation.dart';
+import 'package:watch_it/watch_it.dart';
 
+import '../randoms_provider/provider.dart';
 import 'package:tarot_again/util/util.dart';
-import 'events.dart';
 
 final IList<String> minorArcanaSuits =
     <String>["Wands", "Cups", "Swords", "Pentacles"].lock;
@@ -141,40 +141,35 @@ final IList<TCModel> minorArcana =
 // this is the authoritative full tarot deck, nobody gets to change it directly.
 final IList<TCModel> _fullDeck = [...majorArcana, ...minorArcana].lock;
 
-class StandardDeckDataProvider with Logging {
-  IList<TCModel>? _shuffledDeck;
-  Iterator? _shuffledDeckIterator;
+class StandardDeckProvider with Logging {
+  Iterable<TCModel>? _shuffledDeck;
+  Iterator<TCModel>? _shuffledDeckIterator;
 
-  StandardDeckDataProvider() {
-    onEvent<ShuffleDeck>(onData: _handleShuffleDeck);
-    onEvent<GetNextCard>(onData: _handleGetNextCard);
+  StandardDeckProvider();
+
+  set shuffledDeck(Iterable<TCModel>? newShuffle) {
+    _shuffledDeck = newShuffle;
+
+    if (newShuffle != null) {
+      _shuffledDeckIterator = newShuffle.iterator;
+    }
   }
 
-  void _handleShuffleDeck(ShuffleDeck event) {
-    verbose("StandardDeckDataProvider._handleShuffleDeck received ShuffleDeck event.");
-    _shuffledDeck = null; // get rid of the old shuffled deck
-
-    verbose("  sending DeckShuffled message");
-    // TODO: invoke the RandomProvider to actually shuffle the deck
-    eventSend(DeckShuffled());
+  void shuffleDeck() async {
+    shuffledDeck = await di<RandomsProvider>().shuffleIterable(_fullDeck);
   }
 
-  void _handleGetNextCard(GetNextCard event) {
-    // if there is no next card to send, send that message.
-    StandardDeckDataProviderResponseEvent result = NoNextCard();
+  TCModel? getNextCard() {
+    TCModel? result;
 
-    // if the deck is empty, do nothing
-    if (_shuffledDeck != null) {
-      if (_shuffledDeckIterator?.moveNext() ?? false) {
-        result = NextCard(card: _shuffledDeckIterator?.current);
-      } else {
-        // if the iterator is finished, set everything to null
-        _shuffledDeck = null;
-        _shuffledDeckIterator = null;
-      }
+    final Iterator<TCModel>? sdi = _shuffledDeckIterator;
+
+    if (sdi != null) {
+        if (sdi.moveNext()) {
+          result = sdi.current;
+        }
     }
 
-    eventSend(result.copyWith(responseTo: event));
+    return result;
   }
-
 }
