@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:tarot_again/util/util.dart';
+import 'events.dart';
 
 final IList<String> minorArcanaSuits =
     <String>["Wands", "Cups", "Swords", "Pentacles"].lock;
@@ -81,7 +82,7 @@ enum MajorArcana {
 sealed class TCModel {
   final int sortOrder;
 
-  String get imageAsset => "";
+  String get assetName => "";
 
   TCModel({
     required this.sortOrder,
@@ -97,7 +98,7 @@ class TCMinorArcanaModel extends TCModel {
   final Suits suit;
 
   @override
-  String get imageAsset => "${pips.name}_${suit.name}";
+  String get assetName => "${pips.name}_${suit.name}";
 
   TCMinorArcanaModel({
     required super.sortOrder,
@@ -112,12 +113,10 @@ class TCMajorArcanaModel extends TCModel {
   final MajorArcana card;
 
   @override
-  String get imageAsset {
-  final IList<String> parts = card.name.split(" ").lock;
-  String fileName = parts.length > 1 ? parts.skip(1).join("_") : parts[0];
-
-  return "$fileName.jpg";
-}
+  String get assetName {
+    final IList<String> parts = card.name.split(" ").lock;
+    return parts.length > 1 ? parts.skip(1).join("_") : parts[0];
+  }
 
   TCMajorArcanaModel({required this.card})
       : super(sortOrder: card.index);
@@ -142,55 +141,40 @@ final IList<TCModel> minorArcana =
 // this is the authoritative full tarot deck, nobody gets to change it directly.
 final IList<TCModel> _fullDeck = [...majorArcana, ...minorArcana].lock;
 
-sealed class DeckDataProviderEvent extends MessageEvent {
-  const DeckDataProviderEvent({super.sender});
-}
-class ShuffleDeck extends DeckDataProviderEvent {}
-class DeckShuffled extends DeckDataProviderEvent {}
-class GetFullDeck extends DeckDataProviderEvent {}
-
-@immutable
-class FullDeck extends DeckDataProviderEvent {
-  late final IList<TCModel> fullDeck;
-  FullDeck({super.sender}) { fullDeck = _fullDeck; }
-
-  @override
-  List<Object?> get props => [ sender, fullDeck ];
-}
-
-@immutable
-class GetNextCard extends MessageEvent {}
-
-@immutable
-class NextCard extends MessageEvent {
-  final TCModel card;
-
-  const NextCard({super.sender, required this.card});
-
-  @override
-  NextCard copyWith({Object? sender, TCModel? card}) =>
-      NextCard(
-        sender: sender ?? this.sender,
-        card: card ?? this.card
-      );
-
-  @override
-  List<Object?> get props => [ sender, card ];
-}
-
-
 class StandardDeckDataProvider with Logging {
+  IList<TCModel>? _shuffledDeck;
+  Iterator? _shuffledDeckIterator;
+
   StandardDeckDataProvider() {
     onEvent<ShuffleDeck>(onData: _handleShuffleDeck);
-
-    onEvent<GetFullDeck>(onData: _getFullDeck);
+    onEvent<GetNextCard>(onData: _handleGetNextCard);
   }
 
   void _handleShuffleDeck(ShuffleDeck event) {
     verbose("StandardDeckDataProvider._handleShuffleDeck received ShuffleDeck event.");
+    _shuffledDeck = null; // get rid of the old shuffled deck
+
     verbose("  sending DeckShuffled message");
+    // TODO: invoke the RandomProvider to actually shuffle the deck
     eventSend(DeckShuffled());
   }
 
-  void _getFullDeck(GetFullDeck event) => eventSend(FullDeck());
+  void _handleGetNextCard(GetNextCard event) {
+    // if there is no next card to send, send that message.
+    DeckDataProviderEvent result = NoNextCard();
+
+    // if the deck is empty, do nothing
+    if (_shuffledDeck != null) {
+      if (_shuffledDeckIterator?.moveNext() ?? false) {
+        result = NextCard(card: _shuffledDeckIterator?.current);
+      } else {
+        // if the iterator is finished, set everything to null
+        _shuffledDeck = null;
+        _shuffledDeckIterator = null;
+      }
+    }
+
+    eventSend(result);
+  }
+
 }
