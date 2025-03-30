@@ -1,5 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 
 import 'package:tarot_again/util/util.dart';
 import 'events.dart';
@@ -161,7 +161,7 @@ class StandardDeckDataProvider with Logging {
 
   void _handleGetNextCard(GetNextCard event) {
     // if there is no next card to send, send that message.
-    DeckDataProviderEvent result = NoNextCard();
+    StandardDeckDataProviderResponseEvent result = NoNextCard();
 
     // if the deck is empty, do nothing
     if (_shuffledDeck != null) {
@@ -174,7 +174,7 @@ class StandardDeckDataProvider with Logging {
       }
     }
 
-    eventSend(result);
+    eventSend(result.copyWith(responseTo: event));
   }
 
 }

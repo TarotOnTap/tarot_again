@@ -1,41 +1,23 @@
-import 'package:meta/meta.dart';
+// import 'package:meta/meta.dart';
 import 'package:async/async.dart';
 import 'package:event_bus/event_bus.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:async';
 import 'package:watch_it/watch_it.dart';
 
+import 'events.dart';
 
 // this is the base class for all of the messages to be passed on the event
 // bus.
 // Messages are immutable and Equatable.
 
-
-@immutable
-class MessageEvent extends Equatable {
-  // some messages are sent by the app itself, without needing a source.
-  // In those cases, the sender may be null.
-  // if you're expecting a reply, make sure to create or copyWith using sender: this
-  // could also, conceivably, use the sender field as a "reply to" if you want the
-  // response message to go to a particular object that is expecting it.
-  final Object? sender;
-
-  const MessageEvent({this.sender});
-
-  MessageEvent copyWith({Object? sender}) =>
-      MessageEvent(
-        sender: sender ?? this.sender
-      );
-  @override
-  List<Object?> get props => [ sender ];
-}
-
-
 extension EventMessages on Object {
   void eventSend(MessageEvent message) =>
       di<EventBus>().fire(message.copyWith(sender: this));
+
+  void eventRespond({ required MessageEvent origin, required ResponseEvent response }) =>
+    eventSend(response.copyWith(responseTo: origin));
 
   // convenience function - any object can receive events  by using onEvent,
   // like
@@ -108,26 +90,6 @@ extension EventMessages on Object {
   }
 }
 
-sealed class SystemMessage extends MessageEvent {
-  const SystemMessage({super.sender});
-}
-
-class AppInitialize extends SystemMessage {
-  const AppInitialize({super.sender});
-
-  @override copyWith({Object? sender}) =>
-      AppInitialize(sender: sender ?? this.sender);
-}
-
-class AppInitializationFinished extends SystemMessage {
-  const AppInitializationFinished({super.sender});
-
-  @override copyWith({Object? sender}) =>
-      AppInitializationFinished(sender: sender ?? this.sender);
-}
-
-
-
 class EventSystem {
   late final StreamQueue eventBusQueue;
   EventSystem() {
@@ -142,6 +104,14 @@ class EventSystem {
     }
   }
 }
+
+// this initializes the EventSystem for the app.  Doing so register the EventSystem
+// singleton, so this really sets up the event system for the whole app.
+EventSystem es = EventSystem();
+// once this is set up (by being imported into main.dart, the app can begin to send
+// messages. If initializers have been set up, those can create their classes to
+// start to respond to other messages, and so on. The only explicit calls necessary
+// will be to send events to initializers, which will get everything rolling along.
 
 // The four functions below are set up so that they only receive messages derived
 // from MessageEvent.  If you want to catch other kinds of events, use di<EventBus>()

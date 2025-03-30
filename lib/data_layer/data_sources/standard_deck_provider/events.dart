@@ -1,28 +1,60 @@
 import 'package:meta/meta.dart';
 import 'package:tarot_again/util/util.dart';
 
-sealed class DeckDataProviderEvent extends MessageEvent {
-  const DeckDataProviderEvent({super.sender});
+import 'types.dart';
+
+// initializer events
+@immutable
+class InitializeStandardDeck extends MessageEvent {
+  const InitializeStandardDeck({super.sender});
 }
-class ShuffleDeck extends DeckDataProviderEvent {}
-class DeckShuffled extends DeckDataProviderEvent {}
 
 @immutable
-class GetNextCard extends DeckDataProviderEvent {}
+class StandardDeckInitialized extends ResponseEvent {
+  const StandardDeckInitialized({super.sender, super.responseTo});
+}
 
 @immutable
-class NoNextCard extends DeckDataProviderEvent {}
+sealed class StandardDeckDataProviderEvent extends MessageEvent {
+  const StandardDeckDataProviderEvent({super.sender});
+}
 
 @immutable
-class NextCard extends DeckDataProviderEvent {
+sealed class StandardDeckDataProviderResponseEvent extends ResponseEvent {
+  const StandardDeckDataProviderResponseEvent({super.sender, super.responseTo});
+}
+
+@immutable
+class ShuffleDeck extends StandardDeckDataProviderEvent {
+  const ShuffleDeck({super.sender});
+}
+
+@immutable
+class DeckShuffled extends StandardDeckDataProviderResponseEvent {
+  const DeckShuffled({super.sender, super.responseTo});
+}
+
+@immutable
+class GetNextCard extends StandardDeckDataProviderEvent {
+  const GetNextCard({super.sender});
+}
+
+@immutable
+class NoNextCard extends StandardDeckDataProviderResponseEvent {
+  const NoNextCard({super.sender, super.responseTo});
+}
+
+@immutable
+class NextCard extends StandardDeckDataProviderResponseEvent {
   final TCModel card;
 
-  const NextCard({super.sender, required this.card});
+  const NextCard({super.sender, super.responseTo, required this.card});
 
   @override
-  NextCard copyWith({Object? sender, TCModel? card}) =>
+  NextCard copyWith({Object? sender, MessageEvent? responseTo, TCModel? card}) =>
       NextCard(
           sender: sender ?? this.sender,
+          responseTo: responseTo ?? this.responseTo,
           card: card ?? this.card
       );
 

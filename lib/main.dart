@@ -33,7 +33,8 @@ void main() async {
 }
 
 void initializeEverything() {
-  final es = EventSystem(); // registers EventBus and EventSystem with GetIt.
+  final EventSystem es = di<EventSystem>();
+  // final es = EventSystem(); // registers EventBus and EventSystem with GetIt.
   // only saving that object into es so this can happen:
   es.eventSend(AppInitialize());
   registerLoggingService();
@@ -41,7 +42,9 @@ void initializeEverything() {
 
 
 class TarotAgainApp extends StatelessWidget {
-  const TarotAgainApp({super.key});
+  const TarotAgainApp({super.key}) {
+    onEvent<InitializeApp>
+  }
 
   // This widget is the root of your application.
   @override
