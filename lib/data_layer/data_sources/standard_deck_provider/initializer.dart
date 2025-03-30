@@ -1,21 +1,12 @@
 import 'package:tarot_again/util/util.dart';
 
-import 'events.dart';
+// import 'events.dart';
 import 'provider.dart';
 
-class StandardDeckInitializer {
-  StandardDeckDataProvider? _provider;
-  StandardDeckInitializer() {
-    onEvent<InitializeStandardDeck>(onData: _initializeStandardDeck);
+Future<void> initializeStandardDeckProvider() async {
+  if (!di.isRegistered<StandardDeckProvider>()) {
+    di.registerSingleton(StandardDeckProvider());
   }
 
-  void _initializeStandardDeck(InitializeStandardDeck event) {
-    _provider ??= StandardDeckDataProvider();
-
-    eventSend(StandardDeckInitialized(responseTo: event));
-  }
+  return Future<void>.value();
 }
-
-// this line creates the object that responds to the Initializer event. That's
-// all it's for.
-StandardDeckInitializer sdi = StandardDeckInitializer();
