@@ -155,7 +155,7 @@ class StandardDeckProvider with Logging {
     }
   }
 
-  void shuffleDeck() async {
+  Future<void> shuffleDeck() async {
     shuffledDeck = await di<RandomsProvider>().shuffleIterable(_fullDeck);
   }
 
