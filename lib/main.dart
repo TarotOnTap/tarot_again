@@ -1,9 +1,8 @@
 import 'dart:async';
-// import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:watch_it/watch_it.dart';
 
 import 'util/util.dart';
 
@@ -36,7 +35,7 @@ void main() async {
 }
 
 Future<void> initializeEverything() async {
-  registerLoggingService();
+  initializeLoggingService();
 
   await initializeDataLayer();
 }

@@ -42,7 +42,7 @@ Talker _talkerInit() => TalkerFlutter.init(
   ),
 );
 
-void registerLoggingService() {
+void initializeLoggingService() {
   if (!di.isRegistered<Talker>()) {
     di.registerSingleton<Talker>(_talkerInit());
   }

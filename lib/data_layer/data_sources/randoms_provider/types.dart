@@ -1,12 +1,34 @@
 import 'dart:math';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+// import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:tarot_again/util/util.dart';
 
 abstract class AsyncRandoms {
   final String sourceChoice;
 
-  const AsyncRandoms(this.sourceChoice);
+  AsyncRandoms._(this.sourceChoice);
+
+  factory AsyncRandoms(String? source) {
+    late final AsyncRandoms current;
+    AsyncRandoms returnRandom;
+
+    try {
+      current = sl<AsyncRandoms>();
+    } catch (e, s) {
+      current = SecureRandom();
+    }
+
+    if (current.sourceChoice != source) {
+      returnRandom = switch(source) {
+        "local" || "none" => SecureRandom(),
+        _ => SecureRandom(),
+      };
+    } else {
+      returnRandom = current ?? SecureRandom();
+    }
+
+    return returnRandom;
+  }
 
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh});
 
@@ -67,7 +89,7 @@ class SecureRandom extends AsyncRandoms with Logging {
   // a drop-in replacement for the other classes.
   final Random secureRandom = Random.secure();
 
-  SecureRandom() : super("SecureRandom");
+  SecureRandom() : super._("SecureRandom");
 
   @override
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>

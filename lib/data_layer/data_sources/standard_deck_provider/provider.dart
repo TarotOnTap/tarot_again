@@ -1,6 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:watch_it/watch_it.dart';
-
 import '../randoms_provider/provider.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -88,9 +85,9 @@ sealed class TCModel {
     required this.sortOrder,
   });
 }
-
-String toUpperInitial(String str) =>
-    str.substring(0, 1).toUpperCase() + str.substring(1);
+//
+// String toUpperInitial(String str) =>
+//     str.substring(0, 1).toUpperCase() + str.substring(1);
 
 @immutable
 class TCMinorArcanaModel extends TCModel {
@@ -159,7 +156,9 @@ class StandardDeckProvider with Logging {
     shuffledDeck = await di<RandomsProvider>().shuffleIterable(_fullDeck);
   }
 
-  TCModel? getNextCard() {
+  Future<TCModel?> getNextCard() {
+    // right now, this function does not need to be async, but I can envision a
+    // time where it might want to be.
     TCModel? result;
 
     final Iterator<TCModel>? sdi = _shuffledDeckIterator;
@@ -170,6 +169,6 @@ class StandardDeckProvider with Logging {
         }
     }
 
-    return result;
+    return Future<TCModel?>.value(result);
   }
 }
