@@ -9,7 +9,7 @@ part 'card_widget_event.dart';
 part 'card_widget_state.dart';
 
 class CardWidgetBloc extends Bloc<CardWidgetEvent, CardWidgetState> {
-  CardWidgetBloc({required DealtCard card}) : super(CardWidgetState(card: card)) {
+  CardWidgetBloc({required TCModel card}) : super(CardWidgetState(card: card)) {
     on<CardWidgetFaceUpEvent>((event, emit) =>
         emit(state.copyWith(faceUp: true)));
 
@@ -19,15 +19,25 @@ class CardWidgetBloc extends Bloc<CardWidgetEvent, CardWidgetState> {
     on<CardWidgetFlipFaceEvent>((event, emit) =>
       emit(state.copyWith(faceUp: !state.faceUp)));
 
-    on<CardWidgetLoadAssetsEvent>((event, emit) =>
-        _loadCardAssets(emit));
-  }
+    on<CardWidgetSetReverseEvent>((event, emit) =>
+      emit(state.copyWith(reversed: event.reverse)));
 
-  Future<void> _loadCardAssets(Emitter<CardWidgetState> emit) async {
-    AssetProvider assetProvider = di<AssetProvider>();
+    on<CardWidgetFlipReverseEvent>((event, emit) =>
+      emit(state.copyWith(reversed: !state.reversed)));
 
+    on<CardWidgetSetFaceEvent>((event, emit) =>
+      emit(state.copyWith(face: event.face)));
 
+    on<CardWidgetSetBackEvent>((event, emit) =>
+      emit(state.copyWith(back: event.back)));
 
+    on<CardWidgetSetDescriptionEvent>((event, emit) =>
+      emit(state.copyWith(description: event.description)));
 
+    on<CardWidgetSetUprightMeaningEvent>((event, emit) =>
+      emit(state.copyWith(uprightMeaning: event.uprightMeaning)));
+
+    on<CardWidgetSetReversedMeaningEvent>((event, emit) =>
+      emit(state.copyWith(reversedMeaning: event.reversedMeaning)));
   }
 }

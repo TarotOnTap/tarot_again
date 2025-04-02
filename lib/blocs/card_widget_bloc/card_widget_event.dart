@@ -5,11 +5,6 @@ part of 'card_widget_bloc.dart';
 @immutable
 sealed class CardWidgetEvent extends Equatable {
   const CardWidgetEvent();
-}
-
-@immutable
-class CardWidgetLoadAssetsEvent extends CardWidgetEvent {
-  const CardWidgetLoadAssetsEvent() : super();
 
   @override
   List<Object> get props => [];
@@ -18,26 +13,16 @@ class CardWidgetLoadAssetsEvent extends CardWidgetEvent {
 @immutable
 class CardWidgetFaceUpEvent extends CardWidgetEvent {
   const CardWidgetFaceUpEvent() : super();
-
-  @override
-  List<Object> get props => [];
-
 }
 
 @immutable
 class CardWidgetFaceDownEvent extends CardWidgetEvent {
   const CardWidgetFaceDownEvent() : super();
-
-  @override
-  List<Object> get props => [];
 }
 
 @immutable
 class CardWidgetFlipFaceEvent extends CardWidgetEvent {
   const CardWidgetFlipFaceEvent() : super();
-
-  @override
-  List<Object> get props => [ ];
 }
 
 @immutable
@@ -52,27 +37,54 @@ class CardWidgetSetReverseEvent extends CardWidgetEvent {
 @immutable
 class CardWidgetFlipReverseEvent extends CardWidgetEvent {
   const CardWidgetFlipReverseEvent() : super();
-
-  @override
-  List<Object> get props => [ ];
 }
 
 @immutable
 class CardWidgetSetFaceEvent extends CardWidgetEvent {
-  final Widget? face;
+  final Widget face;
 
-  const CardWidgetSetFaceEvent({this.face}) : super();
+  const CardWidgetSetFaceEvent({required this.face}) : super();
 
   @override
-  List<Object?> get props => [ face ];
+  List<Object> get props => [ face ];
 }
 
 @immutable
 class CardWidgetSetBackEvent extends CardWidgetEvent {
-  final Widget? back;
+  final Widget back;
 
-  const CardWidgetSetBackEvent({this.back}) : super();
+  const CardWidgetSetBackEvent({required this.back}) : super();
 
   @override
-  List<Object?> get props => [ back ];
+  List<Object> get props => [ back ];
+}
+
+@immutable
+class CardWidgetSetDescriptionEvent extends CardWidgetEvent {
+  final String description;
+
+  const CardWidgetSetDescriptionEvent(this.description) : super();
+
+  @override
+  List<Object> get props => [ description ];
+}
+
+@immutable
+class CardWidgetSetUprightMeaningEvent extends CardWidgetEvent {
+  final String uprightMeaning;
+
+  const CardWidgetSetUprightMeaningEvent(this.uprightMeaning) : super();
+
+  @override
+  List<Object> get props => [ uprightMeaning ];
+}
+
+@immutable
+class CardWidgetSetReversedMeaningEvent extends CardWidgetEvent {
+  final String reversedMeaning;
+
+  const CardWidgetSetReversedMeaningEvent({required this.reversedMeaning}) : super();
+
+  @override
+  List<Object> get props => [ reversedMeaning ];
 }
