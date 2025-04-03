@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:tarot_again/data_layer/data_layer.dart' show TCModel, AssetPathMap;
+import 'package:tarot_again/data_layer/data_layer.dart'
+    show TCModel, AssetPathMap;
 import 'package:tarot_again/util/util.dart' show Logging;
 
 typedef LoadedAssetsMap = IMap<String, Object?>;
@@ -20,7 +21,8 @@ class AssetProvider with Logging {
         result = await rootBundle.load(assetPath);
       } catch (e, s) {
         verbose(
-            "AssetProvider.loadImageAsset raised error $e. Asset not found.\n\n$s");
+          "AssetProvider.loadImageAsset raised error $e. Asset not found.\n\n$s",
+        );
       }
 
       if (result != null) {
@@ -45,8 +47,11 @@ class AssetProvider with Logging {
     return result;
   }
 
-  Future<LoadedAssetsMap> loadAssetsByFileExtension(AssetPathMap assetPaths) async {
-    IMap<String, Future<Object?>> assets = const IMap<String, Future<Object?>>.empty();
+  Future<LoadedAssetsMap> loadAssetsByFileExtension(
+    AssetPathMap assetPaths,
+  ) async {
+    IMap<String, Future<Object?>> assets =
+        const IMap<String, Future<Object?>>.empty();
 
     // in this for loop, we're not going to await every asset load. Instead, we'll
     // collect them all afterwards and use Future.wait to do the waiting.
@@ -66,7 +71,7 @@ class AssetProvider with Logging {
 
     final LoadedAssetsMap finalResult = LoadedAssetsMap.fromIterables(
       assets.keys,
-      r
+      r,
     );
 
     return finalResult;

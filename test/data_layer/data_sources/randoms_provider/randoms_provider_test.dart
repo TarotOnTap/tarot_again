@@ -28,32 +28,30 @@ void main() async {
 
   group("AsyncRandom getNextInt using default range-low of zero, and"
       "with various ranges", () {
-
-
     test("test that random number ranges start at 0 by default", () async {
-    final Stream<int> randomStream = getNRandomInts(
-      source: randoms,
-      count: 1000,
-      rangeHigh: 500,
-    );
-
-    bool testResult = await randomStream.every((int elem) => elem >= 0);
-
-    expect(testResult, true);
-  });
-
-  test(
-    "test that random number ranges produce numbers less than their upper limit",
-    () async {
       final Stream<int> randomStream = getNRandomInts(
         source: randoms,
         count: 1000,
-        rangeHigh: 357,
+        rangeHigh: 500,
       );
 
-      bool testResult = await randomStream.every((int elem) => elem < 357);
-    },
-  );
+      bool testResult = await randomStream.every((int elem) => elem >= 0);
+
+      expect(testResult, true);
+    });
+
+    test(
+      "test that random number ranges produce numbers less than their upper limit",
+      () async {
+        final Stream<int> randomStream = getNRandomInts(
+          source: randoms,
+          count: 1000,
+          rangeHigh: 357,
+        );
+
+        bool testResult = await randomStream.every((int elem) => elem < 357);
+      },
+    );
     test(
       "test that random numbers over a range stay within their limits",
       () async {

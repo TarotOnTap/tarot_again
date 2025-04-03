@@ -19,7 +19,7 @@ abstract class AsyncRandoms {
     }
 
     if (current.sourceChoice != source) {
-      returnRandom = switch(source) {
+      returnRandom = switch (source) {
         "local" || "none" => SecureRandom(),
         _ => SecureRandom(),
       };
@@ -37,12 +37,12 @@ abstract class AsyncRandoms {
   Future<bool> getNextBool();
 
   Future<IList<E>> shuffleIterable<E>(
-      // The goal is to return a list of cards in shuffled order.
-      // upstream processing can handle cards popping out of the shuffle, etc.
-      // where it might be useful to use a stream, drawing one card at a time with
-      // the occasional exception.
-      Iterable<E> remaining,
-      ) async {
+    // The goal is to return a list of cards in shuffled order.
+    // upstream processing can handle cards popping out of the shuffle, etc.
+    // where it might be useful to use a stream, drawing one card at a time with
+    // the occasional exception.
+    Iterable<E> remaining,
+  ) async {
     IList<E> copy = IList(remaining);
     // Output<E> removedItem = Output<E>();
     IList<E> resultList = IList<E>([]);

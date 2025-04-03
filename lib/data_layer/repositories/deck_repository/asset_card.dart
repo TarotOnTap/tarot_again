@@ -17,8 +17,8 @@ class AssetPathsCard {
 
   late final AssetPathMap assetMap;
 
-  AssetPathsCard({required this.card, required this.deckName}) :
-        assetMap = assetPathGenerator(deckName, card.assetName);
+  AssetPathsCard({required this.card, required this.deckName})
+    : assetMap = assetPathGenerator(deckName, card.assetName);
 
   static AssetPathMap assetPathGenerator(String deck, String assetName) {
     return AssetPathMap({

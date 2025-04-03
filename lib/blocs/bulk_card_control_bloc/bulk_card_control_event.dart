@@ -1,27 +1,14 @@
 part of 'bulk_card_control_bloc.dart';
 
 @immutable
-sealed class BulkCardControlEvent extends Equatable {
-  const BulkCardControlEvent() : super();
-
-  @override
-  List<Object> get props => [];
-}
+sealed class BulkCardControlEvent {}
 
 @immutable
-class AllowReversals extends BulkCardControlEvent {
-  const AllowReversals() : super();
-}
+class AllowReversals extends BulkCardControlEvent {}
 
 @immutable
-class DisallowReversals extends BulkCardControlEvent {
-  const DisallowReversals() : super();
-}
+class DisallowReversals extends BulkCardControlEvent {}
 
-class TurnEverybodyFaceUpOn extends BulkCardControlEvent {
-  const TurnEverybodyFaceUpOn() : super();
-}
+class TurnEverybodyFaceUpOn extends BulkCardControlEvent {}
 
-class TurnEverybodyFaceUpOff extends BulkCardControlEvent {
-  const TurnEverybodyFaceUpOff() : super();
-}
+class TurnEverybodyFaceUpOff extends BulkCardControlEvent {}

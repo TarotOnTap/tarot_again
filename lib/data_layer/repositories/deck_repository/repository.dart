@@ -14,13 +14,24 @@ class DeckRepository {
   String deckName;
 
   DeckRepository({required this.deckName}) {
-    randomsProvider = di<AsyncRandoms>();
-    standardDeckProvider = di<StandardDeckProvider>();
-    assetProvider = di<AssetProvider>();
+    randomsProvider = sl<AsyncRandoms>();
+    standardDeckProvider = sl<StandardDeckProvider>();
+    assetProvider = sl<AssetProvider>();
   }
 
   Future<void> shuffleDeck() async {
     await standardDeckProvider.shuffleDeck();
+  }
+
+  Future<CardWidgetBloc?> dealNextCardTo() async {
+    // we're going to create a new bloc, and then set a bunch of handlers to retrieve
+    // assets and stuff for it. Finally we return the newly created bloc, or null
+    // if eg the deck is empty
+    CardWidgetBloc? myBloc;
+
+    final TCModel? nextCard = await standardDeckProvider.getNextCard();
+
+    return myBloc;
   }
 
   void dealNextCard(CardWidgetBloc bloc) async {
@@ -30,9 +41,10 @@ class DeckRepository {
     // given card.
     // Lastly, we turn that into a dealt card by assigning reversal if appropriate.
 
-    final assetProvider = di<AssetProvider>();
-
     TCModel? nextCard = await standardDeckProvider.getNextCard();
+    bool reversed = await randomsProvider.getNextBool();
+
+    CardWidgetState state = CardWidgetState(card: nextCard);
 
     if (nextCard == null) {
       // note, at this point we might like to get back to our bloc with the information
@@ -42,14 +54,21 @@ class DeckRepository {
       // after this, the bloc will signal us to shuffle the deck (presumably) and
       // then retry dealNextCard - or whatever.
     } else {
-      final AssetPathsCard assetCard = AssetPathsCard(card: nextCard, deckName: deckName);
+      final AssetPathsCard assetCard = AssetPathsCard(
+        card: nextCard,
+        deckName: deckName,
+      );
 
-      final LoadedAssetsMap loadedAssets = await
-        assetProvider.loadAssetsByFileExtension(assetCard.assetMap);
+      final LoadedAssetsMap loadedAssets = await assetProvider
+          .loadAssetsByFileExtension(assetCard.assetMap);
 
-      DealtCard dc = DealtCard(card: assetCard, assets: loadedAssets, reversed: reversed);
+      DealtCard dc = DealtCard(
+        card: assetCard,
+        assets: loadedAssets,
+        reversed: reversed,
+      );
 
-      bloc.add()
+      // bloc.add()
     }
   }
 }

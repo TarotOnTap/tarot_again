@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
-
 import 'package:tarot_again/util/util.dart';
 
+part 'bulk_card_control_bloc.freezed.dart';
+part 'bulk_card_control_bloc.g.dart';
 part 'bulk_card_control_event.dart';
 part 'bulk_card_control_state.dart';
 
@@ -10,18 +10,33 @@ part 'bulk_card_control_state.dart';
 // a visual control to permit or deny them. NOTE - cards will still be dealt with
 // reversals, but the display widget will use our state as a master switch, like so:
 // if (di<BulkCardControlBloc>().state.reversalsAllowed && card.reversed)...
-class BulkCardControlBloc extends Bloc<BulkCardControlEvent, BulkCardControlState> {
-  BulkCardControlBloc() : super(BulkCardControlState()) {
-    on<AllowReversals>((event, emit) =>
-      emit(state.copyWith(reversalsAllowed: true)));
+class BulkCardControlBloc
+    extends HydratedBloc<BulkCardControlEvent, BulkCardControlState> {
+  BulkCardControlBloc()
+    : super(
+        BulkCardControlState(everybodyFaceUp: false, reversalsAllowed: true),
+      ) {
+    on<AllowReversals>(
+      (event, emit) => emit(state.copyWith(reversalsAllowed: true)),
+    );
 
-    on<DisallowReversals>((event, emit) =>
-        emit(state.copyWith(reversalsAllowed: false)));
+    on<DisallowReversals>(
+      (event, emit) => emit(state.copyWith(reversalsAllowed: false)),
+    );
 
-    on<TurnEverybodyFaceUpOn>((event, emit) =>
-        emit(state.copyWith(everybodyFaceUp: true)));
+    on<TurnEverybodyFaceUpOn>(
+      (event, emit) => emit(state.copyWith(everybodyFaceUp: true)),
+    );
 
-    on<TurnEverybodyFaceUpOff>((event, emit) =>
-        emit(state.copyWith(everybodyFaceUp: false)));
+    on<TurnEverybodyFaceUpOff>(
+      (event, emit) => emit(state.copyWith(everybodyFaceUp: false)),
+    );
   }
+
+  @override
+  BulkCardControlState? fromJson(Map<String, dynamic> json) =>
+      BulkCardControlState.fromJson(json);
+
+  @override
+  Map<String, dynamic>? toJson(BulkCardControlState state) => state.toJson();
 }

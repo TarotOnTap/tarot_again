@@ -5,9 +5,8 @@ export 'repository.dart' show DeckRepository;
 export 'asset_card.dart' show AssetPathsCard;
 // export 'asset_card.dart' show AssetCard, LoadedAssetMap;
 
-
 @immutable
-class DealtCard extends  Equatable {
+class DealtCard extends Equatable {
   final AssetPathsCard card;
   final LoadedAssetsMap assets;
 
@@ -16,9 +15,9 @@ class DealtCard extends  Equatable {
   const DealtCard({
     required this.card,
     required this.assets,
-    required this.reversed
-});
+    required this.reversed,
+  });
 
   @override
-  List<Object> get props => [ card, assets, reversed ];
+  List<Object> get props => [card, assets, reversed];
 }
