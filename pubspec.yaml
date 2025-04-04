@@ -45,6 +45,13 @@ dependencies:
   async: ^2.12.0
   markd: ^7.2.3+1
   flutter_html: ^3.0.0
+  bloc: ^9.0.0
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+  hydrated_bloc: ^10.0.0
+  fbloc_event_gen: ^3.2.1
+  flutter_bloc: ^9.1.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +65,11 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   drift_dev: ^2.26.0
   build_runner: ^2.4.15
+  test: ^1.25.15
+  freezed: ^3.0.4
+  json_serializable: ^6.9.4
+  custom_lint: ^0.7.5
+  freezed_lint: ^0.0.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -72,10 +84,14 @@ flutter:
 
   assets:
     - assets/decks/
-    - assets/decks/RWS/
-    - assets/decks/RWS/images/
-    - assets/explanations/
-    - assets/explanations/standard_tarot
+    - assets/decks/standard_tarot/
+    - assets/decks/standard_tarot/meanings/
+    - assets/decks/standard_tarot/meanings/standard_tarot/
+    - assets/decks/standard_tarot/meanings/standard_tarot/reversed/
+    - assets/decks/standard_tarot/meanings/standard_tarot/upright/
+    - assets/decks/standard_tarot/RWS/
+    - assets/decks/standard_tarot/RWS/descriptions/
+    - assets/decks/standard_tarot/RWS/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

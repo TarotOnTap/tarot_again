@@ -1,139 +1,33 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:watch_it/watch_it.dart';
-
-import '../randoms_provider/provider.dart';
 import 'package:tarot_again/util/util.dart';
 
-final IList<String> minorArcanaSuits =
-    <String>["Wands", "Cups", "Swords", "Pentacles"].lock;
+import '../randoms_provider/provider.dart';
+import 'enums.dart';
+import 'tc_model.dart';
 
-enum Suits { wands, cups, swords, pentacles }
+String majorAssetName(MajorArcana item) =>
+    item.name.split(" ").map((String n) => n.toLowerCase()).join("_");
 
-enum Pips {
-  ace,
-  two,
-  three,
-  four,
-  five,
-  six,
-  seven,
-  eight,
-  nine,
-  ten,
-  page,
-  knight,
-  queen,
-  king,
-}
-
-final IList<String> minorArcanaNames = IList([
-  "Ace",
-  "Two",
-  "Three",
-  "Four",
-  "Five",
-  "Six",
-  "Seven",
-  "Eight",
-  "Nine",
-  "Ten",
-  "Page",
-  "Knight",
-  "Queen",
-  "King",
-]);
-
-enum MajorArcana {
-  fool(name: "The Fool", romanNumber: "0"),
-  magician(name: "The Magician", romanNumber: "I"),
-  highPriestess(name: "The High Priestess", romanNumber: "II"),
-  empress(name: "The Empress", romanNumber: "III"),
-  emperor(name: "The Emperor", romanNumber: "IV"),
-  hierophant(name: "The Hierophant", romanNumber: "V"),
-  lovers(name: "The Lovers", romanNumber: "VI"),
-  chariot(name: "The Chariot", romanNumber: "VII"),
-  strength(name: "Strength", romanNumber: "VIII"),
-  hermit(
-    name: "The Hermit",
-    romanNumber: "IX",
-  ),
-  wheelOfFortune(name: "The Wheel of Fortune", romanNumber: "X"),
-  justice(name: "Justice", romanNumber: "XI"),
-  hangedMan(name: "The Hanged Man", romanNumber: "XII"),
-  death(name: "Death", romanNumber: "XIII"),
-  temperance(name: "Temperance", romanNumber: "XIV"),
-  devil(name: "The Devil", romanNumber: "XV"),
-  tower(name: "The Tower", romanNumber: "XVI"),
-  star(name: "The Star", romanNumber: "XVII"),
-  moon(name: "The Moon", romanNumber: "XVIII"),
-  sun(name: "The Sun", romanNumber: "XIX"),
-  judgment(name: "Judgment", romanNumber: "XX"),
-  theWorld(name: "The World", romanNumber: "XXI");
-
-  final String name;
-  final String romanNumber;
-
-  const MajorArcana({
-    required this.name,
-    required this.romanNumber,
-  });
-}
-
-sealed class TCModel {
-  final int sortOrder;
-
-  String get assetName => "";
-
-  TCModel({
-    required this.sortOrder,
-  });
-}
-
-String toUpperInitial(String str) =>
-    str.substring(0, 1).toUpperCase() + str.substring(1);
-
-@immutable
-class TCMinorArcanaModel extends TCModel {
-  final Pips pips;
-  final Suits suit;
-
-  @override
-  String get assetName => "${pips.name}_${suit.name}";
-
-  TCMinorArcanaModel({
-    required super.sortOrder,
-    required this.suit,
-    required this.pips,
-  });
-}
-
-
-@immutable
-class TCMajorArcanaModel extends TCModel {
-  final MajorArcana card;
-
-  @override
-  String get assetName {
-    final IList<String> parts = card.name.split(" ").lock;
-    return parts.length > 1 ? parts.skip(1).join("_") : parts[0];
-  }
-
-  TCMajorArcanaModel({required this.card})
-      : super(sortOrder: card.index);
-}
+String minorAssetName(Suits suit, Pips pips) => "${pips.name}_${suit.name}";
 
 final IList<TCModel> majorArcana = IList<TCModel>(
-  MajorArcana.values.map((item) => TCMajorArcanaModel(card: item)),
+  MajorArcana.values.map(
+    (item) => TCModel.tcMajorArcanaModel(
+      sortOrder: item.index,
+      card: item,
+      assetName: majorAssetName(item),
+    ),
+  ),
 );
 
 final IList<TCModel> minorArcana =
     [
       for (var suit in Suits.values)
         for (var pips in Pips.values)
-          TCMinorArcanaModel(
+          TCModel.tcMinorArcanaModel(
             sortOrder: (suit.index * Pips.values.length + pips.index + 22),
             suit: suit,
             pips: pips,
+            assetName: minorAssetName(suit, pips),
             // imageAsset: "${pips.name}_${suit.name}"
           ),
     ].lock;
@@ -145,6 +39,12 @@ class StandardDeckProvider with Logging {
   Iterable<TCModel>? _shuffledDeck;
   Iterator<TCModel>? _shuffledDeckIterator;
 
+  // EXPERIMENTAL
+  Stream<TCModel>? _currentShuffledCards;
+  StreamQueue<TCModel>? currentShuffle;
+
+  // END EXPERIMENTAL
+
   StandardDeckProvider();
 
   set shuffledDeck(Iterable<TCModel>? newShuffle) {
@@ -152,24 +52,27 @@ class StandardDeckProvider with Logging {
 
     if (newShuffle != null) {
       _shuffledDeckIterator = newShuffle.iterator;
+      currentShuffle = StreamQueue(Stream<TCModel>.fromIterable(newShuffle));
     }
   }
 
-  void shuffleDeck() async {
+  Future<void> shuffleDeck() async {
     shuffledDeck = await di<RandomsProvider>().shuffleIterable(_fullDeck);
   }
 
-  TCModel? getNextCard() {
+  Future<TCModel?> getNextCard() {
+    // right now, this function does not need to be async, but I can envision a
+    // time where it might want to be.
     TCModel? result;
 
     final Iterator<TCModel>? sdi = _shuffledDeckIterator;
 
     if (sdi != null) {
-        if (sdi.moveNext()) {
-          result = sdi.current;
-        }
+      if (sdi.moveNext()) {
+        result = sdi.current;
+      }
     }
 
-    return result;
+    return Future<TCModel?>.value(result);
   }
 }

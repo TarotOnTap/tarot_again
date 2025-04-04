@@ -1,9 +1,9 @@
 import 'dart:async';
-// import 'package:flutter/foundation.dart';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:watch_it/watch_it.dart';
 
 import 'util/util.dart';
 
@@ -12,7 +12,7 @@ import 'ui_layer/ui.dart';
 
 void main() async {
   runZonedGuarded(
-        () async {
+    () async {
       WidgetsFlutterBinding.ensureInitialized();
       // serviceLocatorConfig();
 
@@ -29,18 +29,24 @@ void main() async {
       // await _initFirebase();
       runApp(TarotAgainApp());
     },
-        (Object error, StackTrace stack) {
+    (Object error, StackTrace stack) {
       di<Talker>().handle(error, stack, 'Uncaught app exception');
     },
   );
 }
 
 Future<void> initializeEverything() async {
-  registerLoggingService();
+  initializeLoggingService();
+
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory:
+        kIsWeb
+            ? HydratedStorageDirectory.web
+            : HydratedStorageDirectory((await getTemporaryDirectory()).path),
+  );
 
   await initializeDataLayer();
 }
-
 
 class TarotAgainApp extends StatelessWidget {
   const TarotAgainApp({super.key});

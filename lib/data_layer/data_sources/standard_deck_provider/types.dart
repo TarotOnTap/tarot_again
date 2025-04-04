@@ -1,1 +1,1 @@
-export 'provider.dart' show StandardDeckProvider, TCModel;
+export "tc_model.dart";
