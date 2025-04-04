@@ -103,8 +103,8 @@ as String,
 /// @nodoc
 @JsonSerializable()
 
-class _TCMinorArcanaModel implements TCModel {
-   _TCMinorArcanaModel({required this.sortOrder, required this.assetName, required this.suit, required this.pips, final  String? $type}): $type = $type ?? 'TcMinorArcanaModel';
+class _TCMinorArcanaModel extends TCModel {
+   _TCMinorArcanaModel({required this.sortOrder, required this.assetName, required this.suit, required this.pips, final  String? $type}): $type = $type ?? 'TcMinorArcanaModel',super._();
   factory _TCMinorArcanaModel.fromJson(Map<String, dynamic> json) => _$TCMinorArcanaModelFromJson(json);
 
 @override final  int sortOrder;
@@ -182,8 +182,8 @@ as Pips,
 /// @nodoc
 @JsonSerializable()
 
-class _TCMajorArcanaModel implements TCModel {
-   _TCMajorArcanaModel({required this.sortOrder, required this.assetName, required this.card, final  String? $type}): $type = $type ?? 'TcMajorArcanaModel';
+class _TCMajorArcanaModel extends TCModel {
+   _TCMajorArcanaModel({required this.sortOrder, required this.assetName, required this.card, final  String? $type}): $type = $type ?? 'TcMajorArcanaModel',super._();
   factory _TCMajorArcanaModel.fromJson(Map<String, dynamic> json) => _$TCMajorArcanaModelFromJson(json);
 
 @override final  int sortOrder;

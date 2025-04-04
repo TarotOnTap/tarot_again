@@ -11,6 +11,7 @@ _BulkCardControlState _$BulkCardControlStateFromJson(
 ) => _BulkCardControlState(
   everybodyFaceUp: json['everybodyFaceUp'] as bool,
   reversalsAllowed: json['reversalsAllowed'] as bool,
+  deckName: json['deckName'] as String? ?? "RWS",
 );
 
 Map<String, dynamic> _$BulkCardControlStateToJson(
@@ -18,4 +19,5 @@ Map<String, dynamic> _$BulkCardControlStateToJson(
 ) => <String, dynamic>{
   'everybodyFaceUp': instance.everybodyFaceUp,
   'reversalsAllowed': instance.reversalsAllowed,
+  'deckName': instance.deckName,
 };

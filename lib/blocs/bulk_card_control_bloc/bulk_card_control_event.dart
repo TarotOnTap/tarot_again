@@ -12,3 +12,10 @@ class DisallowReversals extends BulkCardControlEvent {}
 class TurnEverybodyFaceUpOn extends BulkCardControlEvent {}
 
 class TurnEverybodyFaceUpOff extends BulkCardControlEvent {}
+
+@immutable
+class SetDeckName extends BulkCardControlEvent {
+  final String deckName;
+
+  SetDeckName(this.deckName);
+}

@@ -7,8 +7,16 @@ part 'card_widget_bloc.g.dart';
 part 'card_widget_event.dart';
 part 'card_widget_state.dart';
 
-class CardWidgetBloc extends Bloc<CardWidgetEvent, CardWidgetState> {
-  CardWidgetBloc() : super(CardWidgetState()) {
+class CardWidgetBloc extends HydratedBloc<CardWidgetEvent, CardWidgetState> {
+  final String _id;
+  final DeckCard card;
+
+  @override
+  String get id => _id;
+
+  CardWidgetBloc({required String id, required this.card})
+    : _id = id,
+      super(CardWidgetState()) {
     on<CardWidgetFaceUpEvent>(
       (event, emit) => emit(state.copyWith(faceUp: true)),
     );
@@ -28,19 +36,11 @@ class CardWidgetBloc extends Bloc<CardWidgetEvent, CardWidgetState> {
     on<CardWidgetFlipReverseEvent>(
       (event, emit) => emit(state.copyWith(reversed: !state.reversed)),
     );
-
-    on<CardWidgetSetDescriptionEvent>(
-      (event, emit) => emit(state.copyWith(description: event.description)),
-    );
-
-    on<CardWidgetSetUprightMeaningEvent>(
-      (event, emit) =>
-          emit(state.copyWith(uprightMeaning: event.uprightMeaning)),
-    );
-
-    on<CardWidgetSetReversedMeaningEvent>(
-      (event, emit) =>
-          emit(state.copyWith(reversedMeaning: event.reversedMeaning)),
-    );
   }
+
+  @override
+  fromJson(Map<String, dynamic> json) => CardWidgetState.fromJson(json);
+
+  @override
+  toJson(CardWidgetState state) => state.toJson();
 }

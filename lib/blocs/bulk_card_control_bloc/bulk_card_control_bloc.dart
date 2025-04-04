@@ -31,6 +31,15 @@ class BulkCardControlBloc
     on<TurnEverybodyFaceUpOff>(
       (event, emit) => emit(state.copyWith(everybodyFaceUp: false)),
     );
+
+    on<SetDeckName>((event, emit) {
+      // this one is actually some hard work!
+
+      // TODO: update the deck name where it matters - AssetProvider, StandardDeckProvider,
+      // TODO: DeckRepository
+
+      emit(state.copyWith(deckName: event.deckName));
+    });
   }
 
   @override

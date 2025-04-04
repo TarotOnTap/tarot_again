@@ -7,6 +7,8 @@ part 'tc_model.g.dart';
 
 @freezed
 sealed class TCModel with _$TCModel {
+  TCModel._();
+
   factory TCModel.tcMinorArcanaModel({
     required int sortOrder,
     required String assetName,

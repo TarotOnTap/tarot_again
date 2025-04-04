@@ -1,5 +1,5 @@
+import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/data_layer/data_sources/standard_deck_provider/provider.dart';
 import 'package:tarot_again/util/util.dart';
 
 export 'repository.dart' show DeckRepository;
@@ -9,23 +9,35 @@ const String imageDir = "images/";
 const String descriptionsDir = "descriptions";
 const String meaningsDir = "meanings/";
 
-typedef AssetPathMap = IMap<String, String?>;
+// typedef AssetPathMap = IMap<String, String?>;
 
-class AssetPathsCard {
-  final TCModel card;
-  final String deckName;
+AssetPathMap assetPathGenerator(String assetName) {
+  String deck = di<BulkCardControlBloc>().state.deckName;
 
-  late final AssetPathMap assetMap;
-
-  AssetPathsCard({required this.card, required this.deckName})
-    : assetMap = assetPathGenerator(deckName, card.assetName);
-
-  static AssetPathMap assetPathGenerator(String deck, String assetName) {
-    return AssetPathMap({
-      "image": "$rootName/$deck/$imageDir/$assetName",
-      "description": "$rootName/$deck/$descriptionsDir/$assetName",
-      "reversed": "$rootName/$meaningsDir/reversed/$assetName",
-      "upright": "$rootName/$meaningsDir/upright/$assetName",
-    });
-  }
+  return AssetPathMap({
+    "image": "$rootName/$deck/$imageDir/$assetName",
+    "description": "$rootName/$deck/$descriptionsDir/$assetName",
+    "reversed": "$rootName/$meaningsDir/reversed/$assetName",
+    "upright": "$rootName/$meaningsDir/upright/$assetName",
+  });
 }
+
+//
+// class AssetPathsCard {
+//   final TCModel card;
+//   final String deckName;
+//
+//   late final AssetPathMap assetMap;
+//
+//   AssetPathsCard({required this.card, required this.deckName})
+//     : assetMap = assetPathGenerator(deckName, card.assetName);
+//
+//   static AssetPathMap assetPathGenerator(String deck, String assetName) {
+//     return AssetPathMap({
+//       "image": "$rootName/$deck/$imageDir/$assetName",
+//       "description": "$rootName/$deck/$descriptionsDir/$assetName",
+//       "reversed": "$rootName/$meaningsDir/reversed/$assetName",
+//       "upright": "$rootName/$meaningsDir/upright/$assetName",
+//     });
+//   }
+// }

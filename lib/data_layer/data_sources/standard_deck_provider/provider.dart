@@ -39,6 +39,12 @@ class StandardDeckProvider with Logging {
   Iterable<TCModel>? _shuffledDeck;
   Iterator<TCModel>? _shuffledDeckIterator;
 
+  // EXPERIMENTAL
+  Stream<TCModel>? _currentShuffledCards;
+  StreamQueue<TCModel>? currentShuffle;
+
+  // END EXPERIMENTAL
+
   StandardDeckProvider();
 
   set shuffledDeck(Iterable<TCModel>? newShuffle) {
@@ -46,6 +52,7 @@ class StandardDeckProvider with Logging {
 
     if (newShuffle != null) {
       _shuffledDeckIterator = newShuffle.iterator;
+      currentShuffle = StreamQueue(Stream<TCModel>.fromIterable(newShuffle));
     }
   }
 

@@ -1,9 +1,8 @@
-import 'package:tarot_again/util/util.dart';
-import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/blocs/blocs.dart';
+import 'package:tarot_again/data_layer/data_layer.dart';
+import 'package:tarot_again/util/util.dart';
 
 import 'asset_card.dart';
-import 'types.dart';
 
 class DeckRepository {
   late AsyncRandoms randomsProvider;
@@ -23,52 +22,51 @@ class DeckRepository {
     await standardDeckProvider.shuffleDeck();
   }
 
-  Future<CardWidgetBloc?> dealNextCardTo() async {
-    // we're going to create a new bloc, and then set a bunch of handlers to retrieve
-    // assets and stuff for it. Finally we return the newly created bloc, or null
-    // if eg the deck is empty
-    CardWidgetBloc? myBloc;
+  // Future<DealtCard?> dealNextCardTo() async {
+  //   // we're going to create a new bloc, and then set a bunch of handlers to retrieve
+  //   // assets and stuff for it. Finally we return the newly created bloc, or null
+  //   // if eg the deck is empty
+  //   DealtCard? returnCard;
+  //
+  //   final TCModel? nextCard = await standardDeckProvider.getNextCard();
+  //
+  //   if (nextCard != null) {
+  //     final bool reversed = await randomsProvider.getNextBool();
+  //   } else {}
+  //
+  //   return returnCard;
+  // }
 
-    final TCModel? nextCard = await standardDeckProvider.getNextCard();
-
-    return myBloc;
-  }
-
-  void dealNextCard(CardWidgetBloc bloc) async {
+  Future<DealtCard> dealNextCard() async {
     // First, we get the next card from the standardDeckProvider.
     // if that card is empty, we let the provider know and return.
     // next, we convert the TCModel to an AssetCard, loading the associated assets into the
     // given card.
     // Lastly, we turn that into a dealt card by assigning reversal if appropriate.
 
-    TCModel? nextCard = await standardDeckProvider.getNextCard();
-    bool reversed = await randomsProvider.getNextBool();
+    TCModel? nextCard = await standardDeckProvider.currentShuffle?.next;
+    DealtCard returnCard = DeckEmpty();
 
-    CardWidgetState state = CardWidgetState(card: nextCard);
+    if (nextCard != null) {
+      AssetPathMap paths = assetPathGenerator(nextCard.assetName);
 
-    if (nextCard == null) {
-      // note, at this point we might like to get back to our bloc with the information
-      // that the deck is empty; this gives an opportunity to ask the user if they want to
+      // bloc.add(CardWidgetSetCardEvent(nextCard));
       //
-      // TODO: bloc.add(DeckEmpty());
-      // after this, the bloc will signal us to shuffle the deck (presumably) and
-      // then retry dealNextCard - or whatever.
-    } else {
-      final AssetPathsCard assetCard = AssetPathsCard(
-        card: nextCard,
-        deckName: deckName,
-      );
+      // bool reversed = await randomsProvider.getNextBool();
+      //
+      // bloc.add(CardWidgetSetReverseEvent(reverse: reversed));
+      //
+      // final AssetPathsCard assetCard = AssetPathsCard(
+      //   card: nextCard,
+      //   deckName: deckName,
+      // );
 
       final LoadedAssetsMap loadedAssets = await assetProvider
           .loadAssetsByFileExtension(assetCard.assetMap);
 
-      DealtCard dc = DealtCard(
-        card: assetCard,
-        assets: loadedAssets,
-        reversed: reversed,
-      );
-
       // bloc.add()
     }
+
+    return returnCard;
   }
 }
