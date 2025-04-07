@@ -12,10 +12,7 @@ part 'bulk_card_control_state.dart';
 // if (di<BulkCardControlBloc>().state.reversalsAllowed && card.reversed)...
 class BulkCardControlBloc
     extends HydratedBloc<BulkCardControlEvent, BulkCardControlState> {
-  BulkCardControlBloc()
-    : super(
-        BulkCardControlState(everybodyFaceUp: false, reversalsAllowed: true),
-      ) {
+  BulkCardControlBloc() : super(BulkCardControlState()) {
     on<AllowReversals>(
       (event, emit) => emit(state.copyWith(reversalsAllowed: true)),
     );
@@ -48,4 +45,10 @@ class BulkCardControlBloc
 
   @override
   Map<String, dynamic>? toJson(BulkCardControlState state) => state.toJson();
+}
+
+Future<void> initializeBulkCardControlBloc() async {
+  if (!sl.isRegistered<BulkCardControlBloc>()) {
+    sl.registerSingleton<BulkCardControlBloc>(BulkCardControlBloc());
+  }
 }

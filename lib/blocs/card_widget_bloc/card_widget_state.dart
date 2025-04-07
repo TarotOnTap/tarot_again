@@ -5,7 +5,7 @@ abstract class CardWidgetState with _$CardWidgetState {
   // Note to self - the DealtModel card is actually a property
   // of our bloc, rather than changeable state; it is set by the constructor
   // when the CardWidgetBloc is created.
-  factory CardWidgetState({
+  const factory CardWidgetState({
     @Default(false) bool faceUp,
     @Default(false) bool reversed,
   }) = _CardWidgetState;

@@ -1,7 +1,6 @@
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
-// part 'card_widget_bloc.freezed.dart';
 part 'card_widget_bloc.freezed.dart';
 part 'card_widget_bloc.g.dart';
 part 'card_widget_event.dart';
@@ -9,7 +8,7 @@ part 'card_widget_state.dart';
 
 class CardWidgetBloc extends HydratedBloc<CardWidgetEvent, CardWidgetState> {
   final String _id;
-  final DeckCard card;
+  final DealtCard card;
 
   @override
   String get id => _id;

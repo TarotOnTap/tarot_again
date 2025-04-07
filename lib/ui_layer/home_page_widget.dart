@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tarot_again/blocs/blocs.dart';
+import 'package:tarot_again/data_layer/data_layer.dart';
+import 'package:tarot_again/ui_layer/ui_layer.dart';
+import 'package:tarot_again/util/util.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({super.key, required this.title});
@@ -20,6 +24,30 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   int _counter = 0;
+
+  BulkCardControlBloc? bccBloc;
+  CardWidgetBloc? cwBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    bccBloc = BulkCardControlBloc();
+
+    unawaited(asyncInitState());
+  }
+
+  Future<void> asyncInitState() async {
+    final dr = sl<DeckRepository>();
+
+    await dr.shuffleDeck();
+
+    DealtCard card = await dr.dealNextCard();
+
+    setState(() {
+      cwBloc = CardWidgetBloc(id: "A", card: card);
+    });
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -69,6 +97,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            (bccBloc != null && cwBloc != null)
+                ? CardWidget(bccBloc: bccBloc!, cwBloc: cwBloc!)
+                : Placeholder(child: Text("NO CardWidget")),
+
+            const Text(" "),
             const Text('You have pushed the button this many times:'),
             Text(
               '$_counter',

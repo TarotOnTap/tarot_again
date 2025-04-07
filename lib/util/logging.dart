@@ -1,16 +1,15 @@
-import 'package:watch_it/watch_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:watch_it/watch_it.dart';
 
 mixin Logging {
-  final Talker _log = di<Talker>();
+  // final Talker _log = sl<Talker>();
+  static void debug(msg) => sl<Talker>().debug(msg);
 
-  void debug(msg) => _log.debug("$runtimeType: $msg");
+  static void error(msg) => sl<Talker>().error(msg);
 
-  void error(msg) => _log.error("$runtimeType: $msg");
+  static void verbose(msg) => sl<Talker>().verbose(msg);
 
-  void verbose(msg) => _log.verbose("$runtimeType: $msg");
-
-  void warning(msg) => _log.warning("$runtimeType: $msg");
+  static void warning(msg) => sl<Talker>().warning(msg);
 }
 
 class GoodLog extends TalkerLog {

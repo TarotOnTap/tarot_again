@@ -1,4 +1,5 @@
 import 'dart:math';
+
 // import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:tarot_again/util/util.dart';
@@ -14,7 +15,7 @@ abstract class AsyncRandoms {
 
     try {
       current = sl<AsyncRandoms>();
-    } catch (e, s) {
+    } catch (e) {
       current = SecureRandom();
     }
 

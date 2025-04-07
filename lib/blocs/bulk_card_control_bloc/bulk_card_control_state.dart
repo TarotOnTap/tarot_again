@@ -3,8 +3,8 @@ part of 'bulk_card_control_bloc.dart';
 @freezed
 abstract class BulkCardControlState with _$BulkCardControlState {
   factory BulkCardControlState({
-    required bool everybodyFaceUp,
-    required bool reversalsAllowed,
+    @Default(false) bool everybodyFaceUp,
+    @Default(true) bool reversalsAllowed,
     @Default("RWS") String deckName,
   }) = _BulkCardControlState;
 

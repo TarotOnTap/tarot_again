@@ -1,6 +1,6 @@
 import 'package:tarot_again/util/util.dart';
 
-import '../randoms_provider/provider.dart';
+import '../randoms_provider/randoms_provider.dart';
 import 'enums.dart';
 import 'tc_model.dart';
 
@@ -57,7 +57,7 @@ class StandardDeckProvider with Logging {
   }
 
   Future<void> shuffleDeck() async {
-    shuffledDeck = await di<RandomsProvider>().shuffleIterable(_fullDeck);
+    shuffledDeck = await di<AsyncRandoms>().shuffleIterable(_fullDeck);
   }
 
   Future<TCModel?> getNextCard() {

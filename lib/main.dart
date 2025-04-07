@@ -1,14 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:talker_flutter/talker_flutter.dart';
 
-import 'util/util.dart';
-
+import 'blocs/initializer.dart';
 import 'data_layer/data_layer.dart';
-import 'ui_layer/ui.dart';
+import 'ui_layer/ui_layer.dart';
+import 'util/util.dart';
 
 void main() async {
   runZonedGuarded(
@@ -30,7 +27,7 @@ void main() async {
       runApp(TarotAgainApp());
     },
     (Object error, StackTrace stack) {
-      di<Talker>().handle(error, stack, 'Uncaught app exception');
+      sl<Talker>().handle(error, stack, 'Uncaught app exception');
     },
   );
 }
@@ -46,6 +43,7 @@ Future<void> initializeEverything() async {
   );
 
   await initializeDataLayer();
+  await initializeBlocs();
 }
 
 class TarotAgainApp extends StatelessWidget {
