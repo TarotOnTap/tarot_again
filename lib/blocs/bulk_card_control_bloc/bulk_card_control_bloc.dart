@@ -1,3 +1,5 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/util/util.dart';
 
 part 'bulk_card_control_bloc.freezed.dart';
@@ -28,6 +30,15 @@ class BulkCardControlBloc
     on<TurnEverybodyFaceUpOff>(
       (event, emit) => emit(state.copyWith(everybodyFaceUp: false)),
     );
+
+    on<AddCardPosition>((event, emit) {
+      Option<CardPositions> toEmit = state.positions.fold(
+        () => Option<CardPositions>.of(CardPositions([event.position])),
+        (CardPositions l) => Option<CardPositions>.of(l.add(event.position)),
+      );
+
+      emit(state.copyWith(positions: toEmit));
+    });
 
     on<SetDeckName>((event, emit) {
       // this one is actually some hard work!

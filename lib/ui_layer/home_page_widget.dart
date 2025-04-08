@@ -25,14 +25,12 @@ class HomePageWidget extends StatefulWidget {
 class _HomePageWidgetState extends State<HomePageWidget> {
   int _counter = 0;
 
-  BulkCardControlBloc? bccBloc;
+  final BulkCardControlBloc bccBloc = BulkCardControlBloc();
   CardWidgetBloc? cwBloc;
 
   @override
   void initState() {
     super.initState();
-
-    bccBloc = BulkCardControlBloc();
 
     unawaited(asyncInitState());
   }
@@ -97,8 +95,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            (bccBloc != null && cwBloc != null)
-                ? CardWidget(bccBloc: bccBloc!, cwBloc: cwBloc!)
+            (cwBloc != null)
+                ? CardWidget(cwBloc: cwBloc!)
                 : Placeholder(child: Text("NO CardWidget")),
 
             const Text(" "),

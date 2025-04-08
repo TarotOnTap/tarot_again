@@ -1,7 +1,7 @@
 part of 'card_widget_bloc.dart';
 
 @immutable
-sealed class CardWidgetEvent {}
+sealed class CardWidgetEvent implements BlocWidgetEvent {}
 
 @immutable
 class CardWidgetFaceUpEvent extends CardWidgetEvent {}

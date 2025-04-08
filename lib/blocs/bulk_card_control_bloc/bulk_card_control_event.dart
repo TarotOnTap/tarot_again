@@ -1,7 +1,7 @@
 part of 'bulk_card_control_bloc.dart';
 
 @immutable
-sealed class BulkCardControlEvent {}
+sealed class BulkCardControlEvent implements BlocWidgetEvent {}
 
 @immutable
 class AllowReversals extends BulkCardControlEvent {}
@@ -18,4 +18,11 @@ class SetDeckName extends BulkCardControlEvent {
   final String deckName;
 
   SetDeckName(this.deckName);
+}
+
+@immutable
+class AddCardPosition extends BulkCardControlEvent {
+  final CardPosition position;
+
+  AddCardPosition(this.position);
 }

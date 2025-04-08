@@ -1,6 +1,8 @@
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
+import '../blocs.dart';
+
 part 'card_widget_bloc.freezed.dart';
 part 'card_widget_bloc.g.dart';
 part 'card_widget_event.dart';
