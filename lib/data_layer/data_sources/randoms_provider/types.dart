@@ -2,12 +2,19 @@ import 'dart:math';
 
 // import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
+import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
-abstract class AsyncRandoms {
+abstract class AsyncRandoms extends BaseProvider {
   final String sourceChoice;
 
   AsyncRandoms._(this.sourceChoice);
+
+  static Future<void> initialize() async {
+    if (!sl.isRegistered<AsyncRandoms>()) {
+      sl.registerSingleton<AsyncRandoms>(AsyncRandoms("local"));
+    }
+  }
 
   factory AsyncRandoms(String? source) {
     late final AsyncRandoms current;

@@ -1,0 +1,13 @@
+{
+  "displayName": "Past, Present, Future",
+  "layoutType": "horizontalLinear",
+  "horizontalAlign": "center",
+  "verticalAlign": "center",
+  "alignOnCard": 1,
+  "numCards": 3,
+  "slots": [
+    "Past",
+    "Present",
+    "Future"
+  ]
+}

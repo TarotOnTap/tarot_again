@@ -47,6 +47,12 @@ class StandardDeckProvider with Logging {
 
   StandardDeckProvider();
 
+  static Future<void> initialize() async {
+    if (!di.isRegistered<StandardDeckProvider>()) {
+      di.registerSingleton(StandardDeckProvider());
+    }
+  }
+
   set shuffledDeck(Iterable<TCModel>? newShuffle) {
     _shuffledDeck = newShuffle;
 

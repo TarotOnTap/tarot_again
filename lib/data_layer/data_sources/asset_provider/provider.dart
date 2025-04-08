@@ -1,14 +1,18 @@
 import 'package:flutter/services.dart';
-import 'package:tarot_again/data_layer/data_layer.dart' show AssetPathMap;
+import 'package:tarot_again/data_layer/data_layer.dart'
+    show AssetPathMap, BaseProvider;
 import 'package:tarot_again/util/util.dart';
-
-// part 'provider.freezed.dart';
-// part 'provider.g.dart';
 
 typedef LoadedAssetsMap = IMap<String, String>;
 
-class AssetProvider with Logging {
+class AssetProvider extends BaseProvider with Logging {
   AssetProvider();
+
+  static Future<void> initialize() async {
+    if (!di.isRegistered<AssetProvider>()) {
+      di.registerSingleton(AssetProvider());
+    }
+  }
 
   Future<String> loadMarkdownAsset(String assetPath) async {
     String? result;

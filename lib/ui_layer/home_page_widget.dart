@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/ui_layer/ui_layer.dart';
+import 'package:tarot_again/gen/assets.gen.dart';
 import 'package:tarot_again/util/util.dart';
 
 class HomePageWidget extends StatefulWidget {
@@ -22,7 +22,7 @@ class HomePageWidget extends StatefulWidget {
   State<HomePageWidget> createState() => _HomePageWidgetState();
 }
 
-class _HomePageWidgetState extends State<HomePageWidget> {
+class _HomePageWidgetState extends State<HomePageWidget> with Logging {
   int _counter = 0;
 
   final BulkCardControlBloc bccBloc = BulkCardControlBloc();
@@ -39,6 +39,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     final dr = sl<DeckRepository>();
 
     await dr.shuffleDeck();
+
+    final bob = Assets.layouts.tarotLayouts.values;
+    Logging.verbose("bob is $bob");
 
     DealtCard card = await dr.dealNextCard();
 
@@ -96,7 +99,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             (cwBloc != null)
-                ? CardWidget(cwBloc: cwBloc!)
+                ? Text("now cwBloc") /* CardWidget(cwBloc: cwBloc!) */
                 : Placeholder(child: Text("NO CardWidget")),
 
             const Text(" "),

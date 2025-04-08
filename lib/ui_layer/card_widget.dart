@@ -53,19 +53,18 @@ class _CardWidgetState extends State<CardWidget> {
     }
 
     StringBuffer cwstr = StringBuffer();
-    final CardWidgetState data = _cwState.data as CardWidgetState;
-    cwstr.write("_cwState:");
-
-    cwstr.writeln(" ValidCardWidgetState");
-    cwstr.writeln("  card: ${cwBloc.card}");
-    cwstr.writeln("  faceUp: ${data.faceUp}");
-    cwstr.writeln("  reversed: ${data.reversed}");
+    cwstr.write("Empty - no cwBlk");
+    // final CardWidgetState data = _cwState.data as CardWidgetState;
+    // cwstr.write("_cwState:");
+    //
+    // cwstr.writeln(" ValidCardWidgetState");
+    // cwstr.writeln("  card: ${cwBloc.card}");
+    // cwstr.writeln("  faceUp: ${data.faceUp}");
+    // cwstr.writeln("  reversed: ${data.reversed}");
 
     cwData = Text(cwstr.toString());
 
-    return Column(
-      children: [if (bcData != null) bcData, if (cwData != null) cwData],
-    );
+    return Column(children: [if (bcData != null) bcData, cwData]);
   }
 }
 
