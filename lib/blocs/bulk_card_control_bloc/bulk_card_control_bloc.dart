@@ -56,10 +56,10 @@ class BulkCardControlBloc
 
   @override
   Map<String, dynamic>? toJson(BulkCardControlState state) => state.toJson();
-}
 
-Future<void> initializeBulkCardControlBloc() async {
-  if (!sl.isRegistered<BulkCardControlBloc>()) {
-    sl.registerSingleton<BulkCardControlBloc>(BulkCardControlBloc());
+  static Future<void> initialize() async {
+    if (!sl.isRegistered<BulkCardControlBloc>()) {
+      sl.registerSingleton<BulkCardControlBloc>(BulkCardControlBloc());
+    }
   }
 }
