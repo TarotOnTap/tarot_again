@@ -1,3 +1,7 @@
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:watch_it/watch_it.dart';
+
 export 'dart:async';
 
 export 'package:async/async.dart';
@@ -14,3 +18,30 @@ export 'package:tarot_again/gen/assets.gen.dart';
 export 'package:watch_it/watch_it.dart';
 
 export 'logging.dart';
+
+AsyncSnapshot<BlocStateType>
+watchBloc<BlocType extends BlocBase, BlocStateType>(
+  BlocType Function(BlocType)? select, {
+  BlocType? bloc,
+  BlocStateType? initialState,
+  bool preserveState = true,
+  String? instanceName,
+  GetIt? getIt,
+}) {
+  BlocType targetBloc;
+
+  if (select != null) {
+    targetBloc = di<BlocType>();
+  } else {
+    targetBloc = bloc!;
+  }
+
+  return watchStream(
+    null,
+    target: targetBloc.stream,
+    initialValue: initialState ?? targetBloc.state,
+    preserveState: preserveState,
+    instanceName: instanceName,
+    getIt: getIt,
+  );
+}

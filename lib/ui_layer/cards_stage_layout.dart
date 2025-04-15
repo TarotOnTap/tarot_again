@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:gap/gap.dart';
 import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
@@ -25,8 +24,8 @@ class CardsStageLayout extends WatchingWidget with Logging {
       child: Placeholder(child: Text("Stage Build had no result.")),
     );
 
-    Iterable<Widget> kids = const IList<Widget>.empty();
-    Iterable<CardWidgetBloc> kidsBlocs = const IList<CardWidgetBloc>.empty();
+    // Iterable<Widget> kids = const IList<Widget>.empty();
+    // Iterable<CardWidgetBloc> kidsBlocs = const IList<CardWidgetBloc>.empty();
 
     verbose("CardStageLayout.build: everything is ready to go.");
 
@@ -40,17 +39,16 @@ class CardsStageLayout extends WatchingWidget with Logging {
       case Some<Iterable<DealtCard>>(value: var v):
         verbose("  dt.cards is Some");
 
-        kidsBlocs = v.map(
-          (DealtCard c) => CardWidgetBloc(id: c.toString(), card: c),
-        );
+        // kidsBlocs = v.map(
+        //   (DealtCard c) => CardWidgetBloc(id: c.toString(), card: c),
+        // );
 
-        final paramsList = v.zip(kidsBlocs);
+        // final paramsList = v.zip(kidsBlocs);
         result = Row(
-          children: paramsList.fold(
+          children: v.fold(
             <Widget>[],
-            (prev, elem) =>
-                prev +
-                [CardWidgetOld(dealtCard: elem.$1, cardBloc: elem.$2), Gap(6)],
+            (prev, elem) => prev + [CardWidget(card: elem)],
+            // [CardWidgetOld(dealtCard: elem.$1, cardBloc: elem.$2), Gap(6)],
           ),
         );
       case None():
