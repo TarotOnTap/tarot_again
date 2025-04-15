@@ -8,6 +8,7 @@ abstract class CardWidgetState with _$CardWidgetState {
   const factory CardWidgetState({
     @Default(false) bool faceUp,
     @Default(false) bool reversed,
+    required DealtCard card,
   }) = _CardWidgetState;
 
   factory CardWidgetState.fromJson(Map<String, Object?> json) =>

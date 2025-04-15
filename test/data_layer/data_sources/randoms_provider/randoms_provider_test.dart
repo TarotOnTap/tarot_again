@@ -18,7 +18,7 @@ Stream<int> getNRandomInts({
 void main() async {
   initializeLoggingService();
 
-  await initializeDataLayer();
+  initializeDataLayer();
 
   AsyncRandoms randoms = sl<AsyncRandoms>();
 
@@ -68,4 +68,6 @@ void main() async {
       },
     );
   });
+
+  group("Testing AsyncRandoms shuffleIterableStream", () {});
 }

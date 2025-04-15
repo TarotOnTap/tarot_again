@@ -42,8 +42,8 @@ Future<void> initializeEverything() async {
             : HydratedStorageDirectory((await getTemporaryDirectory()).path),
   );
 
-  await initializeDataLayer();
-  await initializeBlocs();
+  initializeDataLayer();
+  initializeBlocs();
 }
 
 class TarotAgainApp extends StatelessWidget {

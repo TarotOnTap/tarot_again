@@ -10,6 +10,8 @@ abstract class BulkCardControlState with _$BulkCardControlState {
     @Default(true) bool reversalsAllowed,
     @Default("RWS") String deckName,
     @Default(Option<CardPositions>.none()) Option<CardPositions> positions,
+    @Default(Option<Iterable<DealtCard>>.none())
+    Option<Iterable<DealtCard>> cards,
   }) = _BulkCardControlState;
 
   factory BulkCardControlState.fromJson(Map<String, Object?> json) =>

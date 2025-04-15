@@ -1,5 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:tarot_again/blocs/blocs.dart';
+import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 part 'bulk_card_control_bloc.freezed.dart';
@@ -7,14 +8,10 @@ part 'bulk_card_control_bloc.g.dart';
 part 'bulk_card_control_event.dart';
 part 'bulk_card_control_state.dart';
 
-// this is a very simple bloc, and it is used to control bulk aspects of our
-// dealt cards - are reversals allowed? Some readers don't want them, so we offer
-// a visual control to permit or deny them. NOTE - cards will still be dealt with
-// reversals, but the display widget will use our state as a master switch, like so:
-// if (di<BulkCardControlBloc>().state.reversalsAllowed && card.reversed)...
 class BulkCardControlBloc
-    extends HydratedBloc<BulkCardControlEvent, BulkCardControlState> {
-  BulkCardControlBloc() : super(BulkCardControlState()) {
+    extends HydratedBloc<BulkCardControlEvent, BulkCardControlState>
+    with Logging {
+  BulkCardControlBloc._() : super(BulkCardControlState()) {
     on<AllowReversals>(
       (event, emit) => emit(state.copyWith(reversalsAllowed: true)),
     );
@@ -48,6 +45,25 @@ class BulkCardControlBloc
 
       emit(state.copyWith(deckName: event.deckName));
     });
+
+    on<BulkCardDealCards>((event, emit) async {
+      verbose("BulkCardControlBloc on<BulkCardDealCards event");
+      verbose("  event is $event");
+
+      DeckRepository deck = sl<DeckRepository>();
+      await deck.shuffleDeck();
+      Option<Iterable<DealtCard>> cardsOut = None();
+
+      verbose("  dealing cards");
+      List<DealtCard> deal =
+          (await deck.dealtCardQueue.take(event.howMany)).toList();
+
+      verbose("  dealt cards is $deal");
+
+      if (deal.isNotEmpty) {
+        emit(state.copyWith(cards: Option<Iterable<DealtCard>>.of(deal)));
+      }
+    });
   }
 
   @override
@@ -57,9 +73,11 @@ class BulkCardControlBloc
   @override
   Map<String, dynamic>? toJson(BulkCardControlState state) => state.toJson();
 
-  static Future<void> initialize() async {
+  factory BulkCardControlBloc() {
     if (!sl.isRegistered<BulkCardControlBloc>()) {
-      sl.registerSingleton<BulkCardControlBloc>(BulkCardControlBloc());
+      sl.registerSingleton<BulkCardControlBloc>(BulkCardControlBloc._());
     }
+
+    return sl<BulkCardControlBloc>();
   }
 }

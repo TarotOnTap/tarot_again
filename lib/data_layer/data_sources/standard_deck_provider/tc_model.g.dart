@@ -6,8 +6,8 @@ part of 'tc_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_TCMinorArcanaModel _$TCMinorArcanaModelFromJson(Map<String, dynamic> json) =>
-    _TCMinorArcanaModel(
+TCMinorArcanaModel _$TCMinorArcanaModelFromJson(Map<String, dynamic> json) =>
+    TCMinorArcanaModel(
       sortOrder: (json['sortOrder'] as num).toInt(),
       assetName: json['assetName'] as String,
       suit: $enumDecode(_$SuitsEnumMap, json['suit']),
@@ -15,7 +15,7 @@ _TCMinorArcanaModel _$TCMinorArcanaModelFromJson(Map<String, dynamic> json) =>
       $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$TCMinorArcanaModelToJson(_TCMinorArcanaModel instance) =>
+Map<String, dynamic> _$TCMinorArcanaModelToJson(TCMinorArcanaModel instance) =>
     <String, dynamic>{
       'sortOrder': instance.sortOrder,
       'assetName': instance.assetName,
@@ -48,15 +48,15 @@ const _$PipsEnumMap = {
   Pips.king: 'king',
 };
 
-_TCMajorArcanaModel _$TCMajorArcanaModelFromJson(Map<String, dynamic> json) =>
-    _TCMajorArcanaModel(
+TCMajorArcanaModel _$TCMajorArcanaModelFromJson(Map<String, dynamic> json) =>
+    TCMajorArcanaModel(
       sortOrder: (json['sortOrder'] as num).toInt(),
       assetName: json['assetName'] as String,
       card: $enumDecode(_$MajorArcanaEnumMap, json['card']),
       $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$TCMajorArcanaModelToJson(_TCMajorArcanaModel instance) =>
+Map<String, dynamic> _$TCMajorArcanaModelToJson(TCMajorArcanaModel instance) =>
     <String, dynamic>{
       'sortOrder': instance.sortOrder,
       'assetName': instance.assetName,

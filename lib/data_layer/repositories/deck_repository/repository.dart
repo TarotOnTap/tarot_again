@@ -1,23 +1,48 @@
 import 'package:tarot_again/data_layer/data_layer.dart';
+import 'package:tarot_again/data_layer/repositories/types.dart';
 import 'package:tarot_again/util/util.dart';
 
-class DeckRepository {
-  late AsyncRandoms randomsProvider;
-  late StandardDeckProvider standardDeckProvider;
-
-  late AssetProvider assetProvider;
-
+class DeckRepository extends SingletonRepository with Logging {
   String deckName;
 
-  DeckRepository({required this.deckName}) {
-    randomsProvider = sl<AsyncRandoms>();
-    standardDeckProvider = sl<StandardDeckProvider>();
-    assetProvider = sl<AssetProvider>();
+  DeckRepository._({required this.deckName});
+
+  factory DeckRepository({String? deckName}) {
+    if (!sl.isRegistered<DeckRepository>()) {
+      sl.registerSingleton<DeckRepository>(
+        DeckRepository._(deckName: deckName ?? "RWS"),
+      );
+    }
+
+    return sl<DeckRepository>();
   }
 
   Future<void> shuffleDeck() async {
-    await standardDeckProvider.shuffleDeck();
+    await sl<StandardDeckProvider>().shuffleDeck();
   }
+
+  Future<DealtCard> _transformTCModelToDealtCard(TCModel card) async {
+    verbose("_transformTCModelToDealtCard");
+    final bool reversed = await sl<AsyncRandoms>().getNextBool();
+    verbose("  reversed is $reversed");
+
+    DealtModel model = DealtModel(assetName: card.assetName);
+
+    DealtCard temp = await model.transform(card: card, isReversed: reversed);
+    verbose("  temp is $temp");
+    return temp;
+
+    // return model.transform(card: card, isReversed: reversed);
+  }
+
+  Stream<DealtCard> dealtCardStream() async* {
+    // can't use Stream.map here because of async _transformTCModelToDealtCard
+    await for (var card in sl<StandardDeckProvider>().currentShuffleStream) {
+      yield await _transformTCModelToDealtCard(card);
+    }
+  }
+
+  StreamQueue<DealtCard> get dealtCardQueue => StreamQueue(dealtCardStream());
 
   Future<DealtCard> dealNextCard() async {
     // First, we get the next card from the standardDeckProvider.
@@ -26,16 +51,11 @@ class DeckRepository {
     // given card.
     // Lastly, we turn that into a dealt card by assigning reversal if appropriate.
 
-    TCModel? nextCard = await standardDeckProvider.currentShuffle?.next;
+    TCModel? nextCard = await sl<StandardDeckProvider>().getNextCard();
     DealtCard returnCard = DealtCard.deckEmpty();
 
     if (nextCard != null) {
-      // final AssetPathMap paths = assetPathGenerator(nextCard.assetName);
-      final bool reversed = await di<AsyncRandoms>().getNextBool();
-
-      DealtModel model = DealtModel(assetName: nextCard.assetName);
-
-      returnCard = await model.transform(card: nextCard, reversed: reversed);
+      returnCard = await _transformTCModelToDealtCard(nextCard);
     }
 
     return returnCard;

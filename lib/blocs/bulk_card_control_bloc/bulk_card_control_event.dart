@@ -26,3 +26,10 @@ class AddCardPosition extends BulkCardControlEvent {
 
   AddCardPosition(this.position);
 }
+
+@immutable
+class BulkCardDealCards extends BulkCardControlEvent {
+  final int howMany;
+
+  BulkCardDealCards(this.howMany);
+}

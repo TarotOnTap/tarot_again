@@ -1,5 +1,5 @@
 export 'asset_provider/asset_provider.dart';
-export 'initializer.dart';
+export 'initializer.dart' show initializeDataSources;
 export 'layout_provider/layout_provider.dart';
 export 'playing_card_deck_type.dart';
 export 'randoms_provider/randoms_provider.dart';

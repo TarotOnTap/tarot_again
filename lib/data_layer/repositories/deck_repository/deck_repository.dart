@@ -1,4 +1,3 @@
-export 'initializer.dart' show initializeDeckRepository;
 export 'types.dart';
 
 // This repository shuffles decks and deals cards.

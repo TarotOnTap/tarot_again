@@ -3,13 +3,17 @@ import 'package:watch_it/watch_it.dart';
 
 mixin Logging {
   // final Talker _log = sl<Talker>();
-  static void debug(msg) => sl<Talker>().debug(msg);
+  /* static */
+  void debug(msg) => sl<Talker>().debug("$this:$msg");
 
-  static void error(msg) => sl<Talker>().error(msg);
+  /* static */
+  void error(msg) => sl<Talker>().error("$this:$msg");
 
-  static void verbose(msg) => sl<Talker>().verbose(msg);
+  /* static */
+  void verbose(msg) => sl<Talker>().verbose("$this:$msg");
 
-  static void warning(msg) => sl<Talker>().warning(msg);
+  /* static */
+  void warning(msg) => sl<Talker>().warning("$this:$msg");
 }
 
 class GoodLog extends TalkerLog {

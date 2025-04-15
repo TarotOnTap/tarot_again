@@ -6,12 +6,14 @@ import 'package:tarot_again/util/util.dart';
 typedef LoadedAssetsMap = IMap<String, String>;
 
 class AssetProvider extends BaseProvider with Logging {
-  AssetProvider();
+  AssetProvider._();
 
-  static Future<void> initialize() async {
-    if (!di.isRegistered<AssetProvider>()) {
-      di.registerSingleton(AssetProvider());
+  factory AssetProvider() {
+    if (!sl.isRegistered<AssetProvider>()) {
+      return sl.registerSingleton<AssetProvider>(AssetProvider._());
     }
+
+    return sl<AssetProvider>();
   }
 
   Future<String> loadMarkdownAsset(String assetPath) async {
@@ -21,9 +23,7 @@ class AssetProvider extends BaseProvider with Logging {
       try {
         result = await rootBundle.loadString(assetPath);
       } catch (e, s) {
-        Logging.verbose(
-          "AssetProvider.loadMarkdownAsset raised error $e\n\n$s",
-        );
+        verbose("AssetProvider.loadMarkdownAsset raised error $e\n\n$s");
       }
     }
 

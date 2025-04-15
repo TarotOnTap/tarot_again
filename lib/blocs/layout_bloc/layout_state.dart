@@ -2,17 +2,29 @@ part of 'layout_bloc.dart';
 
 @freezed
 sealed class LayoutState with _$LayoutState {
-  const factory LayoutState.initial() = _Initial;
+  const factory LayoutState.initial({
+    @Default(<String>[]) Iterable<String> layoutNames,
+    @Default("Empty Layout") String currentLayoutName,
+    @Default(TarotLayout.nullLayout()) TarotLayout currentLayout,
+  }) = Initial;
 
   const factory LayoutState.changeLayoutState({
-    required String selectedLayout,
+    @Default(<String>[]) Iterable<String> layoutNames,
+    @Default("Empty Layout") String currentLayoutName,
+    @Default(TarotLayout.nullLayout()) TarotLayout currentLayout,
   }) = ChangeLayoutState;
 
-  factory LayoutState.layoutStateReadyToDeal({required String selectedLayout}) =
-      LayoutStateReadyToDeal;
+  factory LayoutState.layoutStateReadyToDeal({
+    @Default(<String>[]) Iterable<String> layoutNames,
+    required String currentLayoutName,
+    required TarotLayout currentLayout,
+  }) = LayoutStateReadyToDeal;
 
-  factory LayoutState.layoutStateDealt({required String selectedLayout}) =
-      LayoutStateDealt;
+  factory LayoutState.layoutStateDealt({
+    @Default(<String>[]) Iterable<String> layoutNames,
+    required String currentLayoutName,
+    required TarotLayout currentLayout,
+  }) = LayoutStateDealt;
 
   factory LayoutState.fromJson(Map<String, dynamic> json) =>
       _$LayoutStateFromJson(json);

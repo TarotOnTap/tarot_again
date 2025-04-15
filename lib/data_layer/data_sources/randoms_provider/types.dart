@@ -5,44 +5,58 @@ import 'dart:math';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
-abstract class AsyncRandoms extends BaseProvider {
-  final String sourceChoice;
+typedef RandomGenMap = IMap<String, RandomsProvider Function()>;
 
-  AsyncRandoms._(this.sourceChoice);
-
-  static Future<void> initialize() async {
-    if (!sl.isRegistered<AsyncRandoms>()) {
-      sl.registerSingleton<AsyncRandoms>(AsyncRandoms("local"));
-    }
-  }
-
-  factory AsyncRandoms(String? source) {
-    late final AsyncRandoms current;
-    AsyncRandoms returnRandom;
-
-    try {
-      current = sl<AsyncRandoms>();
-    } catch (e) {
-      current = SecureRandom();
-    }
-
-    if (current.sourceChoice != source) {
-      returnRandom = switch (source) {
-        "local" || "none" => SecureRandom(),
-        _ => SecureRandom(),
-      };
-    } else {
-      returnRandom = current ?? SecureRandom();
-    }
-
-    return returnRandom;
-  }
-
+abstract class RandomsProvider {
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh});
 
   Future<double> getNextDouble();
 
   Future<bool> getNextBool();
+}
+
+class AsyncRandoms extends BaseProvider with Logging {
+  RandomGenMap randomGenerators =
+      {"local": SecureRandom.new, "none": SecureRandom.new}.lock;
+
+  String currentGenerator = "";
+  late RandomsProvider currentProvider;
+
+  // other random generators get their own variables here
+
+  AsyncRandoms._() {
+    setRandomSource("local");
+  }
+
+  factory AsyncRandoms() {
+    if (!sl.isRegistered<AsyncRandoms>()) {
+      return sl.registerSingleton<AsyncRandoms>(AsyncRandoms._());
+    }
+
+    return sl<AsyncRandoms>();
+  }
+
+  void setRandomSource(String newSource) {
+    // this *always* inserts a new random generator of the source type, even if it's
+    // the same as the current source type.
+    // along the way
+
+    currentGenerator =
+        randomGenerators.containsKey(newSource) ? newSource : "local";
+
+    RandomsProvider Function()? maker = randomGenerators.get(currentGenerator);
+
+    maker ??= SecureRandom.new;
+
+    currentProvider = maker();
+  }
+
+  Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>
+      currentProvider.getNextInt(rangeLow: rangeLow = 0, rangeHigh: rangeHigh);
+
+  Future<double> getNextDouble() => currentProvider.getNextDouble();
+
+  Future<bool> getNextBool() => currentProvider.getNextBool();
 
   Future<IList<E>> shuffleIterable<E>(
     // The goal is to return a list of cards in shuffled order.
@@ -86,18 +100,19 @@ abstract class AsyncRandoms extends BaseProvider {
       yield* shuffleIterableStream(copy);
     }
   }
+
+  StreamQueue<E> shuffleIterableQueue<E>(Iterable<E> remaining) =>
+      StreamQueue(shuffleIterableStream<E>(remaining));
 }
 
 // class SecureRandom extends _AsyncRandomsImpl with Logging {
 // use Random.secure() to create a "good enough" random number generator.
-class SecureRandom extends AsyncRandoms with Logging {
+class SecureRandom extends RandomsProvider with Logging {
   // Other classes implement random numbers using various publicly available
   // online RNGs based on natural events.
   // The only reason to make an async version of the Random class is to use as
   // a drop-in replacement for the other classes.
   final Random secureRandom = Random.secure();
-
-  SecureRandom() : super._("SecureRandom");
 
   @override
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>

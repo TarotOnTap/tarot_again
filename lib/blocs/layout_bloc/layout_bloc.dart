@@ -6,11 +6,32 @@ part 'layout_bloc.g.dart';
 part 'layout_event.dart';
 part 'layout_state.dart';
 
-class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> {
-  LayoutBloc() : super(const LayoutState.initial()) {
-    on<LayoutEvent>((event, emit) {
-      // TODO: implement event handler
+class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> with Logging {
+  late final LayoutRepository layoutRepository;
+
+  LayoutBloc._() : super(const LayoutState.initial()) {
+    layoutRepository = sl<LayoutRepository>();
+
+    on<Starting>((event, emit) async {
+      emit(state.copyWith(layoutNames: layoutRepository.listLayouts));
     });
+
+    on<SetNewLayout>((SetNewLayout event, emit) {
+      final layoutNames = layoutRepository.layoutDisplayNames;
+      final TarotLayout layout = layoutRepository.getLayoutByDisplayName(
+        event.newLayout,
+      );
+
+      emit(
+        LayoutState.layoutStateReadyToDeal(
+          currentLayoutName: event.newLayout,
+          currentLayout: layout,
+          layoutNames: layoutNames,
+        ),
+      );
+    });
+
+    add(LayoutEvent.starting());
   }
 
   @override
@@ -20,9 +41,11 @@ class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> {
   @override
   Map<String, dynamic>? toJson(LayoutState state) => state.toJson();
 
-  static Future<void> initialize() async {
+  factory LayoutBloc() {
     if (!sl.isRegistered<LayoutBloc>()) {
-      sl.registerSingleton(LayoutBloc());
+      sl.registerSingleton<LayoutBloc>(LayoutBloc._());
     }
+
+    return sl<LayoutBloc>();
   }
 }

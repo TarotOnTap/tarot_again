@@ -98,12 +98,16 @@ class $AssetsDecksStandardTarotRWSDescriptionsGen {
   String get fool =>
       'packages/tarot_again/assets/decks/standard_tarot/RWS/descriptions/fool.md';
 
+  /// File path: assets/decks/standard_tarot/RWS/descriptions/hermit.md
+  String get hermit =>
+      'packages/tarot_again/assets/decks/standard_tarot/RWS/descriptions/hermit.md';
+
   /// Directory path: packages/tarot_again/assets/decks/standard_tarot/RWS/descriptions
   String get path =>
       'packages/tarot_again/assets/decks/standard_tarot/RWS/descriptions';
 
   /// List of all assets
-  List<String> get values => [fool];
+  List<String> get values => [fool, hermit];
 }
 
 class $AssetsDecksStandardTarotRWSImagesGen {

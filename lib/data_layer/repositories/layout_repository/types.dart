@@ -20,9 +20,13 @@ abstract class LayoutPositionInfo with _$LayoutPositionInfo {
 }
 
 @freezed
-abstract class TarotLayout with _$TarotLayout {
-  factory TarotLayout({required String layoutName}) = _TarotLayout;
+abstract class LayoutMapRecord with _$LayoutMapRecord {
+  factory LayoutMapRecord({
+    required String displayName,
+    required String assetPath,
+    required TarotLayout layout,
+  }) = _LayoutMapRecord;
 
-  factory TarotLayout.fromJson(Map<String, dynamic> json) =>
-      _$TarotLayoutFromJson(json);
+  factory LayoutMapRecord.fromJson(Map<String, Object?> json) =>
+      _$LayoutMapRecordFromJson(json);
 }

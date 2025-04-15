@@ -7,10 +7,10 @@ class LayoutSlot {
   LayoutSlot();
 }
 
-@freezed
-sealed class Layout with _$Layout {
+@Freezed(unionKey: 'layoutType', unionValueCase: FreezedUnionCase.pascal)
+sealed class TarotLayout with _$TarotLayout {
   /// These classes are only data and do not have any methods
-  factory Layout.horizontalLinear({
+  factory TarotLayout.horizontalLinear({
     required String displayName,
     required String layoutType,
     required String horizontalAlign,
@@ -20,13 +20,16 @@ sealed class Layout with _$Layout {
     required List<String> slots,
   }) = HorizontalLinear;
 
-  factory Layout.simpleGrid({
+  factory TarotLayout.simpleGrid({
     required String displayName,
     required String layoutType,
-    required int numCard,
+    required int numCards,
   }) = SimpleGrid;
 
-  factory Layout.nullLayout() = NullLayout;
+  const factory TarotLayout.nullLayout({
+    @Default("Empty Layout") String displayName,
+  }) = NullLayout;
 
-  factory Layout.fromJson(Map<String, dynamic> json) => _$LayoutFromJson(json);
+  factory TarotLayout.fromJson(Map<String, dynamic> json) =>
+      _$TarotLayoutFromJson(json);
 }

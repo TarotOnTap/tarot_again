@@ -1,7 +1,8 @@
 import 'package:tarot_again/data_layer/data_layer.dart';
 
-Future<void> initializeRepositories() async {
-  await initializeDataSources();
+void initializeRepositories() {
+  // initializeDataSources();
 
-  await initializeDeckRepository();
+  DeckRepository();
+  LayoutRepository();
 }

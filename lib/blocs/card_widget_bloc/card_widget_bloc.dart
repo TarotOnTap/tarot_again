@@ -10,14 +10,13 @@ part 'card_widget_state.dart';
 
 class CardWidgetBloc extends HydratedBloc<CardWidgetEvent, CardWidgetState> {
   final String _id;
-  final DealtCard card;
 
   @override
   String get id => _id;
 
-  CardWidgetBloc({required String id, required this.card})
+  CardWidgetBloc({required String id, required card})
     : _id = id,
-      super(CardWidgetState()) {
+      super(CardWidgetState(card: card)) {
     on<CardWidgetFaceUpEvent>(
       (event, emit) => emit(state.copyWith(faceUp: true)),
     );

@@ -17,11 +17,11 @@ TCModel _$TCModelFromJson(
 ) {
         switch (json['type']) {
                   case 'TcMinorArcanaModel':
-          return _TCMinorArcanaModel.fromJson(
+          return TCMinorArcanaModel.fromJson(
             json
           );
                 case 'TcMajorArcanaModel':
-          return _TCMajorArcanaModel.fromJson(
+          return TCMajorArcanaModel.fromJson(
             json
           );
         
@@ -103,9 +103,9 @@ as String,
 /// @nodoc
 @JsonSerializable()
 
-class _TCMinorArcanaModel extends TCModel {
-   _TCMinorArcanaModel({required this.sortOrder, required this.assetName, required this.suit, required this.pips, final  String? $type}): $type = $type ?? 'TcMinorArcanaModel',super._();
-  factory _TCMinorArcanaModel.fromJson(Map<String, dynamic> json) => _$TCMinorArcanaModelFromJson(json);
+class TCMinorArcanaModel implements TCModel {
+   TCMinorArcanaModel({required this.sortOrder, required this.assetName, required this.suit, required this.pips, final  String? $type}): $type = $type ?? 'TcMinorArcanaModel';
+  factory TCMinorArcanaModel.fromJson(Map<String, dynamic> json) => _$TCMinorArcanaModelFromJson(json);
 
 @override final  int sortOrder;
 @override final  String assetName;
@@ -120,7 +120,7 @@ final String $type;
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$TCMinorArcanaModelCopyWith<_TCMinorArcanaModel> get copyWith => __$TCMinorArcanaModelCopyWithImpl<_TCMinorArcanaModel>(this, _$identity);
+$TCMinorArcanaModelCopyWith<TCMinorArcanaModel> get copyWith => _$TCMinorArcanaModelCopyWithImpl<TCMinorArcanaModel>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
@@ -129,7 +129,7 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TCMinorArcanaModel&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.assetName, assetName) || other.assetName == assetName)&&(identical(other.suit, suit) || other.suit == suit)&&(identical(other.pips, pips) || other.pips == pips));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TCMinorArcanaModel&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.assetName, assetName) || other.assetName == assetName)&&(identical(other.suit, suit) || other.suit == suit)&&(identical(other.pips, pips) || other.pips == pips));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -145,8 +145,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$TCMinorArcanaModelCopyWith<$Res> implements $TCModelCopyWith<$Res> {
-  factory _$TCMinorArcanaModelCopyWith(_TCMinorArcanaModel value, $Res Function(_TCMinorArcanaModel) _then) = __$TCMinorArcanaModelCopyWithImpl;
+abstract mixin class $TCMinorArcanaModelCopyWith<$Res> implements $TCModelCopyWith<$Res> {
+  factory $TCMinorArcanaModelCopyWith(TCMinorArcanaModel value, $Res Function(TCMinorArcanaModel) _then) = _$TCMinorArcanaModelCopyWithImpl;
 @override @useResult
 $Res call({
  int sortOrder, String assetName, Suits suit, Pips pips
@@ -157,17 +157,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$TCMinorArcanaModelCopyWithImpl<$Res>
-    implements _$TCMinorArcanaModelCopyWith<$Res> {
-  __$TCMinorArcanaModelCopyWithImpl(this._self, this._then);
+class _$TCMinorArcanaModelCopyWithImpl<$Res>
+    implements $TCMinorArcanaModelCopyWith<$Res> {
+  _$TCMinorArcanaModelCopyWithImpl(this._self, this._then);
 
-  final _TCMinorArcanaModel _self;
-  final $Res Function(_TCMinorArcanaModel) _then;
+  final TCMinorArcanaModel _self;
+  final $Res Function(TCMinorArcanaModel) _then;
 
 /// Create a copy of TCModel
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? sortOrder = null,Object? assetName = null,Object? suit = null,Object? pips = null,}) {
-  return _then(_TCMinorArcanaModel(
+  return _then(TCMinorArcanaModel(
 sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as int,assetName: null == assetName ? _self.assetName : assetName // ignore: cast_nullable_to_non_nullable
 as String,suit: null == suit ? _self.suit : suit // ignore: cast_nullable_to_non_nullable
@@ -182,9 +182,9 @@ as Pips,
 /// @nodoc
 @JsonSerializable()
 
-class _TCMajorArcanaModel extends TCModel {
-   _TCMajorArcanaModel({required this.sortOrder, required this.assetName, required this.card, final  String? $type}): $type = $type ?? 'TcMajorArcanaModel',super._();
-  factory _TCMajorArcanaModel.fromJson(Map<String, dynamic> json) => _$TCMajorArcanaModelFromJson(json);
+class TCMajorArcanaModel implements TCModel {
+   TCMajorArcanaModel({required this.sortOrder, required this.assetName, required this.card, final  String? $type}): $type = $type ?? 'TcMajorArcanaModel';
+  factory TCMajorArcanaModel.fromJson(Map<String, dynamic> json) => _$TCMajorArcanaModelFromJson(json);
 
 @override final  int sortOrder;
 @override final  String assetName;
@@ -198,7 +198,7 @@ final String $type;
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$TCMajorArcanaModelCopyWith<_TCMajorArcanaModel> get copyWith => __$TCMajorArcanaModelCopyWithImpl<_TCMajorArcanaModel>(this, _$identity);
+$TCMajorArcanaModelCopyWith<TCMajorArcanaModel> get copyWith => _$TCMajorArcanaModelCopyWithImpl<TCMajorArcanaModel>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
@@ -207,7 +207,7 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TCMajorArcanaModel&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.assetName, assetName) || other.assetName == assetName)&&(identical(other.card, card) || other.card == card));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TCMajorArcanaModel&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.assetName, assetName) || other.assetName == assetName)&&(identical(other.card, card) || other.card == card));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -223,8 +223,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$TCMajorArcanaModelCopyWith<$Res> implements $TCModelCopyWith<$Res> {
-  factory _$TCMajorArcanaModelCopyWith(_TCMajorArcanaModel value, $Res Function(_TCMajorArcanaModel) _then) = __$TCMajorArcanaModelCopyWithImpl;
+abstract mixin class $TCMajorArcanaModelCopyWith<$Res> implements $TCModelCopyWith<$Res> {
+  factory $TCMajorArcanaModelCopyWith(TCMajorArcanaModel value, $Res Function(TCMajorArcanaModel) _then) = _$TCMajorArcanaModelCopyWithImpl;
 @override @useResult
 $Res call({
  int sortOrder, String assetName, MajorArcana card
@@ -235,17 +235,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$TCMajorArcanaModelCopyWithImpl<$Res>
-    implements _$TCMajorArcanaModelCopyWith<$Res> {
-  __$TCMajorArcanaModelCopyWithImpl(this._self, this._then);
+class _$TCMajorArcanaModelCopyWithImpl<$Res>
+    implements $TCMajorArcanaModelCopyWith<$Res> {
+  _$TCMajorArcanaModelCopyWithImpl(this._self, this._then);
 
-  final _TCMajorArcanaModel _self;
-  final $Res Function(_TCMajorArcanaModel) _then;
+  final TCMajorArcanaModel _self;
+  final $Res Function(TCMajorArcanaModel) _then;
 
 /// Create a copy of TCModel
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? sortOrder = null,Object? assetName = null,Object? card = null,}) {
-  return _then(_TCMajorArcanaModel(
+  return _then(TCMajorArcanaModel(
 sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as int,assetName: null == assetName ? _self.assetName : assetName // ignore: cast_nullable_to_non_nullable
 as String,card: null == card ? _self.card : card // ignore: cast_nullable_to_non_nullable
