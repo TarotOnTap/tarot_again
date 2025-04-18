@@ -11,6 +11,8 @@ class CardsStageLayout extends WatchingWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
+    final layoutName = watchBloc((LayoutBloc b) => b).data!.currentLayoutName;
+
     return Stack(
       children: <Widget>[
         Center(child: LayoutWidget()),
@@ -20,7 +22,7 @@ class CardsStageLayout extends WatchingWidget with Logging {
           dy: 5,
           touch: Touch.inside,
           child: Text(
-            sl<LayoutBloc>().state.currentLayoutName,
+            layoutName,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
         ),
