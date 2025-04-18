@@ -2,26 +2,26 @@ part of 'layout_bloc.dart';
 
 @freezed
 sealed class LayoutState with _$LayoutState {
-  const factory LayoutState.initial({
+  const factory LayoutState.layoutInitial({
     @Default(<String>[]) Iterable<String> layoutNames,
     @Default("Empty Layout") String currentLayoutName,
     @Default(TarotLayout.nullLayout()) TarotLayout currentLayout,
-  }) = Initial;
+  }) = LayoutInitial;
 
-  const factory LayoutState.changeLayoutState({
-    @Default(<String>[]) Iterable<String> layoutNames,
-    @Default("Empty Layout") String currentLayoutName,
-    @Default(TarotLayout.nullLayout()) TarotLayout currentLayout,
-  }) = ChangeLayoutState;
+  // const factory LayoutState.changeLayoutState({
+  //   @Default(<String>[]) Iterable<String> layoutNames,
+  //   @Default("Empty Layout") String currentLayoutName,
+  //   @Default(TarotLayout.nullLayout()) TarotLayout currentLayout,
+  // }) = ChangeLayoutState;
 
   factory LayoutState.layoutStateReadyToDeal({
-    @Default(<String>[]) Iterable<String> layoutNames,
+    required Iterable<String> layoutNames,
     required String currentLayoutName,
     required TarotLayout currentLayout,
   }) = LayoutStateReadyToDeal;
 
   factory LayoutState.layoutStateDealt({
-    @Default(<String>[]) Iterable<String> layoutNames,
+    required Iterable<String> layoutNames,
     required String currentLayoutName,
     required TarotLayout currentLayout,
   }) = LayoutStateDealt;

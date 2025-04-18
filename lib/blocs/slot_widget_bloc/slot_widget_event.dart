@@ -1,26 +1,33 @@
-part of 'card_widget_bloc.dart';
+part of 'slot_widget_bloc.dart';
 
 @immutable
-sealed class CardWidgetEvent implements BlocWidgetEvent {}
+sealed class SlotWidgetEvent implements BlocWidgetEvent {}
 
 @immutable
-class CardWidgetFaceUpEvent extends CardWidgetEvent {}
+class SlotWidgetFaceUpEvent extends SlotWidgetEvent {}
 
 @immutable
-class CardWidgetFaceDownEvent extends CardWidgetEvent {}
+class SlotWidgetFaceDownEvent extends SlotWidgetEvent {}
 
 @immutable
-class CardWidgetFlipFaceEvent extends CardWidgetEvent {}
+class SlotWidgetFlipFaceEvent extends SlotWidgetEvent {}
+
+// @immutable
+// class SlotWidgetSetReverseEvent extends SlotWidgetEvent {
+//   final bool reverse;
+//
+//   SlotWidgetSetReverseEvent({required this.reverse});
+// }
+//
+// @immutable
+// class SlotWidgetFlipReverseEvent extends SlotWidgetEvent {}
 
 @immutable
-class CardWidgetSetReverseEvent extends CardWidgetEvent {
-  final bool reverse;
+class SlotWidgetSetCardEvent extends SlotWidgetEvent {
+  final DealtCard card;
 
-  CardWidgetSetReverseEvent({required this.reverse});
+  SlotWidgetSetCardEvent(this.card);
 }
-
-@immutable
-class CardWidgetFlipReverseEvent extends CardWidgetEvent {}
 
 //
 // @immutable

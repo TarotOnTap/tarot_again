@@ -5,6 +5,7 @@ import 'package:watch_it/watch_it.dart';
 export 'dart:async';
 
 export 'package:async/async.dart';
+export 'package:change_case/change_case.dart';
 export 'package:equatable/equatable.dart';
 export 'package:fast_immutable_collections/fast_immutable_collections.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';

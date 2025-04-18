@@ -58,10 +58,14 @@ class BulkCardControlBloc
       List<DealtCard> deal =
           (await deck.dealtCardQueue.take(event.howMany)).toList();
 
-      verbose("  dealt cards is $deal");
+      if (deal.isNotEmpty) {
+        cardsOut = Option<Iterable<DealtCard>>.of(deal);
+      }
+
+      verbose("  dealt cards is $cardsOut");
 
       if (deal.isNotEmpty) {
-        emit(state.copyWith(cards: Option<Iterable<DealtCard>>.of(deal)));
+        emit(state.copyWith(cards: cardsOut));
       }
     });
   }

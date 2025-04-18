@@ -1,22 +1,31 @@
+import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/data_layer/repositories/types.dart';
 import 'package:tarot_again/util/util.dart';
 
 typedef LayoutCache = IMap<String, LayoutMapRecord>;
 
-class LayoutRepository extends SingletonRepository {
+class LayoutRepository extends SingletonRepository with Logging {
   LayoutCache layouts = LayoutCache({});
 
+  IList<String> layoutDisplayNames = const IList<String>.empty();
+
   Future<void> cacheLayouts() async {
+    verbose("cacheLayouts");
+
     LayoutProvider lp = LayoutProvider();
 
     for (var layout in Assets.layouts.tarotLayouts.values) {
+      verbose("  layout is $layout");
+
       TarotLayout l = await lp.loadLayout(layout);
+      verbose("  loadedLayout = $l");
 
       var pieceList = layout.split("/");
       String assetFileName = pieceList.last;
       String assetName = assetFileName.split('.')[0];
       // assetName is the map key
+      verbose("  assetName is $assetName");
 
       String displayName = assetName.splitMapJoin(
         "_",
@@ -40,6 +49,17 @@ class LayoutRepository extends SingletonRepository {
         layout: TarotLayout.nullLayout(),
       ),
     );
+
+    layoutDisplayNames =
+        layouts.values
+            .fold(
+              const IList<String>.empty(),
+              (prev, item) => prev.add(item.displayName),
+            )
+            .toList()
+            .lock;
+
+    sl<LayoutBloc>().add(SetLayoutNames(newLayoutNames: layoutDisplayNames));
   }
 
   LayoutRepository._() {
@@ -57,24 +77,20 @@ class LayoutRepository extends SingletonRepository {
   Iterable<String> get listLayouts =>
       layouts.keys; // like for a listview, or other display element
 
-  Iterable<String> get layoutDisplayNames => [
-    for (var item in layouts.values) item.displayName,
-  ];
-
   TarotLayout getLayoutByLayoutName(String name) =>
       layouts.get(name)?.layout ??
       TarotLayout.nullLayout(displayName: "No Such Layout");
 
-  TarotLayout getLayoutByDisplayName(String displayName) {
-    TarotLayout result = TarotLayout.nullLayout(displayName: "No Such Layout");
-
-    for (var item in layouts.entries) {
-      if (item.value.displayName == displayName) {
-        result = item.value.layout;
-        break;
-      }
-    }
-
-    return result;
-  }
+  TarotLayout getLayoutByDisplayName(String displayName) =>
+      layouts.entries
+          .firstWhere(
+            (item) => item.value.displayName == displayName,
+            orElse:
+                () => MapEntry<String, LayoutMapRecord>(
+                  "nullLayout",
+                  nullLayoutMapRecord,
+                ),
+          )
+          .value
+          .layout;
 }

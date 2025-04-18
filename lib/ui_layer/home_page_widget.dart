@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tarot_again/blocs/blocs.dart';
-import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/ui_layer/toplevel_layout.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -26,7 +25,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with Logging {
   int _counter = 0;
 
   final BulkCardControlBloc bccBloc = BulkCardControlBloc();
-  CardWidgetBloc? cwBloc;
+  // CardWidgetBloc? cwBloc;
 
   @override
   void initState() {
@@ -36,18 +35,18 @@ class _HomePageWidgetState extends State<HomePageWidget> with Logging {
   }
 
   Future<void> asyncInitState() async {
-    final dr = sl<DeckRepository>();
-
-    await dr.shuffleDeck();
-
-    final bob = Assets.layouts.tarotLayouts.values;
-    verbose("bob is $bob");
-
-    DealtCard card = await dr.dealNextCard();
-
-    setState(() {
-      cwBloc = CardWidgetBloc(id: "A", card: card);
-    });
+    // final dr = sl<DeckRepository>();
+    //
+    // await dr.shuffleDeck();
+    //
+    // final bob = Assets.layouts.tarotLayouts.values;
+    // verbose("bob is $bob");
+    //
+    // DealtCard card = await dr.dealNextCard();
+    //
+    // setState(() {
+    //   cwBloc = CardWidgetBloc(id: "A", card: card);
+    // });
   }
 
   void _incrementCounter() {

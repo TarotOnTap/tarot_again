@@ -1,6 +1,6 @@
 {
   "displayName": "Past, Present, Future",
-  "layoutType": "horizontalLinear",
+  "layoutType": "HorizontalLinear",
   "horizontalAlign": "center",
   "verticalAlign": "center",
   "alignOnCard": 1,

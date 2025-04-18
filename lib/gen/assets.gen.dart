@@ -15,9 +15,6 @@ class $AssetsDecksGen {
   /// Directory path: assets/decks/standard_tarot
   $AssetsDecksStandardTarotGen get standardTarot =>
       const $AssetsDecksStandardTarotGen();
-
-  /// Directory path: packages/tarot_again/assets/decks
-  String get path => 'packages/tarot_again/assets/decks';
 }
 
 class $AssetsLayoutsGen {
@@ -26,9 +23,6 @@ class $AssetsLayoutsGen {
   /// Directory path: assets/layouts/tarot_layouts
   $AssetsLayoutsTarotLayoutsGen get tarotLayouts =>
       const $AssetsLayoutsTarotLayoutsGen();
-
-  /// Directory path: packages/tarot_again/assets/layouts
-  String get path => 'packages/tarot_again/assets/layouts';
 }
 
 class $AssetsDecksStandardTarotGen {
@@ -41,24 +35,17 @@ class $AssetsDecksStandardTarotGen {
   /// Directory path: assets/decks/standard_tarot/meanings
   $AssetsDecksStandardTarotMeaningsGen get meanings =>
       const $AssetsDecksStandardTarotMeaningsGen();
-
-  /// Directory path: packages/tarot_again/assets/decks/standard_tarot
-  String get path => 'packages/tarot_again/assets/decks/standard_tarot';
 }
 
 class $AssetsLayoutsTarotLayoutsGen {
   const $AssetsLayoutsTarotLayoutsGen();
 
   /// File path: assets/layouts/tarot_layouts/all_cards.json
-  String get allCards =>
-      'packages/tarot_again/assets/layouts/tarot_layouts/all_cards.json';
+  String get allCards => 'assets/layouts/tarot_layouts/all_cards.json';
 
   /// File path: assets/layouts/tarot_layouts/past_present_future.json
   String get pastPresentFuture =>
-      'packages/tarot_again/assets/layouts/tarot_layouts/past_present_future.json';
-
-  /// Directory path: packages/tarot_again/assets/layouts/tarot_layouts
-  String get path => 'packages/tarot_again/assets/layouts/tarot_layouts';
+      'assets/layouts/tarot_layouts/past_present_future.json';
 
   /// List of all assets
   List<String> get values => [allCards, pastPresentFuture];
@@ -74,9 +61,6 @@ class $AssetsDecksStandardTarotRWSGen {
   /// Directory path: assets/decks/standard_tarot/RWS/images
   $AssetsDecksStandardTarotRWSImagesGen get images =>
       const $AssetsDecksStandardTarotRWSImagesGen();
-
-  /// Directory path: packages/tarot_again/assets/decks/standard_tarot/RWS
-  String get path => 'packages/tarot_again/assets/decks/standard_tarot/RWS';
 }
 
 class $AssetsDecksStandardTarotMeaningsGen {
@@ -85,26 +69,16 @@ class $AssetsDecksStandardTarotMeaningsGen {
   /// Directory path: assets/decks/standard_tarot/meanings/standard_tarot
   $AssetsDecksStandardTarotMeaningsStandardTarotGen get standardTarot =>
       const $AssetsDecksStandardTarotMeaningsStandardTarotGen();
-
-  /// Directory path: packages/tarot_again/assets/decks/standard_tarot/meanings
-  String get path =>
-      'packages/tarot_again/assets/decks/standard_tarot/meanings';
 }
 
 class $AssetsDecksStandardTarotRWSDescriptionsGen {
   const $AssetsDecksStandardTarotRWSDescriptionsGen();
 
   /// File path: assets/decks/standard_tarot/RWS/descriptions/fool.md
-  String get fool =>
-      'packages/tarot_again/assets/decks/standard_tarot/RWS/descriptions/fool.md';
+  String get fool => 'assets/decks/standard_tarot/RWS/descriptions/fool.md';
 
   /// File path: assets/decks/standard_tarot/RWS/descriptions/hermit.md
-  String get hermit =>
-      'packages/tarot_again/assets/decks/standard_tarot/RWS/descriptions/hermit.md';
-
-  /// Directory path: packages/tarot_again/assets/decks/standard_tarot/RWS/descriptions
-  String get path =>
-      'packages/tarot_again/assets/decks/standard_tarot/RWS/descriptions';
+  String get hermit => 'assets/decks/standard_tarot/RWS/descriptions/hermit.md';
 
   /// List of all assets
   List<String> get values => [fool, hermit];
@@ -121,10 +95,6 @@ class $AssetsDecksStandardTarotRWSImagesGen {
   AssetGenImage get hermit =>
       const AssetGenImage('assets/decks/standard_tarot/RWS/images/hermit.jpg');
 
-  /// Directory path: packages/tarot_again/assets/decks/standard_tarot/RWS/images
-  String get path =>
-      'packages/tarot_again/assets/decks/standard_tarot/RWS/images';
-
   /// List of all assets
   List<AssetGenImage> get values => [fool, hermit];
 }
@@ -139,10 +109,6 @@ class $AssetsDecksStandardTarotMeaningsStandardTarotGen {
   /// Directory path: assets/decks/standard_tarot/meanings/standard_tarot/upright
   $AssetsDecksStandardTarotMeaningsStandardTarotUprightGen get upright =>
       const $AssetsDecksStandardTarotMeaningsStandardTarotUprightGen();
-
-  /// Directory path: packages/tarot_again/assets/decks/standard_tarot/meanings/standard_tarot
-  String get path =>
-      'packages/tarot_again/assets/decks/standard_tarot/meanings/standard_tarot';
 }
 
 class $AssetsDecksStandardTarotMeaningsStandardTarotReversedGen {
@@ -150,11 +116,7 @@ class $AssetsDecksStandardTarotMeaningsStandardTarotReversedGen {
 
   /// File path: assets/decks/standard_tarot/meanings/standard_tarot/reversed/fool.md
   String get fool =>
-      'packages/tarot_again/assets/decks/standard_tarot/meanings/standard_tarot/reversed/fool.md';
-
-  /// Directory path: packages/tarot_again/assets/decks/standard_tarot/meanings/standard_tarot/reversed
-  String get path =>
-      'packages/tarot_again/assets/decks/standard_tarot/meanings/standard_tarot/reversed';
+      'assets/decks/standard_tarot/meanings/standard_tarot/reversed/fool.md';
 
   /// List of all assets
   List<String> get values => [fool];
@@ -165,11 +127,7 @@ class $AssetsDecksStandardTarotMeaningsStandardTarotUprightGen {
 
   /// File path: assets/decks/standard_tarot/meanings/standard_tarot/upright/fool.md
   String get fool =>
-      'packages/tarot_again/assets/decks/standard_tarot/meanings/standard_tarot/upright/fool.md';
-
-  /// Directory path: packages/tarot_again/assets/decks/standard_tarot/meanings/standard_tarot/upright
-  String get path =>
-      'packages/tarot_again/assets/decks/standard_tarot/meanings/standard_tarot/upright';
+      'assets/decks/standard_tarot/meanings/standard_tarot/upright/fool.md';
 
   /// List of all assets
   List<String> get values => [fool];
@@ -177,8 +135,6 @@ class $AssetsDecksStandardTarotMeaningsStandardTarotUprightGen {
 
 class Assets {
   const Assets._();
-
-  static const String package = 'tarot_again';
 
   static const $AssetsDecksGen decks = $AssetsDecksGen();
   static const $AssetsLayoutsGen layouts = $AssetsLayoutsGen();
@@ -188,8 +144,6 @@ class AssetGenImage {
   const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 
   final String _assetName;
-
-  static const String package = 'tarot_again';
 
   final Size? size;
   final Set<String> flavors;
@@ -214,8 +168,7 @@ class AssetGenImage {
     bool matchTextDirection = false,
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
-    @Deprecated('Do not specify package for a generated library asset')
-    String? package = package,
+    String? package,
     FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
@@ -248,15 +201,11 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    @Deprecated('Do not specify package for a generated library asset')
-    String? package = package,
-  }) {
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
     return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;
 
-  String get keyName => 'packages/tarot_again/$_assetName';
+  String get keyName => _assetName;
 }

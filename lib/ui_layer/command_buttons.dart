@@ -2,6 +2,7 @@ import 'package:choice/choice.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/blocs/blocs.dart';
+import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 @immutable
@@ -19,31 +20,25 @@ class CommandButtonGroup extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    verbose("In CommandButtonGroup.build");
-    verbose("  groupLabel is $groupLabel");
-    verbose("  buttonInfos is $buttonInfos");
-    verbose("  handleBloc is $handlerBloc");
-    // String label;
-    // BlocWidgetEvent bwe;
-    //
-    // BulkCardControlBloc bccBloc = sl<BulkCardControlBloc>();
-    // LayoutRepository layoutRepository = sl<LayoutRepository>();
-    // LayoutBloc layoutBloc = sl<LayoutBloc>();
-
-    // List<String> layoutNames = layoutRepository.listLayouts.toList();
-
     return Column(
       children: <Widget>[
         Text(groupLabel),
         Gap(10),
         Column(
-          children: <Widget>[
-            for (var item in buttonInfos)
-              ElevatedButton(
-                onPressed: () => handlerBloc.add(item.$2),
-                child: Text(item.$1),
-              ),
-          ],
+          children: buttonInfos.fold(
+            [],
+            (prev, item) =>
+                prev +
+                [
+                  ElevatedButton(
+                    onPressed: () => handlerBloc.add(item.$2),
+                    child: Text(
+                      item.$1,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ],
+          ),
         ),
       ],
     );
@@ -57,33 +52,35 @@ class CommandButtons extends WatchingWidget with Logging {
   Widget build(BuildContext context) {
     verbose("In CommandButtons.build");
 
-    LayoutBloc layoutBloc = sl<LayoutBloc>();
-
-    final lrStream = watchStream(
-      (LayoutBloc lr) => lr.stream,
-      initialValue: layoutBloc.state,
-    );
+    final LayoutState layoutBlocState = watchBloc((LayoutBloc b) => b).data!;
+    verbose("build: layoutBlocState is $layoutBlocState");
 
     Widget returnWidget;
 
-    List<String> selectedLayout = <String>["Empty Layout"];
+    // String? selectedLayout = layoutBlocState.currentLayoutName;
+    RandomGenerators? selectedRandomGenerator;
 
-    final data = layoutBloc.state;
+    final randomGeneratorNames =
+        RandomGenerators.values
+            .map((item) => item.name.toNoCase().toCapitalCase())
+            .toList();
 
-    final displayNames = [...data.layoutNames];
+    // final data = layoutBloc.state;
 
-    switch (data) {
-      case Initial(layoutNames: var ln):
+    final displayNames = [...layoutBlocState.layoutNames];
+
+    switch (layoutBlocState) {
+      case LayoutInitial(layoutNames: var ln):
         verbose("  case Initial");
         verbose("  layoutNames is $ln");
 
-      case ChangeLayoutState(
-        currentLayoutName: var sl,
-        currentLayout: var tl,
-        layoutNames: var ln,
-      ):
-        verbose("  case ChangeLayoutState");
-        verbose("  layoutNames is $ln");
+      // case ChangeLayoutState(
+      //   currentLayoutName: var sl,
+      //   currentLayout: var tl,
+      //   layoutNames: var ln,
+      // ):
+      //   verbose("  case ChangeLayoutState");
+      //   verbose("  layoutNames is $ln");
 
       case LayoutStateReadyToDeal(layoutNames: var ln):
         verbose("  case LayoutStateReadyToDeal");
@@ -104,18 +101,22 @@ class CommandButtons extends WatchingWidget with Logging {
             ("Disallow reversals", DisallowReversals()),
             ("FaceUp on", TurnEverybodyFaceUpOn()),
             ("FaceUp off", TurnEverybodyFaceUpOff()),
-            ("Deal 5 cards", BulkCardDealCards(5)),
-            ("Deal 10 cards", BulkCardDealCards(10)),
+            ("Deal cards for layout", BulkCardDealCards(5)),
+            // ("Deal 10 cards", BulkCardDealCards(10)),
           ],
         ),
         Gap(30),
-        Choice<String>.prompt(
+        PromptedChoice<String>.single(
           title: "Select a layout",
           clearable: true,
-          value: selectedLayout,
-          onChanged: (List<String> values) {
-            layoutBloc.add(LayoutEvent.setNewLayout(newLayout: values[0]));
-            selectedLayout = values;
+          value: layoutBlocState.currentLayoutName,
+          // this changes after setNewLayout is called
+          onChanged: (String? value) {
+            if (value != null) {
+              verbose("  onChanged: value is $value");
+              sl<LayoutBloc>().add(LayoutEvent.setNewLayout(newLayout: value));
+              // selectedLayout = value;
+            }
           },
           itemCount: displayNames.length,
           itemBuilder: (state, i) {
@@ -125,6 +126,30 @@ class CommandButtons extends WatchingWidget with Logging {
               label: Text(displayNames[i]),
             );
           },
+          listBuilder: ChoiceList.createWrapped(
+            spacing: 10,
+            runSpacing: 10,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+          ),
+        ),
+        Gap(5),
+        PromptedChoice<RandomGenerators>.single(
+          title: "Select a source of randomness",
+          clearable: true,
+          value: selectedRandomGenerator,
+          onChanged: (RandomGenerators? value) {
+            if (value != null) {
+              sl<AsyncRandoms>().setRandomSource(value);
+              selectedRandomGenerator = value;
+            }
+          },
+          itemCount: RandomGenerators.values.length,
+          itemBuilder:
+              (state, index) => ChoiceChip(
+                selected: state.selected(RandomGenerators.values[index]),
+                onSelected: state.onSelected(RandomGenerators.values[index]),
+                label: Text(randomGeneratorNames[index]),
+              ),
           listBuilder: ChoiceList.createWrapped(
             spacing: 10,
             runSpacing: 10,

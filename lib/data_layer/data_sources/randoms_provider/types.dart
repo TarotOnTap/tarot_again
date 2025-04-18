@@ -5,7 +5,9 @@ import 'dart:math';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
-typedef RandomGenMap = IMap<String, RandomsProvider Function()>;
+enum RandomGenerators { none, local, secureRandom }
+
+typedef RandomGenMap = IMap<RandomGenerators, RandomsProvider Function()>;
 
 abstract class RandomsProvider {
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh});
@@ -17,15 +19,19 @@ abstract class RandomsProvider {
 
 class AsyncRandoms extends BaseProvider with Logging {
   RandomGenMap randomGenerators =
-      {"local": SecureRandom.new, "none": SecureRandom.new}.lock;
+      {
+        RandomGenerators.local: SecureRandom.new,
+        RandomGenerators.none: SecureRandom.new,
+        RandomGenerators.secureRandom: SecureRandom.new,
+      }.lock;
 
-  String currentGenerator = "";
+  RandomGenerators currentGenerator = RandomGenerators.none;
   late RandomsProvider currentProvider;
 
   // other random generators get their own variables here
 
   AsyncRandoms._() {
-    setRandomSource("local");
+    setRandomSource(RandomGenerators.local);
   }
 
   factory AsyncRandoms() {
@@ -36,13 +42,16 @@ class AsyncRandoms extends BaseProvider with Logging {
     return sl<AsyncRandoms>();
   }
 
-  void setRandomSource(String newSource) {
+  void setRandomSource(RandomGenerators newSource) {
     // this *always* inserts a new random generator of the source type, even if it's
     // the same as the current source type.
     // along the way
+    verbose("setRandomSource: newSource is $newSource");
 
     currentGenerator =
-        randomGenerators.containsKey(newSource) ? newSource : "local";
+        randomGenerators.containsKey(newSource)
+            ? newSource
+            : RandomGenerators.local;
 
     RandomsProvider Function()? maker = randomGenerators.get(currentGenerator);
 

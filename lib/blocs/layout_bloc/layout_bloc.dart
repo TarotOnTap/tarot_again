@@ -9,12 +9,17 @@ part 'layout_state.dart';
 class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> with Logging {
   late final LayoutRepository layoutRepository;
 
-  LayoutBloc._() : super(const LayoutState.initial()) {
+  LayoutBloc._() : super(const LayoutState.layoutInitial()) {
     layoutRepository = sl<LayoutRepository>();
 
-    on<Starting>((event, emit) async {
-      emit(state.copyWith(layoutNames: layoutRepository.listLayouts));
-    });
+    on<Starting>(
+      (event, emit) =>
+          emit(state.copyWith(layoutNames: layoutRepository.listLayouts)),
+    );
+
+    on<SetLayoutNames>(
+      (event, emit) => emit(state.copyWith(layoutNames: event.newLayoutNames)),
+    );
 
     on<SetNewLayout>((SetNewLayout event, emit) {
       final layoutNames = layoutRepository.layoutDisplayNames;

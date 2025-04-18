@@ -1,5 +1,5 @@
 {
   "displayName": "All Cards in a grid",
-  "layoutType": "simpleGrid",
+  "layoutType": "SimpleGrid",
   "numCards": 78
 }

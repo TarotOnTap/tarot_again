@@ -21,7 +21,7 @@ abstract class LayoutPositionInfo with _$LayoutPositionInfo {
 
 @freezed
 abstract class LayoutMapRecord with _$LayoutMapRecord {
-  factory LayoutMapRecord({
+  const factory LayoutMapRecord({
     required String displayName,
     required String assetPath,
     required TarotLayout layout,
@@ -30,3 +30,9 @@ abstract class LayoutMapRecord with _$LayoutMapRecord {
   factory LayoutMapRecord.fromJson(Map<String, Object?> json) =>
       _$LayoutMapRecordFromJson(json);
 }
+
+const nullLayoutMapRecord = LayoutMapRecord(
+  displayName: "null layout",
+  assetPath: "",
+  layout: TarotLayout.nullLayout(),
+);

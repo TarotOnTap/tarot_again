@@ -10,7 +10,12 @@ import 'package:tarot_again/util/util.dart';
 /// Inside a layout, a card (DealtCard) will be assigned to each layout slot by
 /// the LayoutRepository - not here.
 ///
+
+typedef LayoutAssetCache = IMap<String, TarotLayout>;
+
 class LayoutProvider extends BaseProvider with Logging {
+  LayoutAssetCache assetCache = const LayoutAssetCache.empty();
+
   TarotLayout? currentLayout;
 
   LayoutProvider._();
@@ -24,21 +29,33 @@ class LayoutProvider extends BaseProvider with Logging {
   }
 
   Future<TarotLayout> loadLayout(String layoutAsset) async {
-    String assetData = "";
-    TarotLayout retVal = TarotLayout.nullLayout();
+    verbose("loadLayout");
+    verbose("  layoutAsset is $layoutAsset");
 
-    try {
-      assetData = await rootBundle.loadString(layoutAsset);
-    } catch (e) {
-      verbose("loadLayout raised error $e");
+    if (assetCache.containsKey(layoutAsset)) {
+      verbose("  assetCache contains key");
+      return assetCache[layoutAsset]!;
+    } else {
+      String assetData = "";
+      TarotLayout retVal = TarotLayout.nullLayout();
+
+      try {
+        verbose("trying rootBundle.loadString on layoutAsset");
+        assetData = await rootBundle.loadString(layoutAsset);
+        verbose("  assetData is $assetData");
+
+        if (assetData.isNotEmpty) {
+          final resultMap = jsonDecode(assetData);
+
+          retVal = TarotLayout.fromJson(resultMap);
+
+          assetCache = assetCache.add(layoutAsset, retVal);
+        }
+      } catch (e) {
+        verbose("loadLayout raised error $e");
+      }
+
+      return retVal;
     }
-
-    if (assetData.isNotEmpty) {
-      final resultMap = jsonDecode(assetData);
-
-      retVal = TarotLayout.fromJson(resultMap);
-    }
-
-    return retVal;
   }
 }

@@ -13,10 +13,10 @@ sealed class TarotLayout with _$TarotLayout {
   factory TarotLayout.horizontalLinear({
     required String displayName,
     required String layoutType,
+    required int numCards,
     required String horizontalAlign,
     required String verticalAlign,
     int? alignOnCard,
-    required int numCards,
     required List<String> slots,
   }) = HorizontalLinear;
 
@@ -28,6 +28,8 @@ sealed class TarotLayout with _$TarotLayout {
 
   const factory TarotLayout.nullLayout({
     @Default("Empty Layout") String displayName,
+    @Default("nullLayout") String layoutType,
+    @Default(0) int numCards,
   }) = NullLayout;
 
   factory TarotLayout.fromJson(Map<String, dynamic> json) =>
