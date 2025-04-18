@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/ui_layer/ui_layer.dart';
 import 'package:tarot_again/util/util.dart';
@@ -62,6 +63,13 @@ class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> with Logging {
         final cards = await deckRepository.dealtCardQueue.take(
           state.currentLayout.numCards,
         );
+
+        var keys = IList<SlotKey>((state as LayoutStateReadyToDeal).slotKeys);
+        var c = IList<DealtCard>(cards);
+
+        for (var (k, item) in keys.zip(c)) {
+          k.currentState?.setDealtCard(item);
+        }
 
         emit(
           LayoutState.layoutStateDealt(

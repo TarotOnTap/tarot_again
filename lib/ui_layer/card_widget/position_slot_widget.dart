@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/ui_layer/card_widget/card_widget.dart';
 import 'package:tarot_again/util/util.dart';
@@ -38,8 +37,9 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final bcData = watchBloc((BulkCardControlBloc b) => b).data!;
-
+    // final bcData =
+    //     watchBloc((BulkCardControlBloc b) => b).data! as BulkCardControlState;
+    //
     return SizedBox(
       width: 80,
       height: 150,
@@ -58,40 +58,3 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
     return const Placeholder();
   }
 }
-
-// class OldPositionSlotWidget extends WatchingWidget {
-//   final String positionTitle;
-//   final SlotWidgetBloc slotBloc;
-//
-//   const OldPositionSlotWidget({
-//     super.key,
-//     required this.positionTitle,
-//     required this.slotBloc,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final blocWatch = watchBloc(null, bloc: slotBloc);
-//
-//     final SlotWidgetState blocData = blocWatch.data!;
-//
-//     return SizedBox(
-//       width: 80,
-//       height: 150,
-//       child: Column(
-//         children: <Widget>[
-//           Text(positionTitle),
-//           Expanded(
-//             child: switch (blocData) {
-//               SlotWidgetStateNotDealt nd => NoCardDealt(),
-//               SlotWidgetStateDealt dealt => CardWidget(
-//                 card: blocData.card,
-//                 superWidget: this,
-//               ),
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
