@@ -4,6 +4,7 @@ import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 import 'package:toastification/toastification.dart';
 
+import 'card_widget.dart';
 import 'deck_card_widget.dart';
 
 export 'position_slot_widget.dart';
@@ -23,32 +24,30 @@ class CardBack extends StatelessWidget {
 
 @immutable
 class CardWidget extends WatchingWidget {
-  final DealtCard card;
-  final SlotWidgetBloc slotBloc;
+  final PositionSlotWidgetState parentState;
 
-  const CardWidget({super.key, required this.card, required this.slotBloc});
+  const CardWidget({super.key, required this.parentState});
 
   @override
   Widget build(BuildContext context) {
-    final what = watchBloc((BulkCardControlBloc b) => b);
-    final slotStream = watchBloc(null, bloc: slotBloc);
+    final bcData = watchBloc((BulkCardControlBloc b) => b).data!;
+    // final slotStream = watchBloc(null, bloc: slotBloc);
 
-    final BulkCardControlState data = what.data!;
-    final SlotWidgetState slotData = slotStream.data!;
+    // final BulkCardControlState data = what.data!;
+    // final SlotWidgetState slotData = slotStream.data!;
 
-    if (slotData is SlotWidgetStateDealt) {
+    final dc = parentState.dealtCard;
+    if (dc != null) {
       bool doReverse = false;
 
-      if (card case DeckCard(reversed: var r)) {
-        doReverse = data.reversalsAllowed && r;
+      if (dc case DeckCard(reversed: var r)) {
+        doReverse = bcData.reversalsAllowed && r;
       }
 
-      // TODO: set up a card back widget - probably displayed here, but not necessarily
-      // TODO: the faceUp and faceDown logic need to happen somewhere, probably
       // at this level. Need to add BulkCardBloc at the top in order to have access
       // to reversalsAllowed and the global faceUp choice.
       return GestureDetector(
-        onDoubleTap: () => slotBloc.add(SlotWidgetFaceUpEvent()),
+        onDoubleTap: () => parentState.flipFace(),
         onSecondaryTap:
             () => toastification.show(
               title: Text("onSecondaryTap handler"),
@@ -67,9 +66,9 @@ class CardWidget extends WatchingWidget {
             decoration: BoxDecoration(border: Border.all(width: 2)),
             alignment: Alignment.center,
             child:
-                slotData.faceUp || data.everybodyFaceUp
-                    ? switch (card) {
-                      DeckCard() => DeckCardWidget(card: card as DeckCard),
+                parentState.faceUp || bcData.everybodyFaceUp
+                    ? switch (dc) {
+                      DeckCard() => DeckCardWidget(card: dc),
                       DeckEmpty() => DeckEmptyWidget(),
                       DeckInitial() => DeckInitialWidget(),
                     }

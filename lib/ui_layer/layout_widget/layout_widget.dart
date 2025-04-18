@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/ui_layer/card_widget/card_widget.dart';
+import 'package:tarot_again/ui_layer/ui_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 @immutable
@@ -20,15 +20,7 @@ class LayoutWidget extends WatchingWidget with Logging {
           for (var name in state.layoutNames) Text("  $name"),
         ],
       ),
-      // TODO is this state really necessary? I don't know what to do with it
-      // ChangeLayoutState() => Placeholder(
-      //   child: Column(
-      //     children: [Text("LayoutWidget"), Text("ChangeLayoutState")],
-      //   ),
-      // ),
-      LayoutStateReadyToDeal() => LayoutStateReadyToDealWidget(),
-      // TODO is this state really necessary? The child layout widgets actually handle dealt cards
-      // TODO by monitoring BulkCardControlBloc
+      LayoutStateReadyToDeal() => LayoutStateReadyToDealWidget(state: state),
       LayoutStateDealt() => Placeholder(
         child: Column(
           children: [Text("LayoutWidget"), Text("ChangeLayoutState")],
@@ -42,43 +34,45 @@ class LayoutWidget extends WatchingWidget with Logging {
 
 @immutable
 class LayoutStateReadyToDealWidget extends WatchingWidget with Logging {
-  LayoutStateReadyToDealWidget({super.key});
+  // passing state as a parameter prevents us from having to watch the
+  // layout bloc for changes. If our parent needs us to change, we will - we don't
+  // have to watch out for that.
+  final LayoutStateReadyToDeal state;
+
+  LayoutStateReadyToDealWidget({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
     // TODO this is the place where the actual layout happens, using one of the layout
     // TODO widgets. Do the layout, then give a big "Deal Cards" button or some other
     // TODO mechanism to fill the slot widgets with dealt cards.
-    final layoutState = sl<LayoutBloc>().state;
-
-    return switch (layoutState.currentLayout) {
-      HorizontalLinear() => LinearLayoutWidget(),
-      SimpleGrid() => GridLayoutWidget(),
-      NullLayout() => NullLayoutWidget(),
+    return switch (state.currentLayout) {
+      HorizontalLinear hl => LinearLayoutWidget(
+        slotKeys: state.slotKeys,
+        layout: hl,
+      ),
+      SimpleGrid sg => GridLayoutWidget(),
+      NullLayout nl => NullLayoutWidget(),
     };
   }
 }
 
 @immutable
 class LinearLayoutWidget extends WatchingWidget with Logging {
-  LinearLayoutWidget({super.key});
+  final KeyIterable slotKeys;
+  final HorizontalLinear layout;
+
+  LinearLayoutWidget({super.key, required this.slotKeys, required this.layout});
 
   @override
   Widget build(BuildContext context) {
-    final layoutInfo = sl<LayoutBloc>().state;
-    final HorizontalLinear layout =
-        layoutInfo.currentLayout as HorizontalLinear;
-
-    final keys = layout.slots.fold([], (prev, elem) {
-      final k = UniqueKey();
-      return prev + [(k, elem, SlotWidgetBloc(slotKey: k))];
-    });
+    final slotInfo = IList<SlotKey>(slotKeys).zip(IList<String>(layout.slots));
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        for (var (k, p, s) in keys)
-          PositionSlotWidget(key: k, positionTitle: p, slotBloc: s),
+        for (var (k, p) in slotInfo)
+          PositionSlotWidget(key: k, positionTitle: p),
       ],
     );
   }

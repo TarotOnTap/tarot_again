@@ -10,5 +10,9 @@ sealed class LayoutEvent with _$LayoutEvent {
 
   factory LayoutEvent.setNewLayout({required String newLayout}) = SetNewLayout;
 
+  // factory LayoutEvent.setBlocsAndKeys({required Iterable<SlotWidgetBloc> blocs, required })
+
+  factory LayoutEvent.dealCards() = DealCards;
+
   factory LayoutEvent.emptyLayout() = EmptyLayout;
 }

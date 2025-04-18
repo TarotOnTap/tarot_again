@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tarot_again/blocs/blocs.dart';
+import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/ui_layer/card_widget/card_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -9,43 +10,88 @@ class NoCardDealt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO I think I would prefer to display an icon here to plain text.
     return SizedBox(width: 70, height: 120, child: Center(child: Text("?")));
   }
 }
 
-class PositionSlotWidget extends WatchingWidget {
+class PositionSlotWidget extends WatchingStatefulWidget with Logging {
   final String positionTitle;
-  final SlotWidgetBloc slotBloc;
 
-  const PositionSlotWidget({
-    super.key,
-    required this.positionTitle,
-    required this.slotBloc,
-  });
+  const PositionSlotWidget({super.key, required this.positionTitle});
+
+  @override
+  State<PositionSlotWidget> createState() => PositionSlotWidgetState();
+}
+
+class PositionSlotWidgetState extends State<PositionSlotWidget> {
+  DealtCard? dealtCard;
+  bool faceUp = false;
+
+  void setDealtCard(DealtCard newCard) => setState(() => dealtCard = newCard);
+
+  void setFaceUp() => setState(() => faceUp = true);
+
+  void setFaceDown() => setState(() => faceUp = false);
+
+  void flipFace() => setState(() => faceUp = !faceUp);
 
   @override
   Widget build(BuildContext context) {
-    final blocWatch = watchBloc(null, bloc: slotBloc);
-
-    final SlotWidgetState blocData = blocWatch.data!;
+    final bcData = watchBloc((BulkCardControlBloc b) => b).data!;
 
     return SizedBox(
       width: 80,
       height: 150,
       child: Column(
         children: <Widget>[
-          Text(positionTitle),
+          Text(widget.positionTitle),
           Expanded(
-            child: switch (blocData) {
-              SlotWidgetStateNotDealt nd => NoCardDealt(),
-              SlotWidgetStateDealt dealt => CardWidget(
-                card: blocData.card,
-                slotBloc: slotBloc,
-              ),
+            child: switch (dealtCard) {
+              null => NoCardDealt(),
+              DealtCard dc => CardWidget(parentState: this),
             },
           ),
         ],
       ),
     );
+    return const Placeholder();
   }
 }
+
+// class OldPositionSlotWidget extends WatchingWidget {
+//   final String positionTitle;
+//   final SlotWidgetBloc slotBloc;
+//
+//   const OldPositionSlotWidget({
+//     super.key,
+//     required this.positionTitle,
+//     required this.slotBloc,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final blocWatch = watchBloc(null, bloc: slotBloc);
+//
+//     final SlotWidgetState blocData = blocWatch.data!;
+//
+//     return SizedBox(
+//       width: 80,
+//       height: 150,
+//       child: Column(
+//         children: <Widget>[
+//           Text(positionTitle),
+//           Expanded(
+//             child: switch (blocData) {
+//               SlotWidgetStateNotDealt nd => NoCardDealt(),
+//               SlotWidgetStateDealt dealt => CardWidget(
+//                 card: blocData.card,
+//                 superWidget: this,
+//               ),
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
