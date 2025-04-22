@@ -67,6 +67,8 @@ sealed class DealtCard with _$DealtCard {
     @Default("") String reversedMeaning,
   }) = DeckCard;
 
+  factory DealtCard.unassignedCard() = DealtCardUnassignedCard;
+
   /// the [deckInitial] constructor indicates that a deck has not been set up yet,
   /// and the [DeckInitial] class is an empty default value.
   factory DealtCard.deckInitial() = DeckInitial;

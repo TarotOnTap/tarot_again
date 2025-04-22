@@ -17,7 +17,7 @@ sealed class TarotLayout with _$TarotLayout {
     required String horizontalAlign,
     required String verticalAlign,
     int? alignOnCard,
-    required List<String> slots,
+    required IList<String> slotNames,
   }) = HorizontalLinear;
 
   factory TarotLayout.simpleGrid({

@@ -15,5 +15,10 @@ sealed class LayoutEvent with _$LayoutEvent implements BlocWidgetEvent {
 
   const factory LayoutEvent.dealCards() = DealCards;
 
+  // const factory LayoutEvent._alertDealtCards() = _AlertDealtCards;
+  const factory LayoutEvent.slotWidgetReadyForCard({
+    required GlobalKey<PositionSlotWidgetState> key,
+  }) = SlotWidgetReadyForCard;
+
   const factory LayoutEvent.emptyLayout() = EmptyLayout;
 }

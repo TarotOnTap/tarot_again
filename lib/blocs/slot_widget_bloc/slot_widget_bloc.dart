@@ -6,35 +6,35 @@ import '../blocs.dart';
 
 part 'slot_widget_bloc.freezed.dart';
 part 'slot_widget_event.dart';
+
+/// don't mess with this
+/// don't mess with this
 part 'slot_widget_state.dart';
 
+/// don't mess with this
+/// don't mess with this
+
 class SlotWidgetBloc extends Bloc<SlotWidgetEvent, SlotWidgetState> {
-  SlotWidgetBloc({required Key slotKey})
-    : super(SlotWidgetStateNotDealt(slotKey: slotKey)) {
+  SlotWidgetBloc({String slotName = ""})
+    : super(SlotWidgetStateNotDealt(slotName: slotName)) {
     on<SlotWidgetFaceUpEvent>((event, emit) {
-      if (state is SlotWidgetStateDealt) {
-        emit((state as SlotWidgetStateDealt).copyWith(faceUp: true));
-      }
+      if (state case SlotWidgetStateDealt sd) emit(sd.copyWith(faceUp: true));
     });
 
     on<SlotWidgetFaceDownEvent>((event, emit) {
-      if (state is SlotWidgetStateDealt) {
-        emit((state as SlotWidgetStateDealt).copyWith(faceUp: false));
-      }
+      if (state case SlotWidgetStateDealt sd) emit(sd.copyWith(faceUp: false));
     });
 
     on<SlotWidgetFlipFaceEvent>((event, emit) {
-      if (state is SlotWidgetStateDealt) {
-        final SlotWidgetStateDealt _state = state as SlotWidgetStateDealt;
-
-        emit(_state.copyWith(faceUp: _state.faceUp));
+      if (state case SlotWidgetStateDealt sd) {
+        emit(sd.copyWith(faceUp: !sd.faceUp));
       }
     });
 
     on<SlotWidgetSetCardEvent>(
       (event, emit) => emit(
-        SlotWidgetState.dealt(
-          slotKey: slotKey,
+        SlotWidgetStateDealt(
+          slotName: state.slotName,
           faceUp: false,
           card: event.card,
         ),

@@ -1,19 +1,20 @@
 part of 'layout_bloc.dart';
 
-typedef SlotKey = GlobalKey<PositionSlotWidgetState>;
-typedef KeyIterable = Iterable<SlotKey>;
+typedef SlotBloc = SlotWidgetBloc;
+typedef KeyIterable = IList<SlotBloc>;
 
 @immutable
-class KeyConverter extends JsonConverter<SlotKey, int> {
+class KeyConverter extends JsonConverter<SlotWidgetBloc, String> {
   const KeyConverter();
 
   @override
-  SlotKey fromJson(int fromJson) => GlobalKey();
+  SlotWidgetBloc fromJson(String fromJson) =>
+      SlotWidgetBloc(slotName: fromJson);
 
   // fromJson.map((item) => GlobalKey<PositionSlotWidgetState>()).toList();
 
   @override
-  int toJson(SlotKey key) => 0;
+  String toJson(SlotWidgetBloc slot) => slot.state.slotName;
 
   // Iterable<int> toJson(KeyIterable toJson) => toJson.map((item) => 0);
 }
@@ -21,29 +22,31 @@ class KeyConverter extends JsonConverter<SlotKey, int> {
 @freezed
 sealed class LayoutState with _$LayoutState {
   const factory LayoutState.layoutInitial({
-    @Default(<String>[]) Iterable<String> layoutNames,
+    @Default(IList<String>.empty()) IList<String> layoutNames,
     @Default("Empty Layout") String currentLayoutName,
     @Default(TarotLayout.nullLayout()) TarotLayout currentLayout,
   }) = LayoutInitial;
 
-  factory LayoutState.layoutStateReadyToDeal({
-    required Iterable<String> layoutNames,
+  factory LayoutState.slotsAssigned({
     required String currentLayoutName,
     required TarotLayout currentLayout,
-
-    @KeyConverter() required KeyIterable slotKeys,
-  }) = LayoutStateReadyToDeal;
-
-  factory LayoutState.layoutStateDealt({
-    required Iterable<String> layoutNames,
-    required String currentLayoutName,
-    required TarotLayout currentLayout,
-    required Iterable<DealtCard> dealtCards,
+    required IList<String> layoutNames,
 
     // this field is always generated as the app runs, otherwise it wouldn't
     // work.
     @KeyConverter() required KeyIterable slotKeys,
-  }) = LayoutStateDealt;
+  }) = LayoutStateSlotsAssigned;
+
+  factory LayoutState.cardsAssigned({
+    required String currentLayoutName,
+    required TarotLayout currentLayout,
+    required IList<String> layoutNames,
+
+    // this field is always generated as the app runs, otherwise it wouldn't
+    // work.
+    @KeyConverter() required KeyIterable slotKeys,
+    required IList<DealtCard> dealtCards,
+  }) = LayoutStateCardsAssigned;
 
   factory LayoutState.fromJson(Map<String, dynamic> json) =>
       _$LayoutStateFromJson(json);

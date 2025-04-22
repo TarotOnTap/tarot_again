@@ -30,6 +30,6 @@ sealed class TCModel with _$TCModel {
     required MajorArcana card,
   }) = TCMajorArcanaModel;
 
-  factory TCModel.fromJson(Map<String, Object?> json) =>
+  factory TCModel.fromJson(Map<String, dynamic> json) =>
       _$TCModelFromJson(json);
 }

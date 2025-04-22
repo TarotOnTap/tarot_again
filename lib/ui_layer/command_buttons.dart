@@ -72,14 +72,11 @@ class CommandButtons extends WatchingWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    verbose("In CommandButtons.build");
-
     final LayoutState layoutBlocState =
         watchBloc((LayoutBloc b) => b).data! as LayoutState;
+
     final BulkCardControlBloc bcBloc = sl<BulkCardControlBloc>();
     final layoutBloc = sl<LayoutBloc>();
-
-    verbose("build: layoutBlocState is $layoutBlocState");
 
     RandomGenerators? selectedRandomGenerator;
 
@@ -91,28 +88,6 @@ class CommandButtons extends WatchingWidget with Logging {
     // final data = layoutBloc.state;
 
     final displayNames = [...layoutBlocState.layoutNames];
-    //
-    // switch (layoutBlocState) {
-    //   case LayoutInitial(layoutNames: var ln):
-    //     verbose("  case Initial");
-    //     verbose("  layoutNames is $ln");
-    //
-    //   // case ChangeLayoutState(
-    //   //   currentLayoutName: var sl,
-    //   //   currentLayout: var tl,
-    //   //   layoutNames: var ln,
-    //   // ):
-    //   //   verbose("  case ChangeLayoutState");
-    //   //   verbose("  layoutNames is $ln");
-    //
-    //   case LayoutStateReadyToDeal(layoutNames: var ln):
-    //     verbose("  case LayoutStateReadyToDeal");
-    //     verbose("  layoutNames is $ln");
-    //
-    //   case LayoutStateDealt(layoutNames: var ln):
-    //     verbose("  case LayoutStateDealt");
-    //     verbose("  layoutNames is $ln");
-    // }
 
     return Column(
       children: <Widget>[
@@ -125,7 +100,6 @@ class CommandButtons extends WatchingWidget with Logging {
             ("FaceUp on", bcBloc, TurnEverybodyFaceUpOn(), null),
             ("FaceUp off", bcBloc, TurnEverybodyFaceUpOff(), null),
             ("Deal cards for layout", layoutBloc, DealCards(), null),
-            // ("Deal 10 cards", BulkCardDealCards(10)),
           ],
         ),
         Gap(30),

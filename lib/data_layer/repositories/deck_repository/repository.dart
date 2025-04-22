@@ -22,17 +22,11 @@ class DeckRepository extends SingletonRepository with Logging {
   }
 
   Future<DealtCard> _transformTCModelToDealtCard(TCModel card) async {
-    verbose("_transformTCModelToDealtCard");
     final bool reversed = await sl<AsyncRandoms>().getNextBool();
-    verbose("  reversed is $reversed");
 
     DealtModel model = DealtModel(assetName: card.assetName);
 
-    DealtCard temp = await model.transform(card: card, isReversed: reversed);
-    verbose("  temp is $temp");
-    return temp;
-
-    // return model.transform(card: card, isReversed: reversed);
+    return await model.transform(card: card, isReversed: reversed);
   }
 
   Stream<DealtCard> dealtCardStream() async* {
