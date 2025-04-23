@@ -20,16 +20,17 @@ class SetDeckName extends BulkCardControlEvent {
   SetDeckName(this.deckName);
 }
 
-@immutable
-class AddCardPosition extends BulkCardControlEvent {
-  final CardPosition position;
-
-  AddCardPosition(this.position);
-}
-
-@immutable
-class BulkCardDealCards extends BulkCardControlEvent {
-  final int howMany;
-
-  BulkCardDealCards(this.howMany);
-}
+//
+// @immutable
+// class AddCardPosition extends BulkCardControlEvent {
+//   final CardPosition position;
+//
+//   AddCardPosition(this.position);
+// }
+//
+// @immutable
+// class BulkCardDealCards extends BulkCardControlEvent {
+//   final int howMany;
+//
+//   BulkCardDealCards(this.howMany);
+// }

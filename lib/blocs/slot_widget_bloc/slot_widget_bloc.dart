@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -15,8 +14,8 @@ part 'slot_widget_state.dart';
 /// don't mess with this
 
 class SlotWidgetBloc extends Bloc<SlotWidgetEvent, SlotWidgetState> {
-  SlotWidgetBloc({String slotName = ""})
-    : super(SlotWidgetStateNotDealt(slotName: slotName)) {
+  SlotWidgetBloc({required int slotIndex, String slotName = ""})
+    : super(SlotWidgetStateNotDealt(slotIndex: slotIndex, slotName: slotName)) {
     on<SlotWidgetFaceUpEvent>((event, emit) {
       if (state case SlotWidgetStateDealt sd) emit(sd.copyWith(faceUp: true));
     });
@@ -34,6 +33,7 @@ class SlotWidgetBloc extends Bloc<SlotWidgetEvent, SlotWidgetState> {
     on<SlotWidgetSetCardEvent>(
       (event, emit) => emit(
         SlotWidgetStateDealt(
+          slotIndex: state.slotIndex,
           slotName: state.slotName,
           faceUp: false,
           card: event.card,

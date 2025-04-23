@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:toastification/toastification.dart';
 
-import 'blocs/initializer.dart';
 import 'data_layer/data_layer.dart';
 import 'ui_layer/ui_layer.dart';
 import 'util/util.dart';
@@ -44,7 +43,7 @@ Future<void> initializeEverything() async {
   );
 
   initializeDataLayer();
-  initializeBlocs();
+  // initializeBlocs();
 }
 
 class TarotAgainApp extends StatelessWidget {

@@ -28,15 +28,6 @@ class BulkCardControlBloc
       (event, emit) => emit(state.copyWith(everybodyFaceUp: false)),
     );
 
-    on<AddCardPosition>((event, emit) {
-      Option<CardPositions> toEmit = state.positions.fold(
-        () => Option<CardPositions>.of(CardPositions([event.position])),
-        (CardPositions l) => Option<CardPositions>.of(l.add(event.position)),
-      );
-
-      emit(state.copyWith(positions: toEmit));
-    });
-
     on<SetDeckName>((event, emit) {
       // this one is actually some hard work!
 
@@ -44,29 +35,6 @@ class BulkCardControlBloc
       // TODO: DeckRepository
 
       emit(state.copyWith(deckName: event.deckName));
-    });
-
-    on<BulkCardDealCards>((event, emit) async {
-      verbose("BulkCardControlBloc on<BulkCardDealCards event");
-      verbose("  event is $event");
-
-      DeckRepository deck = sl<DeckRepository>();
-      await deck.shuffleDeck();
-      Option<Iterable<DealtCard>> cardsOut = None();
-
-      verbose("  dealing cards");
-      List<DealtCard> deal =
-          (await deck.dealtCardQueue.take(event.howMany)).toList();
-
-      if (deal.isNotEmpty) {
-        cardsOut = Option<Iterable<DealtCard>>.of(deal);
-      }
-
-      verbose("  dealt cards is $cardsOut");
-
-      if (deal.isNotEmpty) {
-        emit(state.copyWith(cards: cardsOut));
-      }
     });
   }
 

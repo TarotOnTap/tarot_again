@@ -1,13 +1,18 @@
 import 'dart:math';
 
-// import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
-enum RandomGenerators { none, local, secureRandom }
+enum RandomGenerators {
+  none(displayName: "None", genCreator: SecureRandom.new),
+  local(displayName: "Local", genCreator: SecureRandom.new),
+  secureRandom(displayName: "Secure Random", genCreator: SecureRandom.new);
 
-typedef RandomGenMap = IMap<RandomGenerators, RandomsProvider Function()>;
+  const RandomGenerators({required this.displayName, required this.genCreator});
+
+  final String displayName;
+  final RandomsProvider Function() genCreator;
+}
 
 abstract class RandomsProvider {
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh});
@@ -18,20 +23,24 @@ abstract class RandomsProvider {
 }
 
 class AsyncRandoms extends BaseProvider with Logging {
-  RandomGenMap randomGenerators =
-      {
-        RandomGenerators.local: SecureRandom.new,
-        RandomGenerators.none: SecureRandom.new,
-        RandomGenerators.secureRandom: SecureRandom.new,
-      }.lock;
+  IList<String> _randomGeneratorNames = const IList<String>.empty();
+
+  // lazy loaded. Not really needed, unless we switch to a dynamically-loaded
+  // model for generators.
+  IList<String> get randomGeneratorNames {
+    if (_randomGeneratorNames.isEmpty) {
+      _randomGeneratorNames =
+          RandomGenerators.values.map((item) => item.displayName).toList().lock;
+    }
+
+    return _randomGeneratorNames;
+  }
 
   RandomGenerators currentGenerator = RandomGenerators.none;
   late RandomsProvider currentProvider;
 
-  // other random generators get their own variables here
-
   AsyncRandoms._() {
-    setRandomSource(RandomGenerators.local);
+    setRandomSource(RandomGenerators.none.displayName);
   }
 
   factory AsyncRandoms() {
@@ -42,22 +51,18 @@ class AsyncRandoms extends BaseProvider with Logging {
     return sl<AsyncRandoms>();
   }
 
-  void setRandomSource(RandomGenerators newSource) {
+  void setRandomSource(String name) {
     // this *always* inserts a new random generator of the source type, even if it's
     // the same as the current source type.
     // along the way
-    verbose("setRandomSource: newSource is $newSource");
+    verbose("setRandomSource: newSource is $name");
 
-    currentGenerator =
-        randomGenerators.containsKey(newSource)
-            ? newSource
-            : RandomGenerators.local;
+    currentGenerator = RandomGenerators.values.firstWhere(
+      (elem) => elem.displayName == name,
+      orElse: () => RandomGenerators.none,
+    );
 
-    RandomsProvider Function()? maker = randomGenerators.get(currentGenerator);
-
-    maker ??= SecureRandom.new;
-
-    currentProvider = maker();
+    currentProvider = currentGenerator.genCreator();
   }
 
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>
@@ -114,8 +119,8 @@ class AsyncRandoms extends BaseProvider with Logging {
       StreamQueue(shuffleIterableStream<E>(remaining));
 }
 
-// class SecureRandom extends _AsyncRandomsImpl with Logging {
-// use Random.secure() to create a "good enough" random number generator.
+/// class SecureRandom extends _AsyncRandomsImpl with Logging {
+/// use Random.secure() to create a "good enough" random number generator.
 class SecureRandom extends RandomsProvider with Logging {
   // Other classes implement random numbers using various publicly available
   // online RNGs based on natural events.
@@ -124,15 +129,12 @@ class SecureRandom extends RandomsProvider with Logging {
   final Random secureRandom = Random.secure();
 
   @override
-  Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>
-      Future<int>.value(
-        secureRandom.nextInt(rangeHigh - rangeLow + 1) + rangeLow,
-      );
+  Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) async =>
+      secureRandom.nextInt(rangeHigh - rangeLow + 1) + rangeLow;
 
   @override
-  Future<double> getNextDouble() =>
-      Future<double>.value(secureRandom.nextDouble());
+  Future<double> getNextDouble() async => secureRandom.nextDouble();
 
   @override
-  Future<bool> getNextBool() => Future<bool>.value(secureRandom.nextBool());
+  Future<bool> getNextBool() async => secureRandom.nextBool();
 }

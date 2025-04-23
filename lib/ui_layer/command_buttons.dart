@@ -30,7 +30,7 @@ class CommandButton extends StatelessWidget {
 }
 
 @immutable
-class CommandButtonGroup extends StatelessWidget with Logging {
+class CommandButtonGroup extends StatelessWidget {
   final String groupLabel;
   final Iterable<(String, Bloc, BlocWidgetEvent, TextStyle?)> buttons;
 
@@ -47,105 +47,128 @@ class CommandButtonGroup extends StatelessWidget with Logging {
         Text(groupLabel),
         Gap(10),
         Column(
-          children:
-              buttons
-                  .fold(
-                    const IList<CommandButton>.empty(),
-                    (prev, elem) => prev.add(
-                      CommandButton(
-                        buttonLabel: elem.$1,
-                        handlerBloc: elem.$2,
-                        event: elem.$3,
-                        style: elem.$4,
-                      ),
-                    ),
-                  )
-                  .toList(),
+          children: [
+            for (var (label, bloc, event, style) in buttons)
+              CommandButton(
+                buttonLabel: label,
+                handlerBloc: bloc,
+                event: event,
+                style: style,
+              ),
+          ],
         ),
       ],
     );
   }
 }
 
-class CommandButtons extends WatchingWidget with Logging {
+class CommandButtons extends StatelessWidget with Logging {
   const CommandButtons({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LayoutState layoutBlocState =
-        watchBloc((LayoutBloc b) => b).data! as LayoutState;
-
-    final BulkCardControlBloc bcBloc = sl<BulkCardControlBloc>();
-    final layoutBloc = sl<LayoutBloc>();
-
-    RandomGenerators? selectedRandomGenerator;
-
-    final randomGeneratorNames =
-        RandomGenerators.values
-            .map((item) => item.name.toNoCase().toCapitalCase())
-            .toList();
-
-    // final data = layoutBloc.state;
-
-    final displayNames = [...layoutBlocState.layoutNames];
-
     return Column(
       children: <Widget>[
         CommandButtonGroup(
           groupLabel: "Bulk Command",
           // handlerBloc: sl<BulkCardControlBloc>(),
           buttons: [
-            ("Allow reversals", bcBloc, AllowReversals(), null),
-            ("Disallow reversals", bcBloc, DisallowReversals(), null),
-            ("FaceUp on", bcBloc, TurnEverybodyFaceUpOn(), null),
-            ("FaceUp off", bcBloc, TurnEverybodyFaceUpOff(), null),
-            ("Deal cards for layout", layoutBloc, DealCards(), null),
+            (
+              "Allow reversals",
+              context.read<BulkCardControlBloc>(),
+              AllowReversals(),
+              null,
+            ),
+            (
+              "Disallow reversals",
+              context.read<BulkCardControlBloc>(),
+              DisallowReversals(),
+              null,
+            ),
+            (
+              "FaceUp on",
+              context.read<BulkCardControlBloc>(),
+              TurnEverybodyFaceUpOn(),
+              null,
+            ),
+            (
+              "FaceUp off",
+              context.read<BulkCardControlBloc>(),
+              TurnEverybodyFaceUpOff(),
+              null,
+            ),
+            (
+              "Deal cards for layout",
+              context.read<LayoutBloc>(),
+              DealCards(),
+              null,
+            ),
           ],
         ),
         Gap(30),
-        PromptedChoice<String>.single(
-          title: "Select a layout",
-          clearable: true,
-          value: layoutBlocState.currentLayoutName,
-          // this changes after setNewLayout is called
-          onChanged: (String? value) {
-            if (value != null) {
-              verbose("  onChanged: value is $value");
-              sl<LayoutBloc>().add(LayoutEvent.setNewLayout(newLayout: value));
-              // selectedLayout = value;
-            }
-          },
-          itemCount: layoutBlocState.layoutNames.length,
-          itemBuilder: (state, i) {
-            return ChoiceChip(
-              selected: state.selected(displayNames[i]),
-              onSelected: state.onSelected(displayNames[i]),
-              label: Text(displayNames[i]),
-            );
-          },
-          listBuilder: ChoiceList.createWrapped(
-            spacing: 10,
-            runSpacing: 10,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-          ),
+        BlocBuilder<LayoutBloc, LayoutState>(
+          buildWhen:
+              (LayoutState prev, LayoutState current) =>
+                  prev.layoutNames != current.layoutNames,
+
+          builder:
+              (BuildContext context, LayoutState layoutState) =>
+                  PromptedChoice<String>.single(
+                    title: "Select a layout",
+                    clearable: true,
+                    value: layoutState.currentLayoutName,
+                    // this changes after setNewLayout is called
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        verbose("  onChanged: value is $value");
+                        context.read<LayoutBloc>().add(
+                          LayoutEvent.setNewLayout(newLayout: value),
+                        );
+                        // selectedLayout = value;
+                      }
+                    },
+                    itemCount: layoutState.layoutNames.length,
+                    itemBuilder: (state, i) {
+                      return ChoiceChip(
+                        selected: state.selected(layoutState.layoutNames[i]),
+                        onSelected: state.onSelected(
+                          layoutState.layoutNames[i],
+                        ),
+                        label: Text(layoutState.layoutNames[i]),
+                      );
+                    },
+                    listBuilder: ChoiceList.createWrapped(
+                      spacing: 10,
+                      runSpacing: 10,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 25,
+                      ),
+                    ),
+                  ),
         ),
         Gap(5),
-        PromptedChoice<RandomGenerators>.single(
+        PromptedChoice<String>.single(
           title: "Select a source of randomness",
           clearable: true,
-          value: selectedRandomGenerator,
-          onChanged: (RandomGenerators? value) {
+          value: context.read<AsyncRandoms>().currentGenerator.displayName,
+          onChanged: (String? value) {
             if (value != null) {
-              sl<AsyncRandoms>().setRandomSource(value);
-              selectedRandomGenerator = value;
+              context.read<AsyncRandoms>().setRandomSource(value);
             }
           },
           itemCount: RandomGenerators.values.length,
           itemBuilder:
               (state, index) => ChoiceChip(
-                selected: state.selected(RandomGenerators.values[index]),
-                onSelected: state.onSelected(RandomGenerators.values[index]),
-                label: Text(randomGeneratorNames[index]),
+                selected: state.selected(
+                  context.read<AsyncRandoms>().randomGeneratorNames[index],
+                ),
+                onSelected: state.onSelected(
+                  context.read<AsyncRandoms>().randomGeneratorNames[index],
+                ),
+                label: Text(
+                  context.read<AsyncRandoms>().randomGeneratorNames[index],
+                ),
               ),
           listBuilder: ChoiceList.createWrapped(
             spacing: 10,
