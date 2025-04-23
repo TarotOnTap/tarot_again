@@ -4,6 +4,7 @@ import 'package:tarot_again/util/util.dart';
 import '../blocs.dart';
 
 part 'slot_widget_bloc.freezed.dart';
+part 'slot_widget_bloc.g.dart';
 part 'slot_widget_event.dart';
 
 /// don't mess with this

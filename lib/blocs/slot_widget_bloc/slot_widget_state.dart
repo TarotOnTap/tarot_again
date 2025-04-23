@@ -2,9 +2,6 @@ part of 'slot_widget_bloc.dart';
 
 @freezed
 sealed class SlotWidgetState with _$SlotWidgetState {
-  // Note to self - the DealtModel card is actually a property
-  // of our bloc, rather than changeable state; it is set by the constructor
-  // when the CardWidgetBloc is created.
   const factory SlotWidgetState.notDealt({
     required int slotIndex,
     required String slotName,
@@ -16,4 +13,7 @@ sealed class SlotWidgetState with _$SlotWidgetState {
     required bool faceUp,
     required DealtCard card,
   }) = SlotWidgetStateDealt;
+
+  factory SlotWidgetState.fromJson(Map<String, dynamic> json) =>
+      _$SlotWidgetStateFromJson(json);
 }

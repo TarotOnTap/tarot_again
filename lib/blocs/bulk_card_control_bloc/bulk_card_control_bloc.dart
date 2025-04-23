@@ -1,6 +1,4 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:tarot_again/blocs/blocs.dart';
-import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 part 'bulk_card_control_bloc.freezed.dart';
@@ -10,7 +8,7 @@ part 'bulk_card_control_state.dart';
 
 class BulkCardControlBloc
     extends HydratedBloc<BulkCardControlEvent, BulkCardControlState>
-    with Logging {
+/* with Logging */ {
   BulkCardControlBloc._() : super(BulkCardControlState()) {
     on<AllowReversals>(
       (event, emit) => emit(state.copyWith(reversalsAllowed: true)),

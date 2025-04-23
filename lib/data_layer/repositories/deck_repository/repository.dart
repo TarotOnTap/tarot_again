@@ -2,7 +2,7 @@ import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/data_layer/repositories/types.dart';
 import 'package:tarot_again/util/util.dart';
 
-class DeckRepository extends SingletonRepository with Logging {
+class DeckRepository extends SingletonRepository /* with Logging */ {
   String deckName;
 
   DeckRepository._({required this.deckName});

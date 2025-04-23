@@ -7,7 +7,7 @@ export 'repository.dart' show DeckRepository;
 part 'types.freezed.dart';
 part 'types.g.dart';
 
-class DealtModel with Logging {
+class DealtModel /* with Logging */ {
   final String assetName;
   final AssetPathMap paths;
   late final LoadedAssetsMap assets;
@@ -22,9 +22,9 @@ class DealtModel with Logging {
     required TCModel card,
     required bool isReversed,
   }) async {
-    verbose("transform method");
-    verbose("  isReversed is $isReversed");
-
+    // verbose("transform method");
+    // verbose("  isReversed is $isReversed");
+    //
     assets = await sl<AssetProvider>().loadAssetsByFileExtension(paths);
 
     final DealtCard retVal = DealtCard.deckCard(
@@ -36,7 +36,7 @@ class DealtModel with Logging {
       reversedMeaning: assets["reversed"] ?? "",
     );
 
-    verbose("  returning $retVal");
+    // verbose("  returning $retVal");
 
     return retVal;
   }

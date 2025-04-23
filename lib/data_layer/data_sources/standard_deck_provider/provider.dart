@@ -39,7 +39,7 @@ final IList<TCModel> _fullDeck = [...majorArcana, ...minorArcana].lock;
 /// a means to shuffle the deck, and to retrieve cards from the shuffled deck.
 /// it provides an [Iterator] over the current deck, a [Stream], and a [StreamQueue].
 /// only one of those should survive the development process, but we'll see.
-class StandardDeckProvider with Logging {
+class StandardDeckProvider {
   ///  [_shuffledDeck] holds the current, shuffled deck. Beware, its default
   ///  value is an empty IList.
   late Iterable<TCModel> _shuffledDeck;
