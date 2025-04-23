@@ -16,28 +16,18 @@ class LinearLayoutWidget extends StatelessWidget with Logging {
   Widget build(BuildContext context) {
     verbose("build method");
 
-    Widget retWidget = Placeholder(child: Text("LinearLayoutWidget failed."));
-
-    final LayoutWidgetState? lwState =
-        context.findAncestorStateOfType<LayoutWidgetState>();
-    verbose("  lwState is $lwState");
-
-    final blocs = lwState?.slotBlocs;
-    verbose("  blocs is $blocs");
-
-    if (blocs != null) {
-      retWidget = Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          for (var bloc in blocs)
-            BlocProvider<SlotWidgetBloc>(
-              create: (_) => bloc,
-              child: PositionSlotWidget(),
-            ),
-        ],
-      );
-    }
-
-    return retWidget;
+    return context.findAncestorStateOfType<LayoutWidgetState>()?.let((lwState) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              for (var bloc in lwState.slotBlocs)
+                BlocProvider<SlotWidgetBloc>(
+                  create: (_) => bloc,
+                  child: PositionSlotWidget(),
+                ),
+            ],
+          );
+        }) ??
+        Placeholder(child: Text("LinearLayoutWidget failed."));
   }
 }
