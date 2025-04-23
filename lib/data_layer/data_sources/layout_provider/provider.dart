@@ -16,8 +16,6 @@ typedef LayoutAssetCache = IMap<String, TarotLayout>;
 class LayoutProvider extends BaseProvider with Logging {
   LayoutAssetCache assetCache = const LayoutAssetCache.empty();
 
-  TarotLayout? currentLayout;
-
   LayoutProvider._();
 
   factory LayoutProvider() {
@@ -29,8 +27,7 @@ class LayoutProvider extends BaseProvider with Logging {
   }
 
   Future<TarotLayout> loadLayout(String layoutAsset) async {
-    verbose("loadLayout");
-    verbose("  layoutAsset is $layoutAsset");
+    verbose("loadLayout\n  layoutAsset is $layoutAsset");
 
     if (assetCache.containsKey(layoutAsset)) {
       verbose("  assetCache contains key");
@@ -45,14 +42,18 @@ class LayoutProvider extends BaseProvider with Logging {
         verbose("  assetData is $assetData");
 
         if (assetData.isNotEmpty) {
+          verbose("  assetData is not empty");
           final resultMap = jsonDecode(assetData);
+          verbose("  resultMap is $resultMap");
 
           retVal = TarotLayout.fromJson(resultMap);
+          verbose("  retVal is $retVal");
 
           assetCache = assetCache.add(layoutAsset, retVal);
+          verbose("  assetCache is now $assetCache");
         }
       } catch (e) {
-        verbose("loadLayout raised error $e");
+        verbose("loadLayout raised error $e on asset string $layoutAsset");
       }
 
       return retVal;

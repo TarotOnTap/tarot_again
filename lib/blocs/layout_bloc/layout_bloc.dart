@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
@@ -12,29 +11,17 @@ part 'layout_event.dart';
 /// layout_state contains state for this bloc
 part 'layout_state.dart';
 
-/// extension [RangeGen] on [int]
-/// very simple extension, with one method.
-extension RangeGen on int {
-  /// [range] is a generator that produces values from 0 up to the int it's applied to.
-  /// it's useful replacing a for (var i=0; i<someInt; i++) (and that's all its useful for)
-  Iterable<int> range() sync* {
-    for (var i = 0; i < this; i++) {
-      yield i;
-    }
-  }
-}
-
 class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> with Logging {
   late final LayoutRepository layoutRepository;
 
   LayoutBloc._() : super(const LayoutState()) {
     layoutRepository = sl<LayoutRepository>();
 
-    on<SetLayoutNames>(
-      (event, emit) => emit(
-        state.copyWith(layoutNames: IList<String>(event.newLayoutNames)),
-      ),
-    );
+    on<LayoutStarting>((event, emit) async {
+      await layoutRepository.cacheLayouts();
+
+      emit(state.copyWith(layoutNames: layoutRepository.layoutDisplayNames));
+    });
 
     on<SetNewLayout>((SetNewLayout event, emit) {
       verbose("received SetNewLayout, ${event.newLayout}");
@@ -42,6 +29,7 @@ class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> with Logging {
       final TarotLayout layout = layoutRepository.getLayoutByDisplayName(
         event.newLayout,
       );
+      verbose("  layout is $layout after lookup.");
 
       emit(
         state.copyWith(
@@ -50,6 +38,12 @@ class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> with Logging {
         ),
       );
     });
+
+    on<DealCards>((event, emit) {
+      verbose("on<DealCards> handler");
+    });
+
+    add(LayoutStarting());
   }
 
   @override

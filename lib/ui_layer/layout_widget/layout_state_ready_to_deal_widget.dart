@@ -8,25 +8,16 @@ import 'linear_layout_widget.dart';
 
 @immutable
 class LayoutSlotsWidget extends StatelessWidget with Logging {
-  final List<Widget> children;
-
-  const LayoutSlotsWidget({super.key, required this.children});
+  const LayoutSlotsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LayoutBloc, LayoutState>(
-      buildWhen: (prev, state) => prev.currentLayout != state.currentLayout,
       builder:
           (BuildContext context, LayoutState state) => switch (state
               .currentLayout) {
-            HorizontalLinear hl => LinearLayoutWidget(
-              layoutDetails: hl,
-              children: children,
-            ),
-            SimpleGrid sg => GridLayoutWidget(
-              layoutDetails: sg,
-              children: children,
-            ),
+            HorizontalLinear hl => LinearLayoutWidget(layoutDetails: hl),
+            SimpleGrid sg => GridLayoutWidget(layoutDetails: sg),
             NullLayout nl => Placeholder(child: Text("No layout selected")),
           },
     );

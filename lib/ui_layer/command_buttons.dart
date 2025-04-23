@@ -3,28 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
+import 'package:tarot_again/ui_layer/toplevel_layout.dart';
 import 'package:tarot_again/util/util.dart';
 
 @immutable
-class CommandButton extends StatelessWidget {
+class CommandButton<T extends Bloc> extends StatelessWidget {
   final String buttonLabel;
-  final Bloc handlerBloc;
   final BlocWidgetEvent event;
-  final TextStyle? style;
+  final TextStyle? textStyle;
 
   const CommandButton({
     super.key,
     required this.buttonLabel,
-    required this.handlerBloc,
     required this.event,
-    this.style,
+    this.textStyle,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => handlerBloc.add(event),
-      child: Text(buttonLabel, style: style),
+      onPressed: () => context.read<T>().add(event),
+      child: Text(buttonLabel, style: textStyle),
     );
   }
 }
@@ -32,7 +31,7 @@ class CommandButton extends StatelessWidget {
 @immutable
 class CommandButtonGroup extends StatelessWidget {
   final String groupLabel;
-  final Iterable<(String, Bloc, BlocWidgetEvent, TextStyle?)> buttons;
+  final Iterable<(String, BlocWidgetEvent, TextStyle?)> buttons;
 
   const CommandButtonGroup({
     super.key,
@@ -48,12 +47,11 @@ class CommandButtonGroup extends StatelessWidget {
         Gap(10),
         Column(
           children: [
-            for (var (label, bloc, event, style) in buttons)
-              CommandButton(
+            for (var (label, event, style) in buttons)
+              CommandButton<BulkCardControlBloc>(
                 buttonLabel: label,
-                handlerBloc: bloc,
                 event: event,
-                style: style,
+                textStyle: style,
               ),
           ],
         ),
@@ -73,44 +71,30 @@ class CommandButtons extends StatelessWidget with Logging {
           groupLabel: "Bulk Command",
           // handlerBloc: sl<BulkCardControlBloc>(),
           buttons: [
-            (
-              "Allow reversals",
-              context.read<BulkCardControlBloc>(),
-              AllowReversals(),
-              null,
-            ),
-            (
-              "Disallow reversals",
-              context.read<BulkCardControlBloc>(),
-              DisallowReversals(),
-              null,
-            ),
-            (
-              "FaceUp on",
-              context.read<BulkCardControlBloc>(),
-              TurnEverybodyFaceUpOn(),
-              null,
-            ),
-            (
-              "FaceUp off",
-              context.read<BulkCardControlBloc>(),
-              TurnEverybodyFaceUpOff(),
-              null,
-            ),
-            (
-              "Deal cards for layout",
-              context.read<LayoutBloc>(),
-              DealCards(),
-              null,
-            ),
+            ("Allow reversals", AllowReversals(), null),
+            ("Disallow reversals", DisallowReversals(), null),
+            ("FaceUp on", TurnEverybodyFaceUpOn(), null),
+            ("FaceUp off", TurnEverybodyFaceUpOff(), null),
           ],
         ),
+        ElevatedButton(
+          onPressed: () async {
+            verbose("Deal Cards button pressed.");
+            await context
+                .read<GlobalKeyStore>()
+                .layoutWidgetKey
+                .currentState
+                ?.dealCards();
+          },
+          child: Text("Deal cards"),
+        ),
+
         Gap(30),
         BlocBuilder<LayoutBloc, LayoutState>(
-          buildWhen:
-              (LayoutState prev, LayoutState current) =>
-                  prev.layoutNames != current.layoutNames,
-
+          // buildWhen:
+          //     (LayoutState prev, LayoutState current) =>
+          //         prev.layoutNames != current.layoutNames,
+          //
           builder:
               (BuildContext context, LayoutState layoutState) =>
                   PromptedChoice<String>.single(

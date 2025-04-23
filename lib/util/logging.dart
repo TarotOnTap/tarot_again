@@ -6,14 +6,22 @@ mixin Logging {
   /* static */
   void debug(msg) => sl<Talker>().debug("$this:$msg");
 
+  static void staticDebug(msg) => sl<Talker>().debug("static: $msg");
+
   /* static */
   void error(msg) => sl<Talker>().error("$this:$msg");
+
+  static void staticError(msg) => sl<Talker>().debug("static: $msg");
 
   /* static */
   void verbose(msg) => sl<Talker>().verbose("$this:$msg");
 
+  static void staticVerbose(msg) => sl<Talker>().verbose("static: $msg");
+
   /* static */
   void warning(msg) => sl<Talker>().warning("$this:$msg");
+
+  static void staticWarning(msg) => sl<Talker>().warning("static: $msg");
 }
 
 class GoodLog extends TalkerLog {

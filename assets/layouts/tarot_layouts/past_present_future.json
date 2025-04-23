@@ -5,7 +5,7 @@
   "verticalAlign": "center",
   "alignOnCard": 1,
   "numCards": 3,
-  "slots": [
+  "slotNames": [
     "Past",
     "Present",
     "Future"

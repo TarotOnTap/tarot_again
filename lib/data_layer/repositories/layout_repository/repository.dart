@@ -1,4 +1,3 @@
-import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/data_layer/repositories/types.dart';
 import 'package:tarot_again/util/util.dart';
@@ -26,18 +25,23 @@ class LayoutRepository extends SingletonRepository with Logging {
       String assetName = assetFileName.split('.')[0];
       // assetName is the map key
       verbose("  assetName is $assetName");
-
-      String displayName = assetName.splitMapJoin(
-        "_",
-        onMatch: (match) => " ",
-        onNonMatch:
-            (String piece) =>
-                piece.substring(0, 1).toUpperCase() + piece.substring(1),
-      );
+      //
+      // String displayName = assetName.splitMapJoin(
+      //   "_",
+      //   onMatch: (match) => " ",
+      //   onNonMatch:
+      //       (String piece) =>
+      //           piece.substring(0, 1).toUpperCase() + piece.substring(1),
+      // );
+      // verbose("  displayName is $displayName");
 
       layouts = layouts.add(
         assetName,
-        LayoutMapRecord(displayName: displayName, assetPath: layout, layout: l),
+        LayoutMapRecord(
+          displayName: l.displayName,
+          assetPath: layout,
+          layout: l,
+        ),
       );
     }
 
@@ -50,20 +54,17 @@ class LayoutRepository extends SingletonRepository with Logging {
       ),
     );
 
-    layoutDisplayNames =
-        layouts.values
-            .fold(
-              const IList<String>.empty(),
-              (prev, item) => prev.add(item.displayName),
-            )
-            .toList()
-            .lock;
+    verbose("  setting layoutDisplayNames");
+    layoutDisplayNames = layouts.values.fold(
+      const IList<String>.empty(),
+      (prev, item) => prev.add(item.displayName).toIList(),
+    );
 
-    sl<LayoutBloc>().add(SetLayoutNames(newLayoutNames: layoutDisplayNames));
+    // sl<LayoutBloc>().add(SetLayoutNames(newLayoutNames: layoutDisplayNames));
   }
 
   LayoutRepository._() {
-    unawaited(cacheLayouts());
+    // unawaited(cacheLayouts());
   }
 
   factory LayoutRepository() {

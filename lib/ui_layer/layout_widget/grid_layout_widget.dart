@@ -5,18 +5,12 @@ import 'package:tarot_again/util/util.dart';
 @immutable
 class GridLayoutWidget extends StatelessWidget with Logging {
   final SimpleGrid layoutDetails;
-  final List<Widget> children;
 
-  const GridLayoutWidget({
-    super.key,
-    required this.layoutDetails,
-    required this.children,
-  });
+  const GridLayoutWidget({super.key, required this.layoutDetails});
 
   @override
   Widget build(BuildContext context) {
     verbose("GridLayoutWidget.build");
-    verbose("  children.length: ${children.length}");
     return Placeholder(child: Text("GridLayoutWidget"));
   }
 }
