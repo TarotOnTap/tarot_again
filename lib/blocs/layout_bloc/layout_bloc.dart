@@ -11,16 +11,27 @@ part 'layout_event.dart';
 /// layout_state contains state for this bloc
 part 'layout_state.dart';
 
-class LayoutBloc
-    extends HydratedBloc<LayoutEvent, LayoutState> /* with Logging */ {
+/// slot_widget_state contains sub-state for PositionSlotWidgets
+part 'slot_widget_state.dart';
+
+typedef SWStates = IMap<int, SlotWidgetState>;
+
+// class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> with Logging {
+class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
   late final LayoutRepository layoutRepository;
 
-  LayoutBloc._() : super(const LayoutState()) {
+  LayoutBloc._() : super(const LayoutState(/* newLayout: NewLayout.yes */)) {
     layoutRepository = sl<LayoutRepository>();
 
     on<LayoutStarting>((event, emit) async {
+      // This is one way to get layout names into the state.
+      // the other would be to have LayoutRepository add a different event on us
+      // that signals the list of layout display names is ready, and have that handler
+      // emit the new state. The async happens elsewhere.
+      // For now, this seems to work fine - and it should.
       await layoutRepository.cacheLayouts();
 
+      add(SetNewLayout(newLayout: "Empty Layout"));
       emit(state.copyWith(layoutNames: layoutRepository.layoutDisplayNames));
     });
 
@@ -29,65 +40,113 @@ class LayoutBloc
         event.newLayout,
       );
 
-      final (titles, states) = _makeSlotData();
+      if (layout.displayName != state.currentLayout.displayName) {
+        final titles =
+            switch (layout) {
+              HorizontalLinear(slotNames: var slotNames) => slotNames,
+              _ => layout.numCards.range().map((_) => "slot name"),
+            }.toIList();
 
-      emit(
-        state.copyWith(
-          currentLayoutName: event.newLayout,
-          currentLayout: layout,
-          slotTitles: titles,
-          slotWidgetStates: states,
-          dealtCards: const IList<DealtCard>.empty(),
-        ),
-      );
+        final slotData = layout.numCards.range().fold(
+          const SWStates.empty(),
+          (prev, index) => prev.add(
+            index,
+            SlotWidgetStateNotDealt(slotIndex: index, slotName: titles[index]),
+          ),
+        );
+
+        emit(
+          state.copyWith(
+            currentLayoutName: event.newLayout,
+            currentLayout: layout,
+            slotWidgetStates: slotData,
+            slotNames: titles,
+          ),
+        );
+      }
     });
+
+    // on<AddSlotBloc>((event, emit) {
+    //   SWStates addNew = const SWStates.empty();
+    //
+    //   final int idx = event.newBloc.state.slotIndex;
+    //
+    //   if (!state.slotWidgetStates.containsKey(idx)) {
+    //     addNew = state.slotWidgetStates.add(idx, event.newBloc);
+    //
+    //     emit(state.copyWith(slotWidgetStates: addNew));
+    //   }
+    // });
 
     on<DealCards>((event, emit) async {
-      sl<DeckRepository>().also((deckRepository) async {
-        sl<LayoutBloc>().state.currentLayout.also((layout) async {
-          await deckRepository.shuffleDeck();
-          final cards = await deckRepository.dealtCardQueue.take(
-            layout.numCards,
-          );
+      final dr = sl<DeckRepository>();
 
-          final dealtCards = IList<DealtCard>(cards);
-          // verbose("  dealtCards is $dealtCards");
+      await dr.shuffleDeck();
 
-          emit(state.copyWith(dealtCards: dealtCards));
-        });
-      });
+      final cards = await dr.dealtCardQueue.take(state.currentLayout.numCards);
+
+      final newStates = state.currentLayout.numCards.range().fold(
+        const SWStates.empty(),
+        (prev, index) => prev.add(
+          index,
+          SlotWidgetStateDealt(
+            slotIndex: index,
+            slotName: state.slotNames[index],
+            faceUp: false,
+            card: cards[index],
+          ),
+        ),
+      );
+
+      emit(state.copyWith(slotWidgetStates: newStates));
     });
+
+    on<SlotWidgetFlipFaceEvent>(
+      (event, emit) => _changeDealtState(
+        index: event.index,
+        changer: (s) => s.copyWith(faceUp: !s.faceUp),
+      )?.also((c) => emit(state.copyWith(slotWidgetStates: c))),
+    );
+
+    on<SlotWidgetFaceUpEvent>(
+      (event, emit) => _changeDealtState(
+        index: event.index,
+        changer: (s) => s.copyWith(faceUp: true),
+      )?.also((c) => emit(state.copyWith(slotWidgetStates: c))),
+    );
+
+    on<SlotWidgetFaceDownEvent>(
+      (event, emit) => _changeDealtState(
+        index: event.index,
+        changer: (s) => s.copyWith(faceUp: false),
+      )?.also((c) => emit(state.copyWith(slotWidgetStates: c))),
+    );
 
     add(LayoutStarting());
   }
 
-  (IList<String>, IList<SlotWidgetState>) _makeSlotData() {
-    // this gets called when a new layout is set
-    IList<String> localTitles;
-    IList<SlotWidgetState> localStates;
+  SWStates? _changeDealtState({
+    required int index,
+    required SlotWidgetStateDealt Function(SlotWidgetStateDealt) changer,
+  }) {
+    SWStates? retVal;
 
-    localTitles =
-        switch (state.currentLayout) {
-          HorizontalLinear(slotNames: var slotNames) => slotNames,
-          _ => state.currentLayout.numCards.range().map((_) => ""),
-        }.toIList();
+    if (state.slotWidgetStates[index] case SlotWidgetStateDealt d) {
+      final newState = changer(d);
 
-    localStates = state.currentLayout.numCards.range().fold(
-      const IList<SlotWidgetState>.empty(),
-      (prev, elem) => prev.add(
-        SlotWidgetState.notDealt(slotIndex: elem, slotName: localTitles[elem]),
-      ),
-    );
+      retVal = state.slotWidgetStates.update(index, (ps) => newState);
+    }
 
-    return (localTitles, localStates);
+    return retVal;
   }
 
-  @override
-  LayoutState? fromJson(Map<String, dynamic> json) =>
-      LayoutState.fromJson(json);
-
-  @override
-  Map<String, dynamic>? toJson(LayoutState state) => state.toJson();
+  // these next two are for use with HydratedBloc, keep 'em around
+  // @override
+  // LayoutState? fromJson(Map<String, dynamic> json) =>
+  //     LayoutState.fromJson(json);
+  //
+  // @override
+  // Map<String, dynamic>? toJson(LayoutState state) => state.toJson();
 
   factory LayoutBloc() {
     if (!sl.isRegistered<LayoutBloc>()) {

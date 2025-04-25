@@ -41,33 +41,33 @@ final IList<String> minorArcanaNames = IList([
   "King",
 ]);
 
-@JsonEnum(valueField: 'name')
+@JsonEnum()
 enum MajorArcana {
-  fool(name: "The Fool", romanNumber: "0"),
-  magician(name: "The Magician", romanNumber: "I"),
-  highPriestess(name: "The High Priestess", romanNumber: "II"),
-  empress(name: "The Empress", romanNumber: "III"),
-  emperor(name: "The Emperor", romanNumber: "IV"),
-  hierophant(name: "The Hierophant", romanNumber: "V"),
-  lovers(name: "The Lovers", romanNumber: "VI"),
-  chariot(name: "The Chariot", romanNumber: "VII"),
-  strength(name: "Strength", romanNumber: "VIII"),
-  hermit(name: "The Hermit", romanNumber: "IX"),
-  wheelOfFortune(name: "The Wheel of Fortune", romanNumber: "X"),
-  justice(name: "Justice", romanNumber: "XI"),
-  hangedMan(name: "The Hanged Man", romanNumber: "XII"),
-  death(name: "Death", romanNumber: "XIII"),
-  temperance(name: "Temperance", romanNumber: "XIV"),
-  devil(name: "The Devil", romanNumber: "XV"),
-  tower(name: "The Tower", romanNumber: "XVI"),
-  star(name: "The Star", romanNumber: "XVII"),
-  moon(name: "The Moon", romanNumber: "XVIII"),
-  sun(name: "The Sun", romanNumber: "XIX"),
-  judgment(name: "Judgment", romanNumber: "XX"),
-  theWorld(name: "The World", romanNumber: "XXI");
+  fool(cardName: "The Fool", romanNumber: "0"),
+  magician(cardName: "The Magician", romanNumber: "I"),
+  highPriestess(cardName: "The High Priestess", romanNumber: "II"),
+  empress(cardName: "The Empress", romanNumber: "III"),
+  emperor(cardName: "The Emperor", romanNumber: "IV"),
+  hierophant(cardName: "The Hierophant", romanNumber: "V"),
+  lovers(cardName: "The Lovers", romanNumber: "VI"),
+  chariot(cardName: "The Chariot", romanNumber: "VII"),
+  strength(cardName: "Strength", romanNumber: "VIII"),
+  hermit(cardName: "The Hermit", romanNumber: "IX"),
+  wheelOfFortune(cardName: "The Wheel of Fortune", romanNumber: "X"),
+  justice(cardName: "Justice", romanNumber: "XI"),
+  hangedMan(cardName: "The Hanged Man", romanNumber: "XII"),
+  death(cardName: "Death", romanNumber: "XIII"),
+  temperance(cardName: "Temperance", romanNumber: "XIV"),
+  devil(cardName: "The Devil", romanNumber: "XV"),
+  tower(cardName: "The Tower", romanNumber: "XVI"),
+  star(cardName: "The Star", romanNumber: "XVII"),
+  moon(cardName: "The Moon", romanNumber: "XVIII"),
+  sun(cardName: "The Sun", romanNumber: "XIX"),
+  judgment(cardName: "Judgment", romanNumber: "XX"),
+  theWorld(cardName: "The World", romanNumber: "XXI");
 
-  final String name;
+  final String cardName;
   final String romanNumber;
 
-  const MajorArcana({required this.name, required this.romanNumber});
+  const MajorArcana({required this.cardName, required this.romanNumber});
 }

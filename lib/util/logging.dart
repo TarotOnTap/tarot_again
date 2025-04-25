@@ -1,25 +1,139 @@
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:watch_it/watch_it.dart';
+import 'package:tarot_again/util/util.dart';
+
+enum LoggingLevels { debug, verbose, warning, error }
+
+typedef ET<T> = Either<Object, T>;
+
+class BufferedLog {
+  final StringBuffer _logger = StringBuffer();
+  final LoggingLevels _level;
+  final bool autoFlush;
+
+  BufferedLog(this._level, {this.autoFlush = false});
+
+  BufferedLog add(msg) {
+    _logger.write(msg);
+
+    if (autoFlush) {
+      commit();
+    }
+
+    return this;
+  }
+
+  /// tryAdd uses fpdart's Either class to attempt to run a function and print
+  /// a message. The function returns a record of itself and the Either result of
+  /// running the function. If the function does not throw an error, the message
+  /// is printed.
+  /// It is not possible to have the printed message reflect the value returned
+  /// by the function at this time.
+  (BufferedLog, Either<Object, T>) tryAdd<T>(T Function() runThis, Object msg) {
+    final either = ET<T>.tryCatch(runThis, (Object o, StackTrace s) => o);
+
+    either.fold(
+      (Object o) => addln("  tryAdd's function raised error $o"),
+      (T value) => add(msg),
+    );
+
+    return (this, either);
+  }
+
+  /// tryAdd uses fpdart's Either class to attempt to run a function and print
+  /// a message. The function returns a record of itself and the Either result of
+  /// running the function. If the function does not throw an error, the message
+  /// is printed.
+  /// It is not possible to have the printed message reflect the value returned
+  /// by the function at this time.
+  (BufferedLog, Either<Object, T>) tryAddln<T>(
+    T Function() runThis,
+    Object msg,
+  ) {
+    final either = ET<T>.tryCatch(runThis, (Object o, StackTrace s) => o);
+
+    either.fold(
+      (Object o) => addln("  tryAddln's function raised error $o"),
+      (T value) => addln(msg),
+    );
+
+    return (this, either);
+  }
+
+  BufferedLog addln(msg) {
+    _logger.writeln(msg);
+
+    if (autoFlush) {
+      commit();
+    }
+
+    return this;
+  }
+
+  BufferedLog commit() {
+    final talker = sl<Talker>();
+
+    switch (_level) {
+      case LoggingLevels.verbose:
+        talker.verbose(_logger.toString());
+      case LoggingLevels.debug:
+        talker.debug(_logger.toString());
+      case LoggingLevels.warning:
+        talker.warning(_logger.toString());
+      case LoggingLevels.error:
+        talker.error(_logger.toString());
+    }
+
+    _logger.clear();
+
+    return this;
+  }
+}
 
 mixin Logging {
   // final Talker _log = sl<Talker>();
   /* static */
+
   void debug(msg) => sl<Talker>().debug("$this:$msg");
+
+  BufferedLog bufferedDebug(msg, {autoFlush = false}) =>
+      BufferedLog(LoggingLevels.debug, autoFlush: autoFlush);
 
   static void staticDebug(msg) => sl<Talker>().debug("static: $msg");
 
-  /* static */
   void error(msg) => sl<Talker>().error("$this:$msg");
+
+  BufferedLog bufferedError(msg, {autoFlush = false}) =>
+      BufferedLog(LoggingLevels.error, autoFlush: autoFlush);
 
   static void staticError(msg) => sl<Talker>().debug("static: $msg");
 
   /* static */
-  void verbose(msg) => sl<Talker>().verbose("$this:$msg");
+  T verbose<T>(msg, {T Function()? runIt, Object? afterMessage}) {
+    final talker = sl<Talker>();
+
+    runIt ??= () {} as T Function();
+
+    talker.verbose("$this:$msg");
+
+    final T retval = runIt();
+
+    if (afterMessage != null) {
+      talker.verbose("  $afterMessage");
+    }
+
+    return retval;
+  }
+
+  BufferedLog bufferedVerbose(msg, {autoFlush = false}) =>
+      BufferedLog(LoggingLevels.verbose, autoFlush: autoFlush);
 
   static void staticVerbose(msg) => sl<Talker>().verbose("static: $msg");
 
   /* static */
   void warning(msg) => sl<Talker>().warning("$this:$msg");
+
+  BufferedLog bufferedWarning(msg, {autoFlush = false}) =>
+      BufferedLog(LoggingLevels.warning, autoFlush: autoFlush);
 
   static void staticWarning(msg) => sl<Talker>().warning("static: $msg");
 }

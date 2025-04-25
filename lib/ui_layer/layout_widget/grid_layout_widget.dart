@@ -10,23 +10,16 @@ class GridLayoutWidget extends StatelessWidget with Logging {
   const GridLayoutWidget({super.key, required this.layoutDetails});
 
   @override
-  Widget build(BuildContext context) {
-    verbose("GridLayoutWidget.build");
-
-    return context.findAncestorStateOfType<LayoutWidgetState>()?.let((lwState) {
-          return GridView.builder(
-            itemCount: lwState.slotBlocs.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 8,
-            ),
-            itemBuilder:
-                (BuildContext context, int index) =>
-                    BlocProvider<SlotWidgetBloc>(
-                      create: (_) => lwState.slotBlocs[index],
-                      child: PositionSlotWidget(),
-                    ),
-          );
-        }) ??
-        Placeholder(child: Text("GridLayoutWidget"));
-  }
+  Widget build(BuildContext context) => BlocBuilder<LayoutBloc, LayoutState>(
+    builder:
+        (context, lwState) => GridView.builder(
+          itemCount: lwState.slotWidgetStates.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 8,
+          ),
+          itemBuilder:
+              (BuildContext context, int index) =>
+                  PositionSlotWidget(index: index),
+        ),
+  );
 }

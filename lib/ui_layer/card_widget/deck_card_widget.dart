@@ -21,14 +21,13 @@ class DeckCardWidget extends StatelessWidget with Logging {
     );
 
     returnWidget = switch (card.tcCard) {
-      TCMajorArcanaModel(assetName: String assetName, card: var c) =>
-        TCMajorArcanaWidget(
-          assetName: assetName,
-          card: card.tcCard as TCMajorArcanaModel,
-        ),
-      TCMinorArcanaModel(assetName: String assetName) => TCMinorArcanaWidget(
-        card: card.tcCard as TCMinorArcanaModel,
-        assetName: assetName,
+      TCMajorArcanaModel majorModel => TCMajorArcanaWidget(
+        assetName: majorModel.assetName,
+        card: majorModel,
+      ),
+      TCMinorArcanaModel minorModel => TCMinorArcanaWidget(
+        card: minorModel,
+        assetName: minorModel.assetName,
       ),
       DeckInitial() => Column(children: [Text("Deck"), Text("Initial")]),
       DeckEmpty() => Column(children: [Text("Deck"), Text("Empty")]),

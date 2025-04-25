@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/ui_layer/toplevel_layout.dart';
 import 'package:tarot_again/util/util.dart';
 
 @immutable
@@ -78,23 +77,15 @@ class CommandButtons extends StatelessWidget with Logging {
           ],
         ),
         ElevatedButton(
-          onPressed: () async {
+          onPressed: () {
             verbose("Deal Cards button pressed.");
-            await context
-                .read<GlobalKeyStore>()
-                .layoutWidgetKey
-                .currentState
-                ?.dealCards();
+            context.read<LayoutBloc>().add(DealCards());
           },
           child: Text("Deal cards"),
         ),
 
         Gap(30),
         BlocBuilder<LayoutBloc, LayoutState>(
-          // buildWhen:
-          //     (LayoutState prev, LayoutState current) =>
-          //         prev.layoutNames != current.layoutNames,
-          //
           builder:
               (BuildContext context, LayoutState layoutState) =>
                   PromptedChoice<String>.single(

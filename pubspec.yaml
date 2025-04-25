@@ -60,6 +60,7 @@ dependencies:
   align_positioned: ^5.0.1
   dart_scope_functions: ^1.0.2
   collection: ^1.19.1
+  provider: ^6.1.4
 
 dev_dependencies:
   flutter_test:

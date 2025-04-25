@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/ui_layer/toplevel_layout.dart';
-import 'package:tarot_again/util/util.dart';
 
-class HomePageWidget extends StatefulWidget {
+class HomePageWidget extends StatelessWidget {
   const HomePageWidget({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -17,48 +15,48 @@ class HomePageWidget extends StatefulWidget {
 
   final String title;
 
-  @override
-  State<HomePageWidget> createState() => _HomePageWidgetState();
-}
-
-class _HomePageWidgetState extends State<HomePageWidget> with Logging {
-  int _counter = 0;
-
-  final BulkCardControlBloc bccBloc = BulkCardControlBloc();
+  //   @override
+  //   State<HomePageWidget> createState() => _HomePageWidgetState();
+  // }
+  //
+  // class _HomePageWidgetState extends State<HomePageWidget> with Logging {
+  //   // int _counter = 0;
+  //
+  //   final BulkCardControlBloc bccBloc = BulkCardControlBloc();
   // CardWidgetBloc? cwBloc;
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   unawaited(asyncInitState());
+  // }
 
-    unawaited(asyncInitState());
-  }
+  // Future<void> asyncInitState() async {
+  //   // final dr = sl<DeckRepository>();
+  //   //
+  //   // await dr.shuffleDeck();
+  //   //
+  //   // final bob = Assets.layouts.tarotLayouts.values;
+  //   // verbose("bob is $bob");
+  //   //
+  //   // DealtCard card = await dr.dealNextCard();
+  //   //
+  //   // setState(() {
+  //   //   cwBloc = CardWidgetBloc(id: "A", card: card);
+  //   // });
+  // }
 
-  Future<void> asyncInitState() async {
-    // final dr = sl<DeckRepository>();
-    //
-    // await dr.shuffleDeck();
-    //
-    // final bob = Assets.layouts.tarotLayouts.values;
-    // verbose("bob is $bob");
-    //
-    // DealtCard card = await dr.dealNextCard();
-    //
-    // setState(() {
-    //   cwBloc = CardWidgetBloc(id: "A", card: card);
-    // });
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  // void _incrementCounter() {
+  //   setState(() {
+  //     // This call to setState tells the Flutter framework that something has
+  //     // changed in this State, which causes it to rerun the build method below
+  //     // so that the display can reflect the updated values. If we changed
+  //     // _counter without calling setState(), then the build method would not be
+  //     // called again, and so nothing would appear to happen.
+  //     _counter++;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +74,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with Logging {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         child: TopLevelLayout(),
@@ -111,11 +109,11 @@ class _HomePageWidgetState extends State<HomePageWidget> with Logging {
         //   ],
         // ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: const Icon(Icons.add),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

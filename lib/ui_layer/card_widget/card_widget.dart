@@ -23,67 +23,53 @@ class CardBack extends StatelessWidget {
 
 @immutable
 class CardWidget extends StatelessWidget {
-  const CardWidget({super.key});
+  final int index;
+  final SlotWidgetStateDealt swState;
+
+  const CardWidget({super.key, required this.index, required this.swState});
 
   @override
   Widget build(BuildContext context) {
-    // final bcData = watchBloc((BulkCardControlBloc b) => b).data!;
-
-    // bool doReverse = bcData.reversalsAllowed && card.reversed;
-
-    // at this level. Need to add BulkCardBloc at the top in order to have access
-    // to reversalsAllowed and the global faceUp choice.
-    return BlocBuilder<SlotWidgetBloc, SlotWidgetState>(
-      builder:
-          (context, swState) => GestureDetector(
-            onDoubleTap:
-                () => context.read<SlotWidgetBloc>().add(
-                  SlotWidgetFlipFaceEvent(),
-                ),
-            onSecondaryTap:
-                () => toastification.show(
-                  title: Text("onSecondaryTap handler"),
-                  style: ToastificationStyle.flat,
-                  autoCloseDuration: const Duration(seconds: 3),
-                  description: RichText(
-                    text: const TextSpan(text: 'received a secondary tap. '),
-                  ),
-                ),
-            child: BlocBuilder<BulkCardControlBloc, BulkCardControlState>(
-              builder:
-                  (context, bcState) => RotatedBox(
-                    quarterTurns:
-                        bcState.reversalsAllowed &&
-                                switch (swState) {
-                                  SlotWidgetStateDealt sd => switch (sd.card) {
-                                    DeckCard dc => dc.reversed,
-                                    _ => false,
-                                  },
-                                  _ => false,
-                                }
-                            ? 2
-                            : 0,
-                    child: Container(
-                      width: 70,
-                      height: 120,
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(border: Border.all(width: 2)),
-                      alignment: Alignment.center,
-                      child: switch (swState) {
-                        SlotWidgetStateDealt sd => switch (sd.card) {
-                          DeckCard dc => DeckCardWidget(card: dc),
-                          _ => Placeholder(
-                            child: Text("Card is not a DeckCard"),
-                          ),
-                        },
-                        SlotWidgetStateNotDealt nd => Placeholder(
-                          child: Text("SlotWidgetStateNotDealt ???"),
-                        ),
-                      },
-                    ),
-                  ),
+    return GestureDetector(
+      onDoubleTap:
+          () => context.read<LayoutBloc>().add(
+            SlotWidgetFlipFaceEvent(index: index),
+          ),
+      onSecondaryTap:
+          () => toastification.show(
+            title: Text("onSecondaryTap handler"),
+            style: ToastificationStyle.flat,
+            autoCloseDuration: const Duration(seconds: 3),
+            description: RichText(
+              text: const TextSpan(text: 'received a secondary tap. '),
             ),
           ),
+      child: BlocBuilder<BulkCardControlBloc, BulkCardControlState>(
+        builder:
+            (context, bcState) => RotatedBox(
+              quarterTurns:
+                  bcState.reversalsAllowed &&
+                          switch (swState.card) {
+                            DeckCard dc => dc.reversed,
+                            _ => false,
+                          }
+                      ? 2
+                      : 0,
+              child: Container(
+                width: 70,
+                height: 120,
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(border: Border.all(width: 2)),
+                alignment: Alignment.center,
+                child: switch (swState) {
+                  SlotWidgetStateDealt sd => switch (sd.card) {
+                    DeckCard dc => DeckCardWidget(card: dc),
+                    _ => Placeholder(child: Text("Card is not a DeckCard")),
+                  },
+                },
+              ),
+            ),
+      ),
     );
   }
 }

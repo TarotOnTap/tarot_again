@@ -16,40 +16,53 @@ class NoCardDealt extends StatelessWidget {
 
 @immutable
 class PositionSlotWidget extends StatelessWidget with Logging {
-  const PositionSlotWidget({super.key});
+  final int index;
+
+  const PositionSlotWidget({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<BulkCardControlBloc, BulkCardControlState>(
         // selector: (state) => (state.everybodyFaceUp, state.reversalsAllowed),
         builder:
-            (context, bcState) => Container(
+            (context, bcState) => SizedBox(
               width: 80,
               height: 150,
-              foregroundDecoration: BoxDecoration(
-                border: Border.all(width: 1.0),
-                borderRadius: BorderRadius.all(Radius.circular(3.0)),
-              ),
+              child: Container(
+                foregroundDecoration: BoxDecoration(
+                  border: Border.all(width: 1.0),
+                  borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                ),
 
-              child: BlocBuilder<SlotWidgetBloc, SlotWidgetState>(
-                builder:
-                    (context, swState) => Column(
-                      children: <Widget>[
-                        Text(swState.slotName),
-                        Expanded(
-                          child: switch (swState) {
-                            SlotWidgetStateNotDealt() => NoCardDealt(),
-                            SlotWidgetStateDealt(
-                              faceUp: var faceUp,
-                              card: var card,
-                            ) =>
-                              bcState.everybodyFaceUp || swState.faceUp
-                                  ? CardWidget()
-                                  : CardBack(),
-                          },
-                        ),
-                      ],
-                    ),
+                child: BlocSelector<LayoutBloc, LayoutState, SlotWidgetState?>(
+                  selector: (state) => state.slotWidgetStates[index],
+                  builder:
+                      (context, swState) =>
+                          swState == null
+                              ? Placeholder(
+                                child: Text(
+                                  "PositionSlotWidget: swState[$index] is null",
+                                ),
+                              )
+                              : Column(
+                                children: <Widget>[
+                                  Text(swState.slotName),
+                                  Expanded(
+                                    child: switch (swState) {
+                                      SlotWidgetStateNotDealt() =>
+                                        NoCardDealt(),
+                                      SlotWidgetStateDealt swsd =>
+                                        bcState.everybodyFaceUp || swsd.faceUp
+                                            ? CardWidget(
+                                              index: index,
+                                              swState: swsd,
+                                            )
+                                            : CardBack(),
+                                    },
+                                  ),
+                                ],
+                              ),
+                ),
               ),
             ),
       );

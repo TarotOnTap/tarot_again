@@ -25,15 +25,6 @@ class LayoutRepository extends SingletonRepository with Logging {
       String assetName = assetFileName.split('.')[0];
       // assetName is the map key
       verbose("  assetName is $assetName");
-      //
-      // String displayName = assetName.splitMapJoin(
-      //   "_",
-      //   onMatch: (match) => " ",
-      //   onNonMatch:
-      //       (String piece) =>
-      //           piece.substring(0, 1).toUpperCase() + piece.substring(1),
-      // );
-      // verbose("  displayName is $displayName");
 
       layouts = layouts.add(
         assetName,

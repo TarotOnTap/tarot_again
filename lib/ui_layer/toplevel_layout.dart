@@ -1,23 +1,23 @@
 import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/util/util.dart';
 
 import 'cards_stage_layout.dart';
 import 'ui_layer.dart';
 
-class GlobalKeyStore {
-  GlobalKey<LayoutWidgetState> layoutWidgetKey = GlobalKey<LayoutWidgetState>();
-
-  GlobalKeyStore._();
-
-  factory GlobalKeyStore() {
-    if (!sl.isRegistered<GlobalKeyStore>()) {
-      sl.registerSingleton<GlobalKeyStore>(GlobalKeyStore._());
-    }
-
-    return sl<GlobalKeyStore>();
-  }
-}
+//
+// class GlobalKeyStore {
+//   GlobalKey<LayoutWidgetState> layoutWidgetKey = GlobalKey<LayoutWidgetState>();
+//
+//   GlobalKeyStore._();
+//
+//   factory GlobalKeyStore() {
+//     if (!sl.isRegistered<GlobalKeyStore>()) {
+//       sl.registerSingleton<GlobalKeyStore>(GlobalKeyStore._());
+//     }
+//
+//     return sl<GlobalKeyStore>();
+//   }
+// }
 
 class TopLevelLayout extends StatelessWidget {
   const TopLevelLayout({super.key});
@@ -40,9 +40,6 @@ class TopLevelLayout extends StatelessWidget {
           ),
           RepositoryProvider<DeckRepository>(
             create: (BuildContext context) => DeckRepository(),
-          ),
-          RepositoryProvider<GlobalKeyStore>(
-            create: (BuildContext context) => GlobalKeyStore(),
           ),
         ],
         child: Row(

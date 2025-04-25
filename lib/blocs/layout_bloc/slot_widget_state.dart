@@ -1,4 +1,4 @@
-part of 'slot_widget_bloc.dart';
+part of 'layout_bloc.dart';
 
 @freezed
 sealed class SlotWidgetState with _$SlotWidgetState {

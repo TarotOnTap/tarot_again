@@ -1,7 +1,6 @@
 import 'package:align_positioned/align_positioned.dart';
 import 'package:flutter/material.dart';
 import 'package:tarot_again/blocs/blocs.dart';
-import 'package:tarot_again/ui_layer/toplevel_layout.dart';
 import 'package:tarot_again/util/util.dart';
 
 import 'layout_widget/layout_widget.dart';
@@ -13,16 +12,12 @@ class CardsStageLayout extends StatelessWidget with Logging {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LayoutBloc, LayoutState>(
-      buildWhen:
-          (prev, state) => prev.currentLayoutName != state.currentLayoutName,
+      // buildWhen:
+      //     (prev, state) => prev.currentLayoutName != state.currentLayoutName,
       builder:
           (context, lsState) => Stack(
             children: <Widget>[
-              Center(
-                child: LayoutWidget(
-                  key: context.read<GlobalKeyStore>().layoutWidgetKey,
-                ),
-              ),
+              Center(child: LayoutWidget()),
               AlignPositioned(
                 alignment: Alignment.topLeft,
                 dx: 5,
