@@ -1,73 +1,66 @@
 import 'package:tarot_again/util/util.dart';
 
-final IList<String> minorArcanaSuits =
-    <String>["Wands", "Cups", "Swords", "Pentacles"].lock;
-
 @JsonEnum()
-enum Suits { wands, cups, swords, pentacles }
+enum Suits {
+  wands(displayName: "Wands"),
+  cups(displayName: "Cups"),
+  swords(displayName: "Swords"),
+  pentacles(displayName: "Pentacles");
+
+  const Suits({required this.displayName});
+
+  final String displayName;
+}
 
 @JsonEnum()
 enum Pips {
-  ace,
-  two,
-  three,
-  four,
-  five,
-  six,
-  seven,
-  eight,
-  nine,
-  ten,
-  page,
-  knight,
-  queen,
-  king,
-}
+  ace(displayName: "Ace"),
+  two(displayName: "Two"),
+  three(displayName: "Three"),
+  four(displayName: "Four"),
+  five(displayName: "Five"),
+  six(displayName: "Six"),
+  seven(displayName: "Seven"),
+  eight(displayName: "Eight"),
+  nine(displayName: "Nine"),
+  ten(displayName: "Ten"),
+  page(displayName: "Page"),
+  knight(displayName: "Knight"),
+  queen(displayName: "Queen"),
+  king(displayName: "King");
 
-final IList<String> minorArcanaNames = IList([
-  "Ace",
-  "Two",
-  "Three",
-  "Four",
-  "Five",
-  "Six",
-  "Seven",
-  "Eight",
-  "Nine",
-  "Ten",
-  "Page",
-  "Knight",
-  "Queen",
-  "King",
-]);
+  const Pips({required this.displayName});
+
+  final String displayName;
+}
 
 @JsonEnum()
 enum MajorArcana {
-  fool(cardName: "The Fool", romanNumber: "0"),
-  magician(cardName: "The Magician", romanNumber: "I"),
-  highPriestess(cardName: "The High Priestess", romanNumber: "II"),
-  empress(cardName: "The Empress", romanNumber: "III"),
-  emperor(cardName: "The Emperor", romanNumber: "IV"),
-  hierophant(cardName: "The Hierophant", romanNumber: "V"),
-  lovers(cardName: "The Lovers", romanNumber: "VI"),
-  chariot(cardName: "The Chariot", romanNumber: "VII"),
-  strength(cardName: "Strength", romanNumber: "VIII"),
-  hermit(cardName: "The Hermit", romanNumber: "IX"),
-  wheelOfFortune(cardName: "The Wheel of Fortune", romanNumber: "X"),
-  justice(cardName: "Justice", romanNumber: "XI"),
-  hangedMan(cardName: "The Hanged Man", romanNumber: "XII"),
-  death(cardName: "Death", romanNumber: "XIII"),
-  temperance(cardName: "Temperance", romanNumber: "XIV"),
-  devil(cardName: "The Devil", romanNumber: "XV"),
-  tower(cardName: "The Tower", romanNumber: "XVI"),
-  star(cardName: "The Star", romanNumber: "XVII"),
-  moon(cardName: "The Moon", romanNumber: "XVIII"),
-  sun(cardName: "The Sun", romanNumber: "XIX"),
-  judgment(cardName: "Judgment", romanNumber: "XX"),
-  theWorld(cardName: "The World", romanNumber: "XXI");
+  fool(displayName: "The Fool", romanNumber: "0"),
+  magician(displayName: "The Magician", romanNumber: "I"),
+  highPriestess(displayName: "The High Priestess", romanNumber: "II"),
+  empress(displayName: "The Empress", romanNumber: "III"),
+  emperor(displayName: "The Emperor", romanNumber: "IV"),
+  hierophant(displayName: "The Hierophant", romanNumber: "V"),
+  lovers(displayName: "The Lovers", romanNumber: "VI"),
+  chariot(displayName: "The Chariot", romanNumber: "VII"),
+  strength(displayName: "Strength", romanNumber: "VIII"),
+  hermit(displayName: "The Hermit", romanNumber: "IX"),
+  wheelOfFortune(displayName: "The Wheel of Fortune", romanNumber: "X"),
+  justice(displayName: "Justice", romanNumber: "XI"),
+  hangedMan(displayName: "The Hanged Man", romanNumber: "XII"),
+  death(displayName: "Death", romanNumber: "XIII"),
+  temperance(displayName: "Temperance", romanNumber: "XIV"),
+  devil(displayName: "The Devil", romanNumber: "XV"),
+  tower(displayName: "The Tower", romanNumber: "XVI"),
+  star(displayName: "The Star", romanNumber: "XVII"),
+  moon(displayName: "The Moon", romanNumber: "XVIII"),
+  sun(displayName: "The Sun", romanNumber: "XIX"),
+  judgment(displayName: "Judgment", romanNumber: "XX"),
+  theWorld(displayName: "The World", romanNumber: "XXI");
 
-  final String cardName;
+  final String displayName;
   final String romanNumber;
 
-  const MajorArcana({required this.cardName, required this.romanNumber});
+  const MajorArcana({required this.displayName, required this.romanNumber});
 }

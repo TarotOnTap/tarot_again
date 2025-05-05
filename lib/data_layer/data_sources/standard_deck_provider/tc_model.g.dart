@@ -9,18 +9,18 @@ part of 'tc_model.dart';
 TCMinorArcanaModel _$TCMinorArcanaModelFromJson(Map<String, dynamic> json) =>
     TCMinorArcanaModel(
       sortOrder: (json['sortOrder'] as num).toInt(),
-      assetName: json['assetName'] as String,
       suit: $enumDecode(_$SuitsEnumMap, json['suit']),
       pips: $enumDecode(_$PipsEnumMap, json['pips']),
+      assetReference: json['assetReference'] as String,
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$TCMinorArcanaModelToJson(TCMinorArcanaModel instance) =>
     <String, dynamic>{
       'sortOrder': instance.sortOrder,
-      'assetName': instance.assetName,
       'suit': _$SuitsEnumMap[instance.suit]!,
       'pips': _$PipsEnumMap[instance.pips]!,
+      'assetReference': instance.assetReference,
       'type': instance.$type,
     };
 
@@ -51,16 +51,16 @@ const _$PipsEnumMap = {
 TCMajorArcanaModel _$TCMajorArcanaModelFromJson(Map<String, dynamic> json) =>
     TCMajorArcanaModel(
       sortOrder: (json['sortOrder'] as num).toInt(),
-      assetName: json['assetName'] as String,
       card: $enumDecode(_$MajorArcanaEnumMap, json['card']),
+      assetReference: json['assetReference'] as String,
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$TCMajorArcanaModelToJson(TCMajorArcanaModel instance) =>
     <String, dynamic>{
       'sortOrder': instance.sortOrder,
-      'assetName': instance.assetName,
       'card': _$MajorArcanaEnumMap[instance.card]!,
+      'assetReference': instance.assetReference,
       'type': instance.$type,
     };
 

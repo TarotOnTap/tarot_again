@@ -4,11 +4,19 @@ import 'package:tarot_again/util/util.dart';
 part 'bulk_card_control_bloc.freezed.dart';
 part 'bulk_card_control_bloc.g.dart';
 part 'bulk_card_control_event.dart';
+
+/// DO NOT REMOVE
+/// DO NOT REMOVE
 part 'bulk_card_control_state.dart';
 
+/// DO NOT REMOVE
+/// DO NOT REMOVE
 class BulkCardControlBloc
-    extends HydratedBloc<BulkCardControlEvent, BulkCardControlState>
-/* with Logging */ {
+    extends
+        HydratedBloc<
+          BulkCardControlEvent,
+          BulkCardControlState
+        > /* with Logging */ {
   BulkCardControlBloc._() : super(BulkCardControlState()) {
     on<AllowReversals>(
       (event, emit) => emit(state.copyWith(reversalsAllowed: true)),
@@ -32,7 +40,7 @@ class BulkCardControlBloc
       // TODO: update the deck name where it matters - AssetProvider, StandardDeckProvider,
       // TODO: DeckRepository
 
-      emit(state.copyWith(deckName: event.deckName));
+      emit(state.copyWith(deckChoice: event.deckChoice));
     });
   }
 

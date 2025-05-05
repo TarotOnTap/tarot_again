@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:toastification/toastification.dart';
 
@@ -20,8 +20,6 @@ void main() async {
       };
 
       await initializeEverything();
-
-      // Bloc.observer = const AppBlocObserver();
 
       // await _initFirebase();
       runApp(TarotAgainApp());
@@ -73,7 +71,13 @@ class TarotAgainApp extends StatelessWidget {
           // tested with just a hot reload.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const HomePageWidget(title: 'Flutter Demo Home Page'),
+        home: Scaffold(
+          body: SafeArea(
+            child: Center(
+              child: const HomePageWidget(title: 'Flutter Demo Home Page'),
+            ),
+          ),
+        ),
       ),
     );
   }

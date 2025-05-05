@@ -27,7 +27,7 @@ class LayoutProvider extends BaseProvider with Logging {
   }
 
   Future<TarotLayout> loadLayout(String layoutAsset) async {
-    verbose("loadLayout\n  layoutAsset is $layoutAsset");
+    verbose("LayoutProvider.loadLayout\n  layoutAsset is $layoutAsset");
 
     if (assetCache.containsKey(layoutAsset)) {
       verbose("  assetCache contains key");

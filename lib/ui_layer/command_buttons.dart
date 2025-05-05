@@ -96,6 +96,9 @@ class CommandButtons extends StatelessWidget with Logging {
                     onChanged: (String? value) {
                       if (value != null) {
                         verbose("  onChanged: value is $value");
+                        context.read<BulkCardControlBloc>().add(
+                          TurnEverybodyFaceUpOff(),
+                        );
                         context.read<LayoutBloc>().add(
                           LayoutEvent.setNewLayout(newLayout: value),
                         );

@@ -21,21 +21,30 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
   late final LayoutRepository layoutRepository;
 
   LayoutBloc._() : super(const LayoutState(/* newLayout: NewLayout.yes */)) {
+    verbose("LayoutBloc._()");
     layoutRepository = sl<LayoutRepository>();
 
     on<LayoutStarting>((event, emit) async {
+      verbose("LayoutBloc:on<LayoutStarting");
       // This is one way to get layout names into the state.
       // the other would be to have LayoutRepository add a different event on us
       // that signals the list of layout display names is ready, and have that handler
       // emit the new state. The async happens elsewhere.
       // For now, this seems to work fine - and it should.
-      await layoutRepository.cacheLayouts();
+
+      await layoutRepository.loadLayouts();
+      verbose("  awaited layoutRepository.loadLayouts()");
 
       add(SetNewLayout(newLayout: "Empty Layout"));
+      verbose("  added SetNewLayout empty layout");
       emit(state.copyWith(layoutNames: layoutRepository.layoutDisplayNames));
+      verbose(
+        "  emitted new state with layoutNames: ${layoutRepository.layoutDisplayNames}",
+      );
     });
 
     on<SetNewLayout>((SetNewLayout event, emit) {
+      verbose("LayoutBloc: on<SetNewLayout>; newLayout is ${event.newLayout}");
       final TarotLayout layout = layoutRepository.getLayoutByDisplayName(
         event.newLayout,
       );
@@ -44,7 +53,7 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
         final titles =
             switch (layout) {
               HorizontalLinear(slotNames: var slotNames) => slotNames,
-              _ => layout.numCards.range().map((_) => "slot name"),
+              _ => layout.numCards.range().map((_) => ""),
             }.toIList();
 
         final slotData = layout.numCards.range().fold(
@@ -66,24 +75,18 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
       }
     });
 
-    // on<AddSlotBloc>((event, emit) {
-    //   SWStates addNew = const SWStates.empty();
-    //
-    //   final int idx = event.newBloc.state.slotIndex;
-    //
-    //   if (!state.slotWidgetStates.containsKey(idx)) {
-    //     addNew = state.slotWidgetStates.add(idx, event.newBloc);
-    //
-    //     emit(state.copyWith(slotWidgetStates: addNew));
-    //   }
-    // });
-
     on<DealCards>((event, emit) async {
+      verbose("on<DealCards>");
       final dr = sl<DeckRepository>();
 
+      verbose("  awaiting shuffleDeck()");
       await dr.shuffleDeck();
 
+      verbose(
+        "  awaiting the take of ${state.currentLayout.numCards} from the dealtCardQueue",
+      );
       final cards = await dr.dealtCardQueue.take(state.currentLayout.numCards);
+      verbose("  received $cards from the dealtCardQueue");
 
       final newStates = state.currentLayout.numCards.range().fold(
         const SWStates.empty(),

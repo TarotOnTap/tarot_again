@@ -1,3 +1,4 @@
+import 'package:fpdart/fpdart.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -13,7 +14,7 @@ class BufferedLog {
   BufferedLog(this._level, {this.autoFlush = false});
 
   BufferedLog add(msg) {
-    _logger.write(msg);
+    _logger.write("$runtimeType:$msg");
 
     if (autoFlush) {
       commit();
@@ -113,7 +114,7 @@ mixin Logging {
 
     runIt ??= () {} as T Function();
 
-    talker.verbose("$this:$msg");
+    talker.verbose("$runtimeType:$msg");
 
     final T retval = runIt();
 
@@ -122,6 +123,27 @@ mixin Logging {
     }
 
     return retval;
+  }
+
+  FutureOr<T> verboseWrap<T>(
+    String preMsg, {
+    required FutureOr<T> Function() runIt,
+    String Function(FutureOr<T>)? postMsg,
+  }) {
+    verbose(preMsg);
+
+    FutureOr<T> tmp = runIt();
+
+    if (postMsg != null) {
+      switch (tmp) {
+        case Future t:
+          t.then((value) => postMsg(value));
+        case T t:
+          postMsg(t);
+      }
+    }
+
+    return tmp;
   }
 
   BufferedLog bufferedVerbose(msg, {autoFlush = false}) =>

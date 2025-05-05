@@ -2,60 +2,22 @@ import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/data_layer/repositories/types.dart';
 import 'package:tarot_again/util/util.dart';
 
-typedef LayoutCache = IMap<String, LayoutMapRecord>;
+// typedef LayoutCache = IMap<String, LayoutMapRecord>;
+
+// final assets = Symbol("assets");
 
 class LayoutRepository extends SingletonRepository with Logging {
-  LayoutCache layouts = LayoutCache({});
+  late final AssetProvider assetProvider;
+  late final LayoutProvider layoutProvider;
 
   IList<String> layoutDisplayNames = const IList<String>.empty();
 
-  Future<void> cacheLayouts() async {
-    verbose("cacheLayouts");
-
-    LayoutProvider lp = LayoutProvider();
-
-    for (var layout in Assets.layouts.tarotLayouts.values) {
-      verbose("  layout is $layout");
-
-      TarotLayout l = await lp.loadLayout(layout);
-      verbose("  loadedLayout = $l");
-
-      var pieceList = layout.split("/");
-      String assetFileName = pieceList.last;
-      String assetName = assetFileName.split('.')[0];
-      // assetName is the map key
-      verbose("  assetName is $assetName");
-
-      layouts = layouts.add(
-        assetName,
-        LayoutMapRecord(
-          displayName: l.displayName,
-          assetPath: layout,
-          layout: l,
-        ),
-      );
-    }
-
-    layouts = layouts.add(
-      "empty_layout",
-      LayoutMapRecord(
-        displayName: "Empty Layout",
-        assetPath: "",
-        layout: TarotLayout.nullLayout(),
-      ),
-    );
-
-    verbose("  setting layoutDisplayNames");
-    layoutDisplayNames = layouts.values.fold(
-      const IList<String>.empty(),
-      (prev, item) => prev.add(item.displayName).toIList(),
-    );
-
-    // sl<LayoutBloc>().add(SetLayoutNames(newLayoutNames: layoutDisplayNames));
-  }
-
   LayoutRepository._() {
-    // unawaited(cacheLayouts());
+    assetProvider = AssetProvider();
+
+    layoutProvider = LayoutProvider();
+
+    // layoutDisplayNames = IList<String>(ap.assetMap["layouts"].keys);
   }
 
   factory LayoutRepository() {
@@ -66,23 +28,36 @@ class LayoutRepository extends SingletonRepository with Logging {
     return sl<LayoutRepository>();
   }
 
-  Iterable<String> get listLayouts =>
-      layouts.keys; // like for a listview, or other display element
+  // Iterable<String> get listLayouts => layoutDisplayNames;
+
+  Future<void> loadLayouts() async {
+    verbose("LayoutRepository.loadLayouts()");
+    final layoutDisplayPaths = await assetProvider.findTarotLayouts();
+    verbose("  layoutDisplayPaths is $layoutDisplayPaths");
+
+    for (var path in layoutDisplayPaths) {
+      await layoutProvider.loadLayout(path);
+    }
+
+    layoutDisplayNames =
+        layoutProvider.assetCache.values
+            .map((item) => item.displayName)
+            .toIList();
+  }
 
   TarotLayout getLayoutByLayoutName(String name) =>
-      layouts.get(name)?.layout ??
+      layoutProvider.assetCache.get(name) ??
       TarotLayout.nullLayout(displayName: "No Such Layout");
 
   TarotLayout getLayoutByDisplayName(String displayName) =>
-      layouts.entries
+      layoutProvider.assetCache.entries
           .firstWhere(
             (item) => item.value.displayName == displayName,
             orElse:
-                () => MapEntry<String, LayoutMapRecord>(
+                () => MapEntry<String, TarotLayout>(
                   "nullLayout",
-                  nullLayoutMapRecord,
+                  TarotLayout.nullLayout(),
                 ),
           )
-          .value
-          .layout;
+          .value;
 }

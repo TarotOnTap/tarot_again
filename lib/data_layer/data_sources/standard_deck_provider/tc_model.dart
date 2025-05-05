@@ -19,15 +19,15 @@ part 'tc_model.g.dart';
 sealed class TCModel with _$TCModel {
   factory TCModel.tcMinorArcanaModel({
     required int sortOrder,
-    required String assetName,
     required Suits suit,
     required Pips pips,
+    required String assetReference,
   }) = TCMinorArcanaModel;
 
   factory TCModel.tcMajorArcanaModel({
     required int sortOrder,
-    required String assetName,
     required MajorArcana card,
+    required String assetReference,
   }) = TCMajorArcanaModel;
 
   factory TCModel.fromJson(Map<String, dynamic> json) =>

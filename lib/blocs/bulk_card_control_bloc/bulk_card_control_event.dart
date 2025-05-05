@@ -15,9 +15,9 @@ class TurnEverybodyFaceUpOff extends BulkCardControlEvent {}
 
 @immutable
 class SetDeckName extends BulkCardControlEvent {
-  final String deckName;
+  final StandardTarotDecksEnum deckChoice;
 
-  SetDeckName(this.deckName);
+  SetDeckName(this.deckChoice);
 }
 
 //

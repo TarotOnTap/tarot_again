@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:tarot_again/util/util.dart';
 
 import '../randoms_provider/randoms_provider.dart';
@@ -14,7 +15,8 @@ final IList<TCModel> majorArcana = IList<TCModel>(
     (item) => TCModel.tcMajorArcanaModel(
       sortOrder: item.index,
       card: item,
-      assetName: majorAssetName(item),
+      assetReference: item.name,
+      // assetName: majorAssetName(item),
     ),
   ),
 );
@@ -27,10 +29,17 @@ final IList<TCModel> minorArcana =
             sortOrder: (suit.index * Pips.values.length + pips.index + 22),
             suit: suit,
             pips: pips,
-            assetName: minorAssetName(suit, pips),
-            // imageAsset: "${pips.name}_${suit.name}"
+            // assetName: minorAssetName(suit, pips),
+            assetReference: "${pips.name}_${suit.name}",
           ),
     ].lock;
+
+Future<void> mapAssets() async {
+  Logging.staticVerbose("in the toplevel function mapAssets");
+  AssetManifest manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+  Logging.staticVerbose("mapAssets has found the manifest:");
+  Logging.staticVerbose("  ${manifest.listAssets()}");
+}
 
 // this is the authoritative full tarot deck, nobody gets to change it directly.
 final IList<TCModel> _fullDeck = [...majorArcana, ...minorArcana].lock;
@@ -106,6 +115,8 @@ class StandardDeckProvider {
   /// and then sets the current deck to that. It also cancels the [currentShuffleQueue]
   /// to make sure we don't leak memory there.
   Future<void> shuffleDeck() async {
+    await mapAssets();
+
     final AsyncRandoms ar = sl<AsyncRandoms>();
 
     await currentShuffleQueue.cancel(immediate: true);

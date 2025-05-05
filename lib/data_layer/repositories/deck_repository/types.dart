@@ -1,46 +1,68 @@
 import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/data_layer/repositories/deck_repository/asset_card.dart';
 import 'package:tarot_again/util/util.dart';
 
-export 'repository.dart' show DeckRepository;
+export 'repository.dart';
 
+/// do not change!!! [types.freezed.dart] is important!
 part 'types.freezed.dart';
+
+/// do not change!!! [type.freezed.dart] is important!!!
+
+/// do not change!!! [types.g.dart] is important!
 part 'types.g.dart';
 
-class DealtModel /* with Logging */ {
-  final String assetName;
-  final AssetPathMap paths;
-  late final LoadedAssetsMap assets;
+/// do not change!!! [types.g.dart] is important!!!
 
-  DealtModel({required this.assetName}) : paths = assetPathGenerator(assetName);
+// class DealtModel with Logging {
+//   final String assetName;
+//   final TCModel card;
+//
+//   // final AssetPathMap paths;
+//   //
+//   // late final LoadedAssetsMap assets;
+//
+//   DealtModel({
+//     required this.assetName,
+//     required this.card,
+//   }) /* : paths = const LoadedAssetsMap.empty() */;
 
-  // void loadAssets() async {
-  //   assets = await di<AssetProvider>().loadAssetsByFileExtension(paths);
-  // }
+// Future<TCModelAssets?> loadAssets() async {
+//   final lg = bufferedVerbose("loadAssets()");
+//   lg.addln("  assetName: $assetName");
+//   lg.addln("  card: $card");
+//   BulkCardControlBloc bccBloc = sl<BulkCardControlBloc>();
+//
+//   String deckType = bccBloc.state.deckType.displayName;
+//   lg.addln("  deckType: $deckType");
+//   String deckName = bccBloc.state.deckChoice.displayName;
+//   lg.addln("  deckName: $deckName");
+//   lg.commit();
+//
+//   return verboseWrap(
+//     "  awaiting loadAssetsForCard()",
+//     postMsg:
+//         (returnedValue) =>
+//             "awaited: loadAssetsForCard returned $returnedValue",
+//     runIt:
+//         () => di<AssetProvider>().loadAssetsForCard(deckType, deckName, card),
+//   );
+// }
 
-  Future<DealtCard> transform({
-    required TCModel card,
-    required bool isReversed,
-  }) async {
-    // verbose("transform method");
-    // verbose("  isReversed is $isReversed");
-    //
-    assets = await sl<AssetProvider>().loadAssetsByFileExtension(paths);
-
-    final DealtCard retVal = DealtCard.deckCard(
-      tcCard: card,
-      reversed: isReversed,
-      imageAssetPath: assets["image"] ?? "",
-      description: assets["description"] ?? "",
-      uprightMeaning: assets["upright"] ?? "",
-      reversedMeaning: assets["reversed"] ?? "",
-    );
-
-    // verbose("  returning $retVal");
-
-    return retVal;
-  }
-}
+//   Future<DealtCard> transform({
+//     required TCModel card,
+//     required bool isReversed,
+//   }) async {
+//     // final assets = await loadAssets();
+//
+//     final DealtCard retVal = DealtCard.deckCard(
+//       tcCard: card,
+//       reversed: isReversed,
+//       // assets: assets,
+//     );
+//
+//     return retVal;
+//   }
+// }
 
 /// DealtCard is a class that represents two possible states of a card that has
 /// been dealt by the [DeckRepository]. [DeckEmpty] represents the absence of a
@@ -61,10 +83,9 @@ sealed class DealtCard with _$DealtCard {
   factory DealtCard.deckCard({
     required TCModel tcCard,
     required bool reversed,
-    @Default("") String imageAssetPath,
-    @Default("") String description,
-    @Default("") String uprightMeaning,
-    @Default("") String reversedMeaning,
+    // @JsonKey(includeToJson: false, includeFromJson: false)
+    // @Default(null)
+    // TCModelAssets? assets,
   }) = DeckCard;
 
   factory DealtCard.unassignedCard() = DealtCardUnassignedCard;

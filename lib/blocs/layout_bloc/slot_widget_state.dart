@@ -4,12 +4,12 @@ part of 'layout_bloc.dart';
 sealed class SlotWidgetState with _$SlotWidgetState {
   const factory SlotWidgetState.notDealt({
     required int slotIndex,
-    required String slotName,
+    @Default("") String slotName,
   }) = SlotWidgetStateNotDealt;
 
   const factory SlotWidgetState.dealt({
     required int slotIndex,
-    required String slotName,
+    @Default("") String slotName,
     required bool faceUp,
     required DealtCard card,
   }) = SlotWidgetStateDealt;
