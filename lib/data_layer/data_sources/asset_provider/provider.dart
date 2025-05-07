@@ -115,7 +115,7 @@ class AssetProvider extends BaseProvider with Logging {
   Future<TCModelAssets?> loadAssetsForCard(
     String deckType,
     String deckName,
-    TCModel card,
+    TarotDeckCards card,
   ) async {
     verbose("AssetProvider.loadAssetsForCard");
     verbose("  deckType: $deckType; deckName: $deckName; card: $card");
@@ -125,9 +125,8 @@ class AssetProvider extends BaseProvider with Logging {
     IList<String> cardAssets =
         (await allAssets)
             .where(
-              (String assetName) => assetName.contains(
-                "decks/$deckType/$deckName/${card.assetReference}",
-              ),
+              (String assetName) =>
+                  assetName.contains("decks/$deckType/$deckName/${card.name}"),
             )
             .toIList();
 

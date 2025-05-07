@@ -76,7 +76,7 @@ class DeckRepository extends SingletonRepository with Logging {
   }
 
   Future<void> loadCardAssets(
-    TCModel card,
+    TarotDeck card,
     void Function(TCModelAssets?) callback,
   ) async {
     await sl<AssetProvider>()

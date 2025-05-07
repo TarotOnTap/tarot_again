@@ -85,12 +85,6 @@ class _CardColorBackState extends State<CardColorBack>
       ..addStatusListener(animationStatusListener);
     verbose("  created colorAnimation");
 
-    // colorAnimation.addListener(() {
-    //   setState(() {
-    //     // The state that has changed here is the animation object's value.
-    //   });
-    // });
-
     controller.forward();
   }
 

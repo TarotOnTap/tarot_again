@@ -13,57 +13,6 @@ part 'types.g.dart';
 
 /// do not change!!! [types.g.dart] is important!!!
 
-// class DealtModel with Logging {
-//   final String assetName;
-//   final TCModel card;
-//
-//   // final AssetPathMap paths;
-//   //
-//   // late final LoadedAssetsMap assets;
-//
-//   DealtModel({
-//     required this.assetName,
-//     required this.card,
-//   }) /* : paths = const LoadedAssetsMap.empty() */;
-
-// Future<TCModelAssets?> loadAssets() async {
-//   final lg = bufferedVerbose("loadAssets()");
-//   lg.addln("  assetName: $assetName");
-//   lg.addln("  card: $card");
-//   BulkCardControlBloc bccBloc = sl<BulkCardControlBloc>();
-//
-//   String deckType = bccBloc.state.deckType.displayName;
-//   lg.addln("  deckType: $deckType");
-//   String deckName = bccBloc.state.deckChoice.displayName;
-//   lg.addln("  deckName: $deckName");
-//   lg.commit();
-//
-//   return verboseWrap(
-//     "  awaiting loadAssetsForCard()",
-//     postMsg:
-//         (returnedValue) =>
-//             "awaited: loadAssetsForCard returned $returnedValue",
-//     runIt:
-//         () => di<AssetProvider>().loadAssetsForCard(deckType, deckName, card),
-//   );
-// }
-
-//   Future<DealtCard> transform({
-//     required TCModel card,
-//     required bool isReversed,
-//   }) async {
-//     // final assets = await loadAssets();
-//
-//     final DealtCard retVal = DealtCard.deckCard(
-//       tcCard: card,
-//       reversed: isReversed,
-//       // assets: assets,
-//     );
-//
-//     return retVal;
-//   }
-// }
-
 /// DealtCard is a class that represents two possible states of a card that has
 /// been dealt by the [DeckRepository]. [DeckEmpty] represents the absence of a
 /// card, because the deck has been run dry. We shouldn't get to this state to
@@ -81,7 +30,7 @@ sealed class DealtCard with _$DealtCard {
   /// the contents of a Markdown file. The default value of "" for these assets indicates that the
   /// asset is not present; this should only occur during development.
   factory DealtCard.deckCard({
-    required TCModel tcCard,
+    required TarotDeckCards tcCard,
     required bool reversed,
     // @JsonKey(includeToJson: false, includeFromJson: false)
     // @Default(null)

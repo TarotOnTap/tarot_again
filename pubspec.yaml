@@ -64,6 +64,7 @@ dependencies:
   flutter_layout_grid: ^2.0.8
   path: ^1.9.1
   simple_animations: ^5.2.0
+  card_settings_ui: ^1.1.3
 
 dev_dependencies:
   flutter_test:
@@ -90,23 +91,25 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
-  uses-material-design: true
-
   assets:
     - assets/
     - assets/decks/
     - assets/decks/standard_tarot/
     - assets/decks/standard_tarot/RWS/
-    - assets/decks/standard_tarot/RWS/empress/
-    - assets/decks/standard_tarot/RWS/fool/
-    - assets/decks/standard_tarot/RWS/four_cups/
-    - assets/decks/standard_tarot/RWS/hermit/
-    - assets/decks/standard_tarot/RWS/highPriestess/
-    - assets/decks/standard_tarot/RWS/magician/
+    - assets/decks/standard_tarot/RWS/descriptions/
+    - assets/decks/standard_tarot/RWS/images/
+    - assets/decks/standard_tarot/RWS/reversedMeanings/
+    - assets/decks/standard_tarot/RWS/uprightMeanings/
+    - assets/layouts/
     - assets/layouts/tarot_layouts/
+
+
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
