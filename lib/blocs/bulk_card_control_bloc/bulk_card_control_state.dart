@@ -14,8 +14,8 @@ enum StandardTarotDecksEnum {
 
 @JsonEnum()
 enum DeckTypesEnum {
-  standardTarot(displayName: "standard_tarot"),
-  standardPlayingCards(displayName: "standard_playing_cards");
+  standardTarot(displayName: "Standard Tarot"),
+  standardPlayingCards(displayName: "Standard Playing Cards");
 
   const DeckTypesEnum({required this.displayName});
 

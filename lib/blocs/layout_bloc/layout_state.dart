@@ -9,7 +9,7 @@ sealed class LayoutState with _$LayoutState {
     @Default(IList<String>.empty()) IList<String> layoutNames,
     @Default("Empty Layout") String currentLayoutName,
     @Default(TarotLayout.nullLayout()) TarotLayout currentLayout,
-    @Default(const SWStates.empty()) SWStates slotWidgetStates,
+    @Default(const SWStates.empty()) SWStates slotStates,
     @Default(const IList<String>.empty()) IList<String> slotNames,
   }) = _LayoutState;
 

@@ -4,7 +4,7 @@ import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 class TCMinorArcanaWidget extends StatefulWidget {
-  final TCMinorArcanaModel card;
+  final TarotDeckCards card;
 
   // final TCModelAssets? assets;
   final String assetName;
@@ -66,10 +66,12 @@ class _TCMinorArcanaWidgetState extends State<TCMinorArcanaWidget>
           Object error,
           StackTrace? stacktrace,
         ) {
-          final List<Widget> names = [
-            for (var item in widget.card.card.displayName.split(" "))
-              Text(item, style: theme.titleSmall),
-          ];
+          final List<Widget> names =
+              [
+                widget.card.pips.name,
+                "of",
+                widget.card.suit.name,
+              ].map((item) => Text(item, style: theme.titleSmall)).toList();
 
           final List<Widget> columnChildren = [];
 
@@ -78,15 +80,15 @@ class _TCMinorArcanaWidgetState extends State<TCMinorArcanaWidget>
             columnChildren.add(Gap(5));
           }
 
-          columnChildren.add(
-            Expanded(
-              flex: 4,
-              child: Text(
-                widget.card.card.romanNumber,
-                style: theme.titleSmall,
-              ),
-            ),
-          );
+          // columnChildren.add(
+          //   Expanded(
+          //     flex: 4,
+          //     child: Text(
+          //       widget.card.romanNumber.name.toUpperCase(),
+          //       style: theme.titleSmall,
+          //     ),
+          //   ),
+          // );
 
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,

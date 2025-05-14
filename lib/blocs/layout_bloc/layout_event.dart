@@ -4,10 +4,9 @@ part of 'layout_bloc.dart';
 sealed class LayoutEvent with _$LayoutEvent implements BlocWidgetEvent {
   const factory LayoutEvent.starting() = LayoutStarting;
 
-  //
-  // const factory LayoutEvent.layoutNamesReady({
-  //   required Iterable<String> layoutNames,
-  // }) = LayoutNamesReady;
+  const factory LayoutEvent.layoutNamesReady({
+    required Iterable<String> layoutNames,
+  }) = LayoutNamesReady;
 
   const factory LayoutEvent.setNewLayout({required String newLayout}) =
       SetNewLayout;
@@ -24,6 +23,14 @@ sealed class LayoutEvent with _$LayoutEvent implements BlocWidgetEvent {
 
   const factory LayoutEvent.slotWidgetFaceDownEvent({required int index}) =
       SlotWidgetFaceDownEvent;
+
+  const factory LayoutEvent.setAssetsForSlot({
+    required int index,
+    AssetGenImage? image,
+    String? description,
+    String? uprightMeaning,
+    String? reversedMeaning,
+  }) = SetAssetsForSlot;
 
   // const factory LayoutEvent.addSlotBloc({required SlotWidgetBloc newBloc}) =
   //     AddSlotBloc;

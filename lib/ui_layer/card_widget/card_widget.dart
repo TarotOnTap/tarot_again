@@ -72,25 +72,21 @@ class _CardColorBackState extends State<CardColorBack>
 
   @override
   void initState() {
-    verbose("_CardColorBackState.initState()");
     super.initState();
 
     controller = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
     );
-    verbose("  created AnimationController");
 
     colorAnimation = colorCycle.animate(controller)
       ..addStatusListener(animationStatusListener);
-    verbose("  created colorAnimation");
 
     controller.forward();
   }
 
   @override
   void dispose() {
-    verbose("in _CardColorBackState.dispose()");
     controller.dispose();
     super.dispose();
   }
@@ -101,19 +97,14 @@ class _CardColorBackState extends State<CardColorBack>
   }
 
   void animationStatusListener(AnimationStatus status) {
-    verbose("animationStatusListener; status is $status");
     if (status == AnimationStatus.completed) {
-      verbose("  completed.");
       setState(() {
         colorCycle.begin = genRandomColor();
-        verbose("  set colorCycle to $colorCycle; calling controller.reverse");
         controller.reverse();
       });
     } else if (status == AnimationStatus.dismissed) {
-      verbose("  dismissted.");
       setState(() {
         colorCycle.end = genRandomColor();
-        verbose("  set colorCycle to $colorCycle; calling controller.forward");
         controller.forward();
       });
     }
@@ -123,7 +114,7 @@ class _CardColorBackState extends State<CardColorBack>
 @immutable
 class CardWidget extends StatelessWidget {
   final int index;
-  final SlotWidgetStateDealt swState;
+  final SlotStateDealt swState;
 
   const CardWidget({super.key, required this.index, required this.swState});
 
@@ -149,11 +140,9 @@ class CardWidget extends StatelessWidget {
               //   borderRadius: BorderRadius.circular(10),
               // ),
               alignment: Alignment.center,
-              child: switch (swState) {
-                SlotWidgetStateDealt sd => switch (sd.card) {
-                  DeckCard dc => DeckCardWidget(card: dc),
-                  _ => Placeholder(child: Text("Card is not a DeckCard")),
-                },
+              child: switch (swState.card) {
+                DeckCard dc => DeckCardWidget(card: dc),
+                _ => Placeholder(child: Text("Not a DeckCard")),
               },
             ),
           ),

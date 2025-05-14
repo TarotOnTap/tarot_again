@@ -179,3 +179,17 @@ class AssetGenImage {
 
   String get keyName => _assetName;
 }
+
+sealed class AssetProviderEvents {}
+
+class SetDeckTypeEvent extends AssetProviderEvents {
+  final String deckType;
+
+  SetDeckTypeEvent({required this.deckType});
+}
+
+class SetDeckNameEvent extends AssetProviderEvents {
+  final String deckName;
+
+  SetDeckNameEvent({required this.deckName});
+}

@@ -1,52 +1,148 @@
 import 'package:tarot_again/util/util.dart';
 
 @JsonEnum()
+enum RomanNumerals {
+  none,
+  zero,
+  i,
+  ii,
+  iii,
+  iv,
+  v,
+  vi,
+  vii,
+  viii,
+  ix,
+  x,
+  xi,
+  xii,
+  xiii,
+  xiv,
+  xv,
+  xvi,
+  xvii,
+  xviii,
+  xix,
+  xx,
+  xxi,
+  // xxii,
+}
+
+@JsonEnum()
 enum Arcana { major, minor }
 
 @JsonEnum()
 enum TarotDeckCards {
-  fool(displayName: "The Fool", romanNumber: "0", arcana: Arcana.major),
-  magician(displayName: "The Magician", romanNumber: "I", arcana: Arcana.major),
+  fool(
+    displayName: "The Fool",
+    romanNumber: RomanNumerals.zero,
+    arcana: Arcana.major,
+  ),
+  magician(
+    displayName: "The Magician",
+    romanNumber: RomanNumerals.i,
+    arcana: Arcana.major,
+  ),
   highPriestess(
     displayName: "The High Priestess",
-    romanNumber: "II",
+    romanNumber: RomanNumerals.ii,
     arcana: Arcana.major,
   ),
-  empress(displayName: "The Empress", romanNumber: "III", arcana: Arcana.major),
-  emperor(displayName: "The Emperor", romanNumber: "IV", arcana: Arcana.major),
+  empress(
+    displayName: "The Empress",
+    romanNumber: RomanNumerals.iii,
+    arcana: Arcana.major,
+  ),
+  emperor(
+    displayName: "The Emperor",
+    romanNumber: RomanNumerals.iv,
+    arcana: Arcana.major,
+  ),
   hierophant(
     displayName: "The Hierophant",
-    romanNumber: "V",
+    romanNumber: RomanNumerals.v,
     arcana: Arcana.major,
   ),
-  lovers(displayName: "The Lovers", romanNumber: "VI", arcana: Arcana.major),
-  chariot(displayName: "The Chariot", romanNumber: "VII", arcana: Arcana.major),
-  strength(displayName: "Strength", romanNumber: "VIII", arcana: Arcana.major),
-  hermit(displayName: "The Hermit", romanNumber: "IX", arcana: Arcana.major),
+  lovers(
+    displayName: "The Lovers",
+    romanNumber: RomanNumerals.vi,
+    arcana: Arcana.major,
+  ),
+  chariot(
+    displayName: "The Chariot",
+    romanNumber: RomanNumerals.vii,
+    arcana: Arcana.major,
+  ),
+  strength(
+    displayName: "Strength",
+    romanNumber: RomanNumerals.viii,
+    arcana: Arcana.major,
+  ),
+  hermit(
+    displayName: "The Hermit",
+    romanNumber: RomanNumerals.ix,
+    arcana: Arcana.major,
+  ),
   wheelOfFortune(
     displayName: "The Wheel of Fortune",
-    romanNumber: "X",
+    romanNumber: RomanNumerals.x,
     arcana: Arcana.major,
   ),
-  justice(displayName: "Justice", romanNumber: "XI", arcana: Arcana.major),
+  justice(
+    displayName: "Justice",
+    romanNumber: RomanNumerals.xi,
+    arcana: Arcana.major,
+  ),
   hangedMan(
     displayName: "The Hanged Man",
-    romanNumber: "XII",
+    romanNumber: RomanNumerals.xii,
     arcana: Arcana.major,
   ),
-  death(displayName: "Death", romanNumber: "XIII", arcana: Arcana.major),
+  death(
+    displayName: "Death",
+    romanNumber: RomanNumerals.xiii,
+    arcana: Arcana.major,
+  ),
   temperance(
     displayName: "Temperance",
-    romanNumber: "XIV",
+    romanNumber: RomanNumerals.xiv,
     arcana: Arcana.major,
   ),
-  devil(displayName: "The Devil", romanNumber: "XV", arcana: Arcana.major),
-  tower(displayName: "The Tower", romanNumber: "XVI", arcana: Arcana.major),
-  star(displayName: "The Star", romanNumber: "XVII", arcana: Arcana.major),
-  moon(displayName: "The Moon", romanNumber: "XVIII", arcana: Arcana.major),
-  sun(displayName: "The Sun", romanNumber: "XIX", arcana: Arcana.major),
-  judgment(displayName: "Judgment", romanNumber: "XX", arcana: Arcana.major),
-  theWorld(displayName: "The World", romanNumber: "XXI", arcana: Arcana.major),
+  devil(
+    displayName: "The Devil",
+    romanNumber: RomanNumerals.xv,
+    arcana: Arcana.major,
+  ),
+  tower(
+    displayName: "The Tower",
+    romanNumber: RomanNumerals.xvi,
+    arcana: Arcana.major,
+  ),
+  star(
+    displayName: "The Star",
+    romanNumber: RomanNumerals.xvii,
+    arcana: Arcana.major,
+  ),
+  moon(
+    displayName: "The Moon",
+    romanNumber: RomanNumerals.xviii,
+    arcana: Arcana.major,
+  ),
+  sun(
+    displayName: "The Sun",
+    romanNumber: RomanNumerals.xix,
+    arcana: Arcana.major,
+  ),
+  judgment(
+    displayName: "Judgment",
+    romanNumber: RomanNumerals.xx,
+    arcana: Arcana.major,
+  ),
+  theWorld(
+    displayName: "The World",
+    romanNumber: RomanNumerals.xxi,
+    arcana: Arcana.major,
+  ),
   aceWands(
     displayName: "Ace of Wands",
     arcana: Arcana.minor,
@@ -385,25 +481,26 @@ enum TarotDeckCards {
   );
 
   final String displayName;
-  final String? romanNumber;
+  final RomanNumerals romanNumber;
   final Arcana arcana;
-  final Suits? suit;
-  final Pips? pips;
+  final Suits suit;
+  final Pips pips;
 
   const TarotDeckCards({
     required this.displayName,
-    this.romanNumber,
+    this.romanNumber = RomanNumerals.none,
     required this.arcana,
-    this.suit,
-    this.pips,
+    this.suit = Suits.none,
+    this.pips = Pips.none,
   });
 }
 
 @JsonEnum()
-enum Suits { wands, cups, swords, pentacles }
+enum Suits { none, wands, cups, swords, pentacles }
 
 @JsonEnum()
 enum Pips {
+  none,
   ace,
   two,
   three,

@@ -4,7 +4,7 @@ import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 class TCMajorArcanaWidget extends StatefulWidget {
-  final TCMajorArcanaModel card;
+  final TarotDeckCards card;
 
   // final TCModelAssets? assets;
   final String assetName;
@@ -67,7 +67,7 @@ class _TCMajorArcanaWidgetState extends State<TCMajorArcanaWidget>
           StackTrace? stacktrace,
         ) {
           final List<Widget> names = [
-            for (var item in widget.card.card.displayName.split(" "))
+            for (var item in widget.card.displayName.split(" "))
               Text(item, style: theme.titleSmall),
           ];
 
@@ -82,7 +82,7 @@ class _TCMajorArcanaWidgetState extends State<TCMajorArcanaWidget>
             Expanded(
               flex: 4,
               child: Text(
-                widget.card.card.romanNumber,
+                widget.card.romanNumber.name.toUpperCase(),
                 style: theme.titleSmall,
               ),
             ),

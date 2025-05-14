@@ -76,11 +76,11 @@ class DeckRepository extends SingletonRepository with Logging {
   }
 
   Future<void> loadCardAssets(
-    TarotDeck card,
+    TarotDeckCards card,
     void Function(TCModelAssets?) callback,
   ) async {
     await sl<AssetProvider>()
-        .loadAssetsForCard("standard_tarot", deckName, card)
+        .loadAssetsForCard(card)
         .then((TCModelAssets? assets) => callback(assets));
   }
 }

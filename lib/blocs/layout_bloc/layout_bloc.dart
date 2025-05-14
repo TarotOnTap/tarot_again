@@ -12,9 +12,9 @@ part 'layout_event.dart';
 part 'layout_state.dart';
 
 /// slot_widget_state contains sub-state for PositionSlotWidgets
-part 'slot_widget_state.dart';
+part 'slot_state.dart';
 
-typedef SWStates = IMap<int, SlotWidgetState>;
+typedef SWStates = IMap<int, SlotState>;
 
 // class LayoutBloc extends HydratedBloc<LayoutEvent, LayoutState> with Logging {
 class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
@@ -60,7 +60,7 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
           const SWStates.empty(),
           (prev, index) => prev.add(
             index,
-            SlotWidgetStateNotDealt(slotIndex: index, slotName: titles[index]),
+            SlotStateNotDealt(slotIndex: index, slotName: titles[index]),
           ),
         );
 
@@ -68,7 +68,7 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
           state.copyWith(
             currentLayoutName: event.newLayout,
             currentLayout: layout,
-            slotWidgetStates: slotData,
+            slotStates: slotData,
             slotNames: titles,
           ),
         );
@@ -92,7 +92,7 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
         const SWStates.empty(),
         (prev, index) => prev.add(
           index,
-          SlotWidgetStateDealt(
+          SlotStateDealt(
             slotIndex: index,
             slotName: state.slotNames[index],
             faceUp: false,
@@ -101,28 +101,28 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
         ),
       );
 
-      emit(state.copyWith(slotWidgetStates: newStates));
+      emit(state.copyWith(slotStates: newStates));
     });
 
     on<SlotWidgetFlipFaceEvent>(
       (event, emit) => _changeDealtState(
         index: event.index,
         changer: (s) => s.copyWith(faceUp: !s.faceUp),
-      )?.also((c) => emit(state.copyWith(slotWidgetStates: c))),
+      )?.also((c) => emit(state.copyWith(slotStates: c))),
     );
 
     on<SlotWidgetFaceUpEvent>(
       (event, emit) => _changeDealtState(
         index: event.index,
         changer: (s) => s.copyWith(faceUp: true),
-      )?.also((c) => emit(state.copyWith(slotWidgetStates: c))),
+      )?.also((c) => emit(state.copyWith(slotStates: c))),
     );
 
     on<SlotWidgetFaceDownEvent>(
       (event, emit) => _changeDealtState(
         index: event.index,
         changer: (s) => s.copyWith(faceUp: false),
-      )?.also((c) => emit(state.copyWith(slotWidgetStates: c))),
+      )?.also((c) => emit(state.copyWith(slotStates: c))),
     );
 
     add(LayoutStarting());
@@ -130,14 +130,14 @@ class LayoutBloc extends Bloc<LayoutEvent, LayoutState> with Logging {
 
   SWStates? _changeDealtState({
     required int index,
-    required SlotWidgetStateDealt Function(SlotWidgetStateDealt) changer,
+    required SlotStateDealt Function(SlotStateDealt) changer,
   }) {
     SWStates? retVal;
 
-    if (state.slotWidgetStates[index] case SlotWidgetStateDealt d) {
+    if (state.slotStates[index] case SlotStateDealt d) {
       final newState = changer(d);
 
-      retVal = state.slotWidgetStates.update(index, (ps) => newState);
+      retVal = state.slotStates.update(index, (ps) => newState);
     }
 
     return retVal;

@@ -12,16 +12,16 @@ class DeckCardWidget extends StatelessWidget with Logging {
   const DeckCardWidget({super.key, required this.card});
 
   @override
-  Widget build(BuildContext context) => switch (card.tcCard) {
-    TCMajorArcanaModel majorModel => TCMajorArcanaWidget(
-      assetName: majorModel.assetReference,
-      card: majorModel,
+  Widget build(BuildContext context) => switch (card.tcCard.arcana) {
+    Arcana.major => TCMajorArcanaWidget(
+      assetName: card.tcCard.name,
+      card: card.tcCard,
     ),
-    TCMinorArcanaModel minorModel => TCMinorArcanaWidget(
-      card: minorModel,
-      assetName: minorModel.assetReference,
+    Arcana.minor => TCMinorArcanaWidget(
+      card: card.tcCard,
+      assetName: card.tcCard.name,
     ),
-    DeckInitial() => Column(children: [Text("Deck"), Text("Initial")]),
-    DeckEmpty() => Column(children: [Text("Deck"), Text("Empty")]),
+    // DeckInitial() => Column(children: [Text("Deck"), Text("Initial")]),
+    // DeckEmpty() => Column(children: [Text("Deck"), Text("Empty")]),
   };
 }

@@ -94,14 +94,16 @@ flutter:
   assets:
     - assets/
     - assets/decks/
-    - assets/decks/standard_tarot/
-    - assets/decks/standard_tarot/RWS/
-    - assets/decks/standard_tarot/RWS/descriptions/
-    - assets/decks/standard_tarot/RWS/images/
-    - assets/decks/standard_tarot/RWS/reversedMeanings/
-    - assets/decks/standard_tarot/RWS/uprightMeanings/
+    - assets/decks/standardTarot/
+    - assets/decks/standardTarot/RWS/
+    - assets/decks/standardTarot/RWS/descriptions/
+    - assets/decks/standardTarot/RWS/images/
+    - assets/decks/standardTarot/RWS/reversedMeanings/
+    - assets/decks/standardTarot/RWS/uprightMeanings/
     - assets/layouts/
     - assets/layouts/tarot_layouts/
+
+
 
 
 

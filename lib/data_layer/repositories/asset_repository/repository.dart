@@ -6,9 +6,27 @@ class AssetRepository {
   late final AssetProvider assetProvider;
   late final BulkCardControlBloc bccBloc;
 
+  String deckChoice = "";
+  String deckType = "";
+
+  Iterable<String> deckAssets = [];
+
   AssetRepository._() {
     assetProvider = sl<AssetProvider>();
     bccBloc = sl<BulkCardControlBloc>();
+
+    deckChoice = bccBloc.state.deckChoice.name;
+    deckType = bccBloc.state.deckType.name;
+
+    bccBloc.stream.listen(_bccChangeHandler);
+  }
+
+  void _bccChangeHandler(BulkCardControlState newState) {
+    if (newState.deckChoice.name != deckChoice ||
+        newState.deckType.name != deckType) {
+      deckChoice = newState.deckChoice.name;
+      deckType = newState.deckType.name;
+    }
   }
 
   factory AssetRepository() {
@@ -17,5 +35,16 @@ class AssetRepository {
     }
 
     return sl<AssetRepository>();
+  }
+
+  Future<void> loadAssetsForCard({
+    required int index,
+    required TarotDeckCards card,
+  }) async {
+    final bccBloc = sl<BulkCardControlBloc>();
+
+    final layoutBloc = sl<LayoutBloc>();
+
+    await sl<AssetProvider>().loadAssetsForCard(card);
   }
 }

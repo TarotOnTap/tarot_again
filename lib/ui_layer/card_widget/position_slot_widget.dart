@@ -36,8 +36,8 @@ class PositionSlotWidget extends StatelessWidget with Logging {
               borderRadius: BorderRadius.all(Radius.circular(2.0)),
             ),
 
-            child: BlocSelector<LayoutBloc, LayoutState, SlotWidgetState?>(
-              selector: (state) => state.slotWidgetStates[index],
+            child: BlocSelector<LayoutBloc, LayoutState, SlotState?>(
+              selector: (state) => state.slotStates[index],
               builder:
                   (context, swState) =>
                       swState == null
@@ -69,14 +69,22 @@ class PositionSlotWidget extends StatelessWidget with Logging {
                                         ),
                                       ),
                                   child: switch (swState) {
-                                    SlotWidgetStateNotDealt() => NoCardDealt(),
-                                    SlotWidgetStateDealt swsd =>
-                                      bcState.everybodyFaceUp || swsd.faceUp
+                                    SlotStateNotDealt() => NoCardDealt(),
+                                    SlotStateDealt ssd =>
+                                      bcState.everybodyFaceUp || ssd.faceUp
                                           ? CardWidget(
                                             index: index,
-                                            swState: swsd,
+                                            swState: ssd,
                                           )
                                           : CardColorBack(),
+
+                                    // SlotStateDealt ssdwa =>
+                                    // bcState.everybodyFaceUp || ssdwa.faceUp
+                                    //     ? CardWidgetWithAssets(
+                                    //   index: index,
+                                    //   swState: ssdwa,
+                                    // )
+                                    //     : CardColorBack(),
                                   },
                                 ),
                               ),

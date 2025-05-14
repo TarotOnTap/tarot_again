@@ -12,8 +12,8 @@ abstract class TCModelAssets with _$TCModelAssets {
 
   factory TCModelAssets({
     @Default(null) String? description,
-    @Default(null) String? reversed,
-    @Default(null) String? upright,
+    @Default(null) String? reversedMeaning,
+    @Default(null) String? uprightMeaning,
     @Default(null) AssetGenImage? image,
   }) = _TCModelAssets;
 }

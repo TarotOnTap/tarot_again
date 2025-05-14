@@ -381,10 +381,10 @@ packages:
     dependency: "direct main"
     description:
       name: fbloc_event_gen
-      sha256: "87a55b6ed31c3066e75275fe25b8c92753911001aed00115ea9a517a85510127"
+      sha256: ddb2f9ce404816a0d5e129b987adb653fa68442fac545e8bce5f2f42fd4c3f66
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.2"
   ffi:
     dependency: transitive
     description:
@@ -1105,26 +1105,26 @@ packages:
     dependency: "direct main"
     description:
       name: talker
-      sha256: "8784bb7ed8438832dcdc8211bd9b6fed96dcdf215145ff8771d5612667bc158a"
+      sha256: "3d8b17976b9fe89436f23ac2b24642d62e170bc45e81943f2bdc309427ff9d0b"
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.5"
+    version: "4.7.6"
   talker_flutter:
     dependency: "direct main"
     description:
       name: talker_flutter
-      sha256: "63e2454581ef26969491c59c307b36dc9d1fba936ddcc5df449bbe486b8adda8"
+      sha256: "7bfc1fdee3eb27233e4b753777045f51c64acab56490687b0818e25eff189d13"
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.5"
+    version: "4.7.6"
   talker_logger:
     dependency: transitive
     description:
       name: talker_logger
-      sha256: "4f97def0c14944ea26caba225831dcdf4088017c02961c493c45a057e5e6c382"
+      sha256: a77ce73f79e7cbd01c408683f3377090c0a0f1fa7c9716c06727dcd0713cfa24
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.5"
+    version: "4.7.6"
   term_glyph:
     dependency: transitive
     description:
@@ -1313,10 +1313,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: dc6ecaa00a7c708e5b4d10ee7bec8c270e9276dfcab1783f57e9962d7884305f
+      sha256: "329edf97fdd893e0f1e3b9e88d6a0e627128cc17cc316a8d67fda8f1451178ba"
       url: "https://pub.dev"
     source: hosted
-    version: "5.12.0"
+    version: "5.13.0"
   xdg_directories:
     dependency: transitive
     description:

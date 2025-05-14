@@ -1,12 +1,40 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:tarot_again/blocs/blocs.dart';
 import 'package:tarot_again/data_layer/data_layer.dart'; // show AssetPathMap, BaseProvider;
+import 'package:tarot_again/util/event_bus.dart';
 import 'package:tarot_again/util/util.dart';
 
 class AssetProvider extends BaseProvider with Logging {
   final _allAssets = AsyncMemoizer<IList<String>>();
 
+  Iterable<String> deckAssets = [];
+
+  final ValueNotifier<String> deckType = ValueNotifier<String>("standardTarot");
+  final ValueNotifier<String> deckName = ValueNotifier<String>("RWS");
+
   AssetProvider._() {
-    // unawaited(mapAssets());
+    deckType.addListener(_rebuildAssets);
+    deckName.addListener(_rebuildAssets);
+
+    receiveEvents<SetDeckTypeEvent>(
+      onData: (SetDeckTypeEvent t) {
+        deckType.value = t.deckType;
+      },
+    );
+    receiveEvents<SetDeckNameEvent>(
+      onData: (SetDeckNameEvent t) => deckName.value = t.deckName,
+    );
+
+    _rebuildAssets();
+  }
+
+  void _rebuildAssets() async {
+    String deckString = "decks/$deckType/$deckName";
+
+    deckAssets = (await allAssets).where(
+      (String assetName) => assetName.contains(deckString),
+    );
   }
 
   factory AssetProvider() {
@@ -26,80 +54,6 @@ class AssetProvider extends BaseProvider with Logging {
     return assetManifest.listAssets().toIList();
   });
 
-  // MappableNode addAssetPath(
-  //   String assetPath,
-  //   Iterable<String> nodeList,
-  //   MappableNode currentMap,
-  // ) {
-  //   String key = nodeList.first;
-  //
-  //   // skip the assets directory, as we'll get it from assetPath anyway when we go to
-  //   // get the actual asset.
-  //   if (key == "assets") {
-  //     nodeList = nodeList.tail;
-  //   }
-  //
-  //   if (!currentMap.containsKey(key)) {
-  //     currentMap = currentMap.add(key, MappableNode(parent: currentMap));
-  //   }
-  //
-  //   if (nodeList.length == 2) {
-  //     LeafNode leaf = LeafNode(assetPath: assetPath, parent: currentMap[key]);
-  //     leavesMap = leavesMap.add(assetPath, leaf);
-  //
-  //     currentMap[key]?.add(nodeList.last, leaf);
-  //
-  //     return currentMap;
-  //   } else {
-  //     return addAssetPath(
-  //       assetPath,
-  //       nodeList.tail,
-  //       currentMap[key] ?? MappableNode(parent: currentMap),
-  //     );
-  //   }
-  // }
-
-  // Future<void> mapAssets() async {
-  //   verbose('mapAssets');
-  //   AssetManifest assetManifest = await AssetManifest.loadFromAssetBundle(
-  //     rootBundle,
-  //   );
-  //
-  //   for (var asset in assetManifest.listAssets()) {
-  //     assetMap = addAssetPath(asset, asset.split("/"), assetMap);
-  //   }
-  // }
-
-  // Future<void> loadAssets() async {
-  //   for (var item in leavesMap.entries) {
-  //     Object? asset = switch (item.value.assetType) {
-  //       LeafAssetTypes.json => loadJsonAsset(item.key),
-  //       LeafAssetTypes.markdown => loadMarkdownAsset(item.key),
-  //       LeafAssetTypes.image => item.value.imageAsset,
-  //       LeafAssetTypes.unknown => null,
-  //     };
-  //
-  //     if (asset is Future) {
-  //       asset = await asset;
-  //     }
-  //   }
-  // }
-
-  // Future<Map<String, dynamic>?> loadJsonAsset(String assetPath) async {
-  //   Map<String, dynamic>? result;
-  //   JsonDecoder decoder = JsonDecoder();
-  //
-  //   try {
-  //     final String temp = await rootBundle.loadString(assetPath);
-  //
-  //     result = decoder.convert(temp);
-  //   } catch (e, s) {
-  //     verbose("AssetProvider.loadJsonAsset raised error $e\n\n$s");
-  //   }
-  //
-  //   return Future<Map<String, dynamic>?>.value(result);
-  // }
-
   Future<String> loadMarkdownAsset(String assetPath) async {
     String? result;
 
@@ -112,23 +66,30 @@ class AssetProvider extends BaseProvider with Logging {
     return result ?? "";
   }
 
-  Future<TCModelAssets?> loadAssetsForCard(
-    String deckType,
-    String deckName,
-    TarotDeckCards card,
-  ) async {
+  Future<TCModelAssets?> loadAssetsForCard(TarotDeckCards card) async {
+    final bccBloc = sl<BulkCardControlBloc>();
+
     verbose("AssetProvider.loadAssetsForCard");
-    verbose("  deckType: $deckType; deckName: $deckName; card: $card");
+    verbose(
+      "  deckType: ${bccBloc.state.deckType}; deckName: ${bccBloc.state.deckChoice}; card: $card",
+    );
     TCModelAssets? retVal;
 
+    String deckString =
+        "decks/${bccBloc.state.deckType.name}/${bccBloc.state.deckChoice.name}";
+
+    final lg = bufferedVerbose(
+      "  beginning to process asset strings for this card",
+    );
+
+    Iterable<String> deckAssets = (await allAssets).where(
+      (String assetName) => assetName.contains(deckString),
+    );
+
     // first, find all of the assets associated with the given card in the deck in the deckType
-    IList<String> cardAssets =
-        (await allAssets)
-            .where(
-              (String assetName) =>
-                  assetName.contains("decks/$deckType/$deckName/${card.name}"),
-            )
-            .toIList();
+    Iterable<String> cardAssets = (await allAssets)
+        .where((String assetName) => assetName.contains(deckString))
+        .where((String assetName) => assetName.contains(card.name));
 
     verbose("  cardAssets is $cardAssets");
 
@@ -136,25 +97,28 @@ class AssetProvider extends BaseProvider with Logging {
       retVal = TCModelAssets();
 
       for (var asset in cardAssets) {
-        final String assetName = asset.split("/").last;
+        final assetPathParts = asset.split("/");
+
+        final String assetName = assetPathParts.last;
+        final String assetKind = assetPathParts[assetPathParts.length - 1];
 
         final IList<String> info = assetName.split(".").toIList();
         final String fileType = info[1];
 
-        switch (assetName) {
-          case "description":
+        switch (assetKind) {
+          case "descriptions":
             String description = await loadMarkdownAsset(asset);
             retVal = retVal?.copyWith(description: description);
 
-          case "reversed":
+          case "reversedMeanings":
             String reversed = await loadMarkdownAsset(asset);
-            retVal = retVal?.copyWith(reversed: reversed);
+            retVal = retVal?.copyWith(reversedMeaning: reversed);
 
-          case "upright":
+          case "uprightMeanings":
             String upright = await loadMarkdownAsset(asset);
-            retVal = retVal?.copyWith(upright: upright);
+            retVal = retVal?.copyWith(uprightMeaning: upright);
 
-          case _:
+          case "images":
             if (["jpg", "jpeg", "png", "gif"].contains(fileType)) {
               AssetGenImage image = AssetGenImage(asset);
               retVal = retVal?.copyWith(image: image);
