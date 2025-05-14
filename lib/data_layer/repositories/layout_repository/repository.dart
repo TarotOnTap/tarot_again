@@ -32,7 +32,7 @@ class LayoutRepository extends SingletonRepository with Logging {
 
   Future<void> loadLayouts() async {
     verbose("LayoutRepository.loadLayouts()");
-    final layoutDisplayPaths = await assetProvider.findTarotLayouts();
+    final layoutDisplayPaths = await assetProvider.tarotLayouts.value;
     verbose("  layoutDisplayPaths is $layoutDisplayPaths");
 
     for (var path in layoutDisplayPaths) {

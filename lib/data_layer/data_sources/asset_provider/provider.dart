@@ -1,39 +1,51 @@
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:tarot_again/blocs/blocs.dart';
+import 'package:signals/signals.dart';
 import 'package:tarot_again/data_layer/data_layer.dart'; // show AssetPathMap, BaseProvider;
 import 'package:tarot_again/util/event_bus.dart';
 import 'package:tarot_again/util/util.dart';
 
 class AssetProvider extends BaseProvider with Logging {
-  final _allAssets = AsyncMemoizer<IList<String>>();
+  // final _allAssets = AsyncMemoizer<IList<String>>();
 
-  Iterable<String> deckAssets = [];
+  // Iterable<String> deckAssets = [];
 
-  final ValueNotifier<String> deckType = ValueNotifier<String>("standardTarot");
-  final ValueNotifier<String> deckName = ValueNotifier<String>("RWS");
+  final allAssets = signal<Iterable<String>>([]);
+
+  final deckType = signal<String>("standardTarot");
+  final deckName = signal<String>("rws");
+
+  late final Computed<String> deckString;
+  late final Computed<Iterable<String>> deckAssets;
+
+  late final Computed<Iterable<String>> tarotLayouts;
 
   AssetProvider._() {
-    deckType.addListener(_rebuildAssets);
-    deckName.addListener(_rebuildAssets);
+    deckString = computed(() => "decks/${deckType.value}/${deckName.value}");
+    deckAssets = computed(
+      () => allAssets.value.where(
+        (String assetName) => assetName.contains(deckString.value),
+      ),
+    );
+    tarotLayouts = computed(
+      () => allAssets.value.where(
+        (String assetName) => assetName.contains("layouts/tarot_layouts"),
+      ),
+    );
+
+    unawaited(
+      _getAllAssets(),
+    ); // this will load the manifest and set the value of
+    // the allAssets signal when it's finished. No async necessary in that!
 
     receiveEvents<SetDeckTypeEvent>(
       onData: (SetDeckTypeEvent t) {
         deckType.value = t.deckType;
       },
     );
+
     receiveEvents<SetDeckNameEvent>(
       onData: (SetDeckNameEvent t) => deckName.value = t.deckName,
-    );
-
-    _rebuildAssets();
-  }
-
-  void _rebuildAssets() async {
-    String deckString = "decks/$deckType/$deckName";
-
-    deckAssets = (await allAssets).where(
-      (String assetName) => assetName.contains(deckString),
     );
   }
 
@@ -45,14 +57,13 @@ class AssetProvider extends BaseProvider with Logging {
     return sl<AssetProvider>();
   }
 
-  Future<IList<String>> get allAssets async => _allAssets.runOnce(() async {
-    verbose('mapAssets');
-    AssetManifest assetManifest = await AssetManifest.loadFromAssetBundle(
+  Future<void> _getAllAssets() async {
+    final AssetManifest assetManifest = await AssetManifest.loadFromAssetBundle(
       rootBundle,
     );
 
-    return assetManifest.listAssets().toIList();
-  });
+    allAssets.value = assetManifest.listAssets();
+  }
 
   Future<String> loadMarkdownAsset(String assetPath) async {
     String? result;
@@ -67,29 +78,13 @@ class AssetProvider extends BaseProvider with Logging {
   }
 
   Future<TCModelAssets?> loadAssetsForCard(TarotDeckCards card) async {
-    final bccBloc = sl<BulkCardControlBloc>();
-
     verbose("AssetProvider.loadAssetsForCard");
-    verbose(
-      "  deckType: ${bccBloc.state.deckType}; deckName: ${bccBloc.state.deckChoice}; card: $card",
-    );
     TCModelAssets? retVal;
 
-    String deckString =
-        "decks/${bccBloc.state.deckType.name}/${bccBloc.state.deckChoice.name}";
-
-    final lg = bufferedVerbose(
-      "  beginning to process asset strings for this card",
-    );
-
-    Iterable<String> deckAssets = (await allAssets).where(
-      (String assetName) => assetName.contains(deckString),
-    );
-
     // first, find all of the assets associated with the given card in the deck in the deckType
-    Iterable<String> cardAssets = (await allAssets)
-        .where((String assetName) => assetName.contains(deckString))
-        .where((String assetName) => assetName.contains(card.name));
+    Iterable<String> cardAssets = deckAssets.value.where(
+      (String assetName) => assetName.contains(card.name),
+    );
 
     verbose("  cardAssets is $cardAssets");
 
@@ -128,21 +123,5 @@ class AssetProvider extends BaseProvider with Logging {
     }
 
     return retVal;
-  }
-
-  Future<IList<String>> findTarotLayouts() async {
-    verbose("AssetProvider.findTarotLayouts()");
-    verbose("  allAssets is ${await allAssets}");
-
-    final tempAssets = await allAssets;
-    final tempLayouts =
-        tempAssets
-            .where(
-              (String assetName) => assetName.contains("layouts/tarot_layouts"),
-            )
-            .toIList();
-    verbose("  tempLayouts is $tempLayouts");
-
-    return tempLayouts;
   }
 }

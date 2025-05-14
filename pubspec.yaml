@@ -65,6 +65,7 @@ dependencies:
   path: ^1.9.1
   simple_animations: ^5.2.0
   card_settings_ui: ^1.1.3
+  signals: ^6.0.2
 
 dev_dependencies:
   flutter_test:
@@ -95,13 +96,14 @@ flutter:
     - assets/
     - assets/decks/
     - assets/decks/standardTarot/
-    - assets/decks/standardTarot/RWS/
-    - assets/decks/standardTarot/RWS/descriptions/
-    - assets/decks/standardTarot/RWS/images/
-    - assets/decks/standardTarot/RWS/reversedMeanings/
-    - assets/decks/standardTarot/RWS/uprightMeanings/
+    - assets/decks/standardTarot/rws/
+    - assets/decks/standardTarot/rws/descriptions/
+    - assets/decks/standardTarot/rws/images/
+    - assets/decks/standardTarot/rws/reversedMeanings/
+    - assets/decks/standardTarot/rws/uprightMeanings/
     - assets/layouts/
     - assets/layouts/tarot_layouts/
+
 
 
 
