@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 class TCMinorArcanaWidget extends StatefulWidget {
@@ -28,7 +27,7 @@ class _TCMinorArcanaWidgetState extends State<TCMinorArcanaWidget>
   void initState() {
     super.initState();
 
-    sl<DeckRepository>().loadCardAssets(widget.card, setCardAssets);
+    // sl<DeckRepository>().loadCardAssets(widget.card, setCardAssets);
   }
 
   // callback for loadCardAssets
@@ -61,40 +60,36 @@ class _TCMinorArcanaWidgetState extends State<TCMinorArcanaWidget>
 
     if (imageAsset != null) {
       returnWidget = imageAsset.image(
-        errorBuilder: (
-          BuildContext context,
-          Object error,
-          StackTrace? stacktrace,
-        ) {
-          final List<Widget> names =
-              [
+        errorBuilder:
+            (BuildContext context, Object error, StackTrace? stacktrace) {
+              final List<Widget> names = [
                 widget.card.pips.name,
                 "of",
                 widget.card.suit.name,
               ].map((item) => Text(item, style: theme.titleSmall)).toList();
 
-          final List<Widget> columnChildren = [];
+              final List<Widget> columnChildren = [];
 
-          for (var item in names) {
-            columnChildren.add(item);
-            columnChildren.add(Gap(5));
-          }
+              for (var item in names) {
+                columnChildren.add(item);
+                columnChildren.add(Gap(5));
+              }
 
-          // columnChildren.add(
-          //   Expanded(
-          //     flex: 4,
-          //     child: Text(
-          //       widget.card.romanNumber.name.toUpperCase(),
-          //       style: theme.titleSmall,
-          //     ),
-          //   ),
-          // );
+              // columnChildren.add(
+              //   Expanded(
+              //     flex: 4,
+              //     child: Text(
+              //       widget.card.romanNumber.name.toUpperCase(),
+              //       style: theme.titleSmall,
+              //     ),
+              //   ),
+              // );
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: columnChildren,
-          );
-        },
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: columnChildren,
+              );
+            },
       );
     }
 

@@ -1,27 +1,28 @@
 import 'package:choice/choice.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:tarot_again/blocs/blocs.dart';
-import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 @immutable
-class CommandButton<T extends Bloc> extends StatelessWidget {
+class CommandButton extends StatelessWidget {
   final String buttonLabel;
-  final BlocWidgetEvent event;
+
+  // final BlocWidgetEvent event;
   final TextStyle? textStyle;
+  final VoidCallback callback;
 
   const CommandButton({
     super.key,
     required this.buttonLabel,
-    required this.event,
+    // required this.event,
     this.textStyle,
+    required this.callback,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => context.read<T>().add(event),
+      onPressed: () => callback(),
       child: Text(buttonLabel, style: textStyle),
     );
   }
@@ -30,7 +31,7 @@ class CommandButton<T extends Bloc> extends StatelessWidget {
 @immutable
 class CommandButtonGroup extends StatelessWidget {
   final String groupLabel;
-  final Iterable<(String, BlocWidgetEvent, TextStyle?)> buttons;
+  final Iterable<(String, TextStyle?, VoidCallback)> buttons;
 
   const CommandButtonGroup({
     super.key,
@@ -46,10 +47,10 @@ class CommandButtonGroup extends StatelessWidget {
         Gap(10),
         Column(
           children: [
-            for (var (label, event, style) in buttons)
-              CommandButton<BulkCardControlBloc>(
+            for (var (label, style, callback) in buttons)
+              CommandButton(
                 buttonLabel: label,
-                event: event,
+                callback: callback,
                 textStyle: style,
               ),
           ],
@@ -64,90 +65,73 @@ class CommandButtons extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
+    final SessionManager sm = sl<SessionManager>();
+    final LayoutRepository lr = sl<LayoutRepository>();
+
     return Column(
       children: <Widget>[
         CommandButtonGroup(
           groupLabel: "Bulk Command",
-          // handlerBloc: sl<BulkCardControlBloc>(),
           buttons: [
-            ("Allow reversals", AllowReversals(), null),
-            ("Disallow reversals", DisallowReversals(), null),
-            ("FaceUp on", TurnEverybodyFaceUpOn(), null),
-            ("FaceUp off", TurnEverybodyFaceUpOff(), null),
+            ("Allow reversals", null, sm.allowReversals),
+            ("Disallow reversals", null, sm.disallowReversals),
+            ("FaceUp on", null, sm.turnAllCardsFaceUp),
+            ("FaceUp off", null, sm.turnAllCardsFaceDown),
           ],
         ),
         ElevatedButton(
-          onPressed: () {
-            verbose("Deal Cards button pressed.");
-            context.read<LayoutBloc>().add(DealCards());
-          },
+          onPressed: () => sm.dealCards(),
+
           child: Text("Deal cards"),
         ),
 
         Gap(30),
-        BlocBuilder<LayoutBloc, LayoutState>(
-          builder:
-              (BuildContext context, LayoutState layoutState) =>
-                  PromptedChoice<String>.single(
-                    title: "Select a layout",
-                    clearable: true,
-                    value: layoutState.currentLayoutName,
-                    // this changes after setNewLayout is called
-                    onChanged: (String? value) {
-                      if (value != null) {
-                        verbose("  onChanged: value is $value");
-                        context.read<BulkCardControlBloc>().add(
-                          TurnEverybodyFaceUpOff(),
-                        );
-                        context.read<LayoutBloc>().add(
-                          LayoutEvent.setNewLayout(newLayout: value),
-                        );
-                        // selectedLayout = value;
-                      }
-                    },
-                    itemCount: layoutState.layoutNames.length,
-                    itemBuilder: (state, i) {
-                      return ChoiceChip(
-                        selected: state.selected(layoutState.layoutNames[i]),
-                        onSelected: state.onSelected(
-                          layoutState.layoutNames[i],
-                        ),
-                        label: Text(layoutState.layoutNames[i]),
-                      );
-                    },
-                    listBuilder: ChoiceList.createWrapped(
-                      spacing: 10,
-                      runSpacing: 10,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 25,
-                      ),
-                    ),
-                  ),
+        PromptedChoice<String>.single(
+          title: "Select a layout",
+          clearable: true,
+          value: lr.tarotLayout.value.displayName,
+          // this changes after setNewLayout is called
+          onChanged: (String? value) {
+            if (value != null) {
+              verbose("  onChanged: value is $value");
+              lr.getLayoutByDisplayName(value);
+            }
+          },
+          itemCount: sm.layoutDisplayNames.value.length,
+          itemBuilder: (state, i) {
+            return ChoiceChip(
+              selected: state.selected(sm.layoutDisplayNames.value[i]),
+              onSelected: state.onSelected(sm.layoutDisplayNames.value[i]),
+              label: Text(sm.layoutDisplayNames.value[i]),
+            );
+          },
+          listBuilder: ChoiceList.createWrapped(
+            spacing: 10,
+            runSpacing: 10,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+          ),
         ),
+
         Gap(5),
         PromptedChoice<String>.single(
           title: "Select a source of randomness",
           clearable: true,
-          value: context.read<AsyncRandoms>().currentGenerator.displayName,
+          value: sl<AsyncRandoms>().currentGenerator.displayName,
           onChanged: (String? value) {
             if (value != null) {
-              context.read<AsyncRandoms>().setRandomSource(value);
+              sl<AsyncRandoms>().setRandomSource(value);
             }
           },
           itemCount: RandomGenerators.values.length,
-          itemBuilder:
-              (state, index) => ChoiceChip(
-                selected: state.selected(
-                  context.read<AsyncRandoms>().randomGeneratorNames[index],
-                ),
-                onSelected: state.onSelected(
-                  context.read<AsyncRandoms>().randomGeneratorNames[index],
-                ),
-                label: Text(
-                  context.read<AsyncRandoms>().randomGeneratorNames[index],
-                ),
-              ),
+          itemBuilder: (state, index) => ChoiceChip(
+            selected: state.selected(
+              sl<AsyncRandoms>().randomGeneratorNames[index],
+            ),
+            onSelected: state.onSelected(
+              sl<AsyncRandoms>().randomGeneratorNames[index],
+            ),
+            label: Text(sl<AsyncRandoms>().randomGeneratorNames[index]),
+          ),
           listBuilder: ChoiceList.createWrapped(
             spacing: 10,
             runSpacing: 10,

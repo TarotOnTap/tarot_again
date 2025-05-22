@@ -101,7 +101,7 @@ mixin Logging {
 
   static void staticDebug(msg) => sl<Talker>().debug("static: $msg");
 
-  void error(msg) => sl<Talker>().error("$this:$msg");
+  void errorLog(msg) => sl<Talker>().error("$this:$msg");
 
   BufferedLog bufferedError(msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.error, autoFlush: autoFlush);

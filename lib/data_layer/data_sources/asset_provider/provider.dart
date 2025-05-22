@@ -1,68 +1,42 @@
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:signals/signals.dart';
-import 'package:tarot_again/data_layer/data_layer.dart'; // show AssetPathMap, BaseProvider;
-import 'package:tarot_again/util/event_bus.dart';
 import 'package:tarot_again/util/util.dart';
 
 class AssetProvider extends BaseProvider with Logging {
-  // final _allAssets = AsyncMemoizer<IList<String>>();
+  final Signal<IList<String>> allAssetPaths = signal(
+    const IList<String>.empty(),
+  );
 
-  // Iterable<String> deckAssets = [];
+  late final Computed<IList<String>> deckAssetPaths;
+  late final Computed<IList<String>> layoutAssetPaths;
+  late final Computed<IList<String>> tarotLayoutAssetPaths;
 
-  final allAssets = signal<Iterable<String>>([]);
+  AssetProvider() {
+    deckAssetPaths = computed(() {
+      final String ds = sl<SessionManager>().deckString.value;
+      return allAssetPaths.value.where((path) => path.contains(ds)).toIList();
+    });
 
-  final deckType = signal<String>("standardTarot");
-  final deckName = signal<String>("rws");
-
-  late final Computed<String> deckString;
-  late final Computed<Iterable<String>> deckAssets;
-
-  late final Computed<Iterable<String>> tarotLayouts;
-
-  AssetProvider._() {
-    deckString = computed(() => "decks/${deckType.value}/${deckName.value}");
-    deckAssets = computed(
-      () => allAssets.value.where(
-        (String assetName) => assetName.contains(deckString.value),
-      ),
-    );
-    tarotLayouts = computed(
-      () => allAssets.value.where(
-        (String assetName) => assetName.contains("layouts/tarot_layouts"),
-      ),
+    layoutAssetPaths = computed(
+      () => allAssetPaths.value
+          .where((path) => path.contains("assets/layouts"))
+          .toIList(),
     );
 
-    unawaited(
-      _getAllAssets(),
-    ); // this will load the manifest and set the value of
-    // the allAssets signal when it's finished. No async necessary in that!
+    unawaited(_getAllAssetPaths());
 
-    receiveEvents<SetDeckTypeEvent>(
-      onData: (SetDeckTypeEvent t) {
-        deckType.value = t.deckType;
-      },
-    );
-
-    receiveEvents<SetDeckNameEvent>(
-      onData: (SetDeckNameEvent t) => deckName.value = t.deckName,
+    tarotLayoutAssetPaths = computed(
+      () => layoutAssetPaths.value
+          .where((asset) => asset.contains("tarotLayouts"))
+          .toIList(),
     );
   }
 
-  factory AssetProvider() {
-    if (!sl.isRegistered<AssetProvider>()) {
-      return sl.registerSingleton<AssetProvider>(AssetProvider._());
-    }
-
-    return sl<AssetProvider>();
-  }
-
-  Future<void> _getAllAssets() async {
+  Future<void> _getAllAssetPaths() async {
     final AssetManifest assetManifest = await AssetManifest.loadFromAssetBundle(
       rootBundle,
     );
 
-    allAssets.value = assetManifest.listAssets();
+    allAssetPaths.value = assetManifest.listAssets().toIList();
   }
 
   Future<String> loadMarkdownAsset(String assetPath) async {
@@ -82,7 +56,7 @@ class AssetProvider extends BaseProvider with Logging {
     TCModelAssets? retVal;
 
     // first, find all of the assets associated with the given card in the deck in the deckType
-    Iterable<String> cardAssets = deckAssets.value.where(
+    Iterable<String> cardAssets = deckAssetPaths.value.where(
       (String assetName) => assetName.contains(card.name),
     );
 
@@ -115,8 +89,8 @@ class AssetProvider extends BaseProvider with Logging {
 
           case "images":
             if (["jpg", "jpeg", "png", "gif"].contains(fileType)) {
-              AssetGenImage image = AssetGenImage(asset);
-              retVal = retVal?.copyWith(image: image);
+              // AssetGenImage image = AssetGenImage(asset);
+              retVal = retVal?.copyWith(image: AssetGenImage(asset));
             }
         }
       }

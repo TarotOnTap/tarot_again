@@ -1,10 +1,9 @@
-import 'package:flutter/foundation.dart';
 // import 'package:flutter/material.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:toastification/toastification.dart';
 
-import 'data_layer/data_layer.dart';
 import 'ui_layer/ui_layer.dart';
+import 'util/register_singletons.dart';
 import 'util/util.dart';
 
 void main() async {
@@ -33,15 +32,7 @@ void main() async {
 Future<void> initializeEverything() async {
   initializeLoggingService();
 
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory:
-        kIsWeb
-            ? HydratedStorageDirectory.web
-            : HydratedStorageDirectory((await getTemporaryDirectory()).path),
-  );
-
-  initializeDataLayer();
-  // initializeBlocs();
+  registerSingletons();
 }
 
 class TarotAgainApp extends StatelessWidget {

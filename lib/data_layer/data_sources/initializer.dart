@@ -1,8 +1,6 @@
-import 'data_sources.dart';
-
-void initializeDataSources() {
-  AssetProvider();
-  AsyncRandoms();
-  StandardDeckProvider();
-  LayoutProvider();
-}
+// void initializeDataSources() {
+//   AssetProvider();
+//   AsyncRandoms();
+//   StandardDeckProvider();
+//   LayoutProvider();
+// }

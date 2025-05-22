@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:tarot_again/data_layer/data_layer.dart';
+// import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 enum RandomGenerators {
@@ -29,8 +29,10 @@ class AsyncRandoms extends BaseProvider with Logging {
   // model for generators.
   IList<String> get randomGeneratorNames {
     if (_randomGeneratorNames.isEmpty) {
-      _randomGeneratorNames =
-          RandomGenerators.values.map((item) => item.displayName).toList().lock;
+      _randomGeneratorNames = RandomGenerators.values
+          .map((item) => item.displayName)
+          .toList()
+          .lock;
     }
 
     return _randomGeneratorNames;
@@ -39,17 +41,18 @@ class AsyncRandoms extends BaseProvider with Logging {
   RandomGenerators currentGenerator = RandomGenerators.none;
   late RandomsProvider currentProvider;
 
-  AsyncRandoms._() {
+  // AsyncRandoms._() {
+  AsyncRandoms() {
     setRandomSource(RandomGenerators.none.displayName);
   }
 
-  factory AsyncRandoms() {
-    if (!sl.isRegistered<AsyncRandoms>()) {
-      return sl.registerSingleton<AsyncRandoms>(AsyncRandoms._());
-    }
-
-    return sl<AsyncRandoms>();
-  }
+  // factory AsyncRandoms() {
+  //   if (!sl.isRegistered<AsyncRandoms>()) {
+  //     return sl.registerSingleton<AsyncRandoms>(AsyncRandoms._());
+  //   }
+  //
+  //   return sl<AsyncRandoms>();
+  // }
 
   void setRandomSource(String name) {
     // this *always* inserts a new random generator of the source type, even if it's
@@ -64,6 +67,17 @@ class AsyncRandoms extends BaseProvider with Logging {
 
     currentProvider = currentGenerator.genCreator();
   }
+
+  // Future<(E, Iterable<E>)> getRandomElementFromIterable<E>(
+  //   Iterable<E> iterable,
+  // ) async {
+  //   final int index = await getNextInt(rangeHigh: iterable.length - 1);
+  //   Iterable<E> frontList = iterable.take(index);
+  //   Iterable<E> restList = iterable.skip(index + 1);
+  //   E element = iterable.elementAt(index);
+  //
+  //   return (element, frontList.followedBy(restList));
+  // }
 
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>
       currentProvider.getNextInt(rangeLow: rangeLow = 0, rangeHigh: rangeHigh);
@@ -81,7 +95,7 @@ class AsyncRandoms extends BaseProvider with Logging {
   ) async {
     IList<E> copy = IList(remaining);
     // Output<E> removedItem = Output<E>();
-    IList<E> resultList = IList<E>([]);
+    IList<E> resultList = IList<E>.empty();
 
     if (copy.isNotEmpty) {
       // taskChoice never fails

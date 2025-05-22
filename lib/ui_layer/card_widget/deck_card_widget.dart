@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarot_again/data_layer/data_layer.dart';
+// import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 import 'tc_major_arcana_widget.dart';

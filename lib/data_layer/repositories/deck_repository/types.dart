@@ -1,4 +1,4 @@
-import 'package:tarot_again/data_layer/data_layer.dart';
+// import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 export 'repository.dart';
@@ -12,6 +12,8 @@ part 'types.freezed.dart';
 part 'types.g.dart';
 
 /// do not change!!! [types.g.dart] is important!!!
+///
+///
 
 /// DealtCard is a class that represents two possible states of a card that has
 /// been dealt by the [DeckRepository]. [DeckEmpty] represents the absence of a
@@ -32,9 +34,9 @@ sealed class DealtCard with _$DealtCard {
   factory DealtCard.deckCard({
     required TarotDeckCards tcCard,
     required bool reversed,
-    // @JsonKey(includeToJson: false, includeFromJson: false)
-    // @Default(null)
-    // TCModelAssets? assets,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(null)
+    TCModelAssets? assets,
   }) = DeckCard;
 
   factory DealtCard.unassignedCard() = DealtCardUnassignedCard;

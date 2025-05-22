@@ -1,6 +1,5 @@
 // this gets us GetIt/WatchIt packages
 
-import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 import 'package:test/test.dart';
 
@@ -18,7 +17,7 @@ Stream<int> getNRandomInts({
 void main() async {
   initializeLoggingService();
 
-  initializeDataLayer();
+  // initializeDataLayer();
 
   AsyncRandoms randoms = sl<AsyncRandoms>();
 

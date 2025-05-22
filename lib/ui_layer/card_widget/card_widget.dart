@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tarot_again/blocs/blocs.dart';
-import 'package:tarot_again/data_layer/data_layer.dart';
+import 'package:signals/signals_flutter.dart';
+// import 'package:tarot_again/data_layer/data_layer.dart';
+import 'package:tarot_again/managers/session_manager/session_manager.dart';
 import 'package:tarot_again/util/util.dart';
 
 // import 'package:toastification/toastification.dart';
@@ -29,15 +30,14 @@ class AnimatedColorCardBackWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
-      builder:
-          (context, child) => Container(
-            decoration: BoxDecoration(
-              color: animation.value,
-              border: Border.all(width: 1),
-              borderRadius: BorderRadius.circular(3),
-            ),
-            child: child,
-          ),
+      builder: (context, child) => Container(
+        decoration: BoxDecoration(
+          color: animation.value,
+          border: Border.all(width: 1),
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: child,
+      ),
     );
   }
 }
@@ -114,38 +114,32 @@ class _CardColorBackState extends State<CardColorBack>
 @immutable
 class CardWidget extends StatelessWidget {
   final int index;
-  final SlotStateDealt swState;
+  final DeckCard deckCard;
 
-  const CardWidget({super.key, required this.index, required this.swState});
+  const CardWidget({super.key, required this.index, required this.deckCard});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BulkCardControlBloc, BulkCardControlState>(
-      builder:
-          (context, bcState) => RotatedBox(
-            quarterTurns:
-                bcState.reversalsAllowed &&
-                        switch (swState.card) {
-                          DeckCard dc => dc.reversed,
-                          _ => false,
-                        }
-                    ? 2
-                    : 0,
-            child: Container(
-              // width: 70,
-              // height: 120,
-              padding: const EdgeInsets.all(1.0),
-              // decoration: BoxDecoration(
-              //   border: Border.all(width: 1),
-              //   borderRadius: BorderRadius.circular(10),
-              // ),
-              alignment: Alignment.center,
-              child: switch (swState.card) {
-                DeckCard dc => DeckCardWidget(card: dc),
-                _ => Placeholder(child: Text("Not a DeckCard")),
-              },
-            ),
-          ),
+    // return BlocBuilder<BulkCardControlBloc, BulkCardControlState>(
+    //   builder:
+    return Watch(
+      (context) => RotatedBox(
+        quarterTurns:
+            sl<SessionManager>().reversalsAllowed.value && deckCard.reversed
+            ? 2
+            : 0,
+        child: Container(
+          // width: 70,
+          // height: 120,
+          padding: const EdgeInsets.all(1.0),
+          // decoration: BoxDecoration(
+          //   border: Border.all(width: 1),
+          //   borderRadius: BorderRadius.circular(10),
+          // ),
+          alignment: Alignment.center,
+          child: DeckCardWidget(card: deckCard),
+        ),
+      ),
     );
   }
 }
