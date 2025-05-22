@@ -1,4 +1,3 @@
-import 'package:signals/signals_flutter.dart';
 import 'package:tarot_again/util/util.dart';
 
 // import '../randoms_provider/randoms_provider.dart';
@@ -15,7 +14,7 @@ class StandardDeckProvider {
   ///  [shuffledDeck] holds the current, shuffled deck. Beware, its default
   ///  value is an empty IList.
   ///
-  AsyncSignal<IList<TarotDeckCards>> shuffledDeck = asyncSignal(
+  static final AsyncSignal<IList<TarotDeckCards>> shuffledDeck = asyncSignal(
     AsyncState.loading(),
   );
 

@@ -2,33 +2,29 @@ import 'package:flutter/services.dart';
 import 'package:tarot_again/util/util.dart';
 
 class AssetProvider extends BaseProvider with Logging {
-  final Signal<IList<String>> allAssetPaths = signal(
+  static final Signal<IList<String>> allAssetPaths = signal(
     const IList<String>.empty(),
   );
 
-  late final Computed<IList<String>> deckAssetPaths;
-  late final Computed<IList<String>> layoutAssetPaths;
-  late final Computed<IList<String>> tarotLayoutAssetPaths;
+  static final Computed<IList<String>> deckAssetPaths = computed(() {
+    final String ds = SessionManager.deckString.value;
+    return allAssetPaths.value.where((path) => path.contains(ds)).toIList();
+  });
+
+  static final Computed<IList<String>> layoutAssetPaths = computed(
+    () => allAssetPaths.value
+        .where((path) => path.contains("assets/layouts"))
+        .toIList(),
+  );
+
+  static final Computed<IList<String>> tarotLayoutAssetPaths = computed(
+    () => layoutAssetPaths.value
+        .where((asset) => asset.contains("tarotLayouts"))
+        .toIList(),
+  );
 
   AssetProvider() {
-    deckAssetPaths = computed(() {
-      final String ds = sl<SessionManager>().deckString.value;
-      return allAssetPaths.value.where((path) => path.contains(ds)).toIList();
-    });
-
-    layoutAssetPaths = computed(
-      () => allAssetPaths.value
-          .where((path) => path.contains("assets/layouts"))
-          .toIList(),
-    );
-
     unawaited(_getAllAssetPaths());
-
-    tarotLayoutAssetPaths = computed(
-      () => layoutAssetPaths.value
-          .where((asset) => asset.contains("tarotLayouts"))
-          .toIList(),
-    );
   }
 
   Future<void> _getAllAssetPaths() async {

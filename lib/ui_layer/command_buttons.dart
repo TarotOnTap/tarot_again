@@ -90,20 +90,24 @@ class CommandButtons extends StatelessWidget with Logging {
           PromptedChoice<String>.single(
             title: "Select a layout",
             clearable: true,
-            value: lr.tarotLayout.value.displayName,
+            value: LayoutRepository.tarotLayout.value.displayName,
             // this changes after setNewLayout is called
             onChanged: (String? value) {
               if (value != null) {
                 verbose("  onChanged: value is $value");
-                lr.getLayoutByDisplayName(value);
+                lr.setLayoutByDisplayName(value);
               }
             },
-            itemCount: sm.layoutDisplayNames.value.length,
+            itemCount: LayoutProvider.layoutDisplayNames.value.length,
             itemBuilder: (state, i) {
               return ChoiceChip(
-                selected: state.selected(sm.layoutDisplayNames.value[i]),
-                onSelected: state.onSelected(sm.layoutDisplayNames.value[i]),
-                label: Text(sm.layoutDisplayNames.value[i]),
+                selected: state.selected(
+                  LayoutProvider.layoutDisplayNames.value[i],
+                ),
+                onSelected: state.onSelected(
+                  LayoutProvider.layoutDisplayNames.value[i],
+                ),
+                label: Text(LayoutProvider.layoutDisplayNames.value[i]),
               );
             },
             listBuilder: ChoiceList.createWrapped(

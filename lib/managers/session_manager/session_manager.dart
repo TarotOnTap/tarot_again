@@ -60,33 +60,32 @@ import 'types.dart';
 /// what deck is used, whether reversals are allowed, what layout is chosen,
 /// what cards are dealt into that layout, etc.
 class SessionManager /* with DeckManager */ with Logging {
-  final LoggingSignal<DeckTypesEnum> deckType = loggingSignal<DeckTypesEnum>(
-    DeckTypesEnum.standardTarot,
-    name: "deckType",
-  );
+  static final LoggingSignal<DeckTypesEnum> deckType =
+      loggingSignal<DeckTypesEnum>(
+        DeckTypesEnum.standardTarot,
+        name: "deckType",
+      );
 
-  final LoggingSignal<IList<Signal<DealtCard>>> dealtCards = loggingSignal(
-    const IList<Signal<DealtCard>>.empty(),
-    name: "dealtCards",
-  );
+  static final LoggingSignal<IList<Signal<DealtCard>>> dealtCards =
+      loggingSignal(const IList<Signal<DealtCard>>.empty(), name: "dealtCards");
 
-  final LoggingSignal<StandardTarotDecksEnum> deckName =
+  static final LoggingSignal<StandardTarotDecksEnum> deckName =
       loggingSignal<StandardTarotDecksEnum>(
         StandardTarotDecksEnum.rws,
         name: "deckName",
       );
 
-  final LoggingSignal<String> cardBackStyle = loggingSignal<String>(
+  static final LoggingSignal<String> cardBackStyle = loggingSignal<String>(
     "",
     name: "cardBackStyle",
   );
 
-  final LoggingSignal<bool> allCardsFaceUp = loggingSignal<bool>(
+  static final LoggingSignal<bool> allCardsFaceUp = loggingSignal<bool>(
     false,
     name: "allCardsFaceUp",
   );
 
-  final LoggingSignal<bool> reversalsAllowed = loggingSignal<bool>(
+  static final LoggingSignal<bool> reversalsAllowed = loggingSignal<bool>(
     true,
     name: "reversalsAllowed",
   );
@@ -94,10 +93,11 @@ class SessionManager /* with DeckManager */ with Logging {
   // IList<Computed<DealtCard>> dealtCardSelectors =
   //     const IList<Computed<DealtCard>>.empty();
 
-  final LoggingSignal<IList<bool>> faceUpCards = loggingSignal<IList<bool>>(
-    const IList<bool>.empty(),
-    name: "faceUpCards",
-  );
+  static final LoggingSignal<IList<bool>> faceUpCards =
+      loggingSignal<IList<bool>>(
+        const IList<bool>.empty(),
+        name: "faceUpCards",
+      );
 
   // final Signal<bool> newCardsDealt = signal<bool>(false);
 
@@ -106,39 +106,33 @@ class SessionManager /* with DeckManager */ with Logging {
   //   TarotLayout.nullLayout(),
   // );
 
-  late final LoggingComputed<String> deckString;
-  late final LoggingComputed<IMap<String, String>> tarotLayoutMap;
+  static final LoggingComputed<String> deckString = loggingComputed(
+    () => "decks/${deckType.value.name}/${deckName.value.name}",
+    name: "deckString",
+  );
+
+  // static final LoggingComputed<IMap<String, String>> tarotLayoutMap;
 
   LoggingComputed<IList<String>> get layoutNames => LayoutProvider.layoutNames;
 
   LoggingComputed<IList<String>> get layoutDisplayNames =>
       LayoutProvider.layoutDisplayNames;
 
-  late final LoggingComputed<bool> assetsNeedReloading;
-  late final LoggingComputed<IList<Signal<SlotState>>> slotStates;
+  // static final LoggingComputed<bool> assetsNeedReloading;
+  static final LoggingComputed<IList<Signal<SlotState>>> slotStates =
+      loggingComputed(
+        () => LayoutRepository.tarotLayout.value.let(
+          (_) => [
+            for (var i in LayoutRepository.tarotLayout.value.numCards.range())
+              signal(SlotState.notDealt(slotIndex: i)),
+          ].toIList(),
+        ),
+        name: "slotStates",
+      );
 
-  LoggingSignal<TarotLayout> get tarotLayout =>
-      sl<LayoutRepository>().tarotLayout;
+  LoggingSignal<TarotLayout> get tarotLayout => LayoutRepository.tarotLayout;
 
   SessionManager() {
-    deckString = loggingComputed(
-      () => "decks/${deckType.value.name}/${deckName.value.name}",
-      name: "deckString",
-    );
-    //
-    // layoutNames = sl<LayoutProvider>().layoutNames;
-    // layoutDisplayNames = sl<LayoutProvider>().layoutDisplayNames;
-
-    slotStates = loggingComputed(
-      () => tarotLayout.value.let(
-        (_) => [
-          for (var i in tarotLayout.value.numCards.range())
-            signal(SlotState.notDealt(slotIndex: i)),
-        ].toIList(),
-      ),
-      name: "slotStates",
-    );
-
     // this happens when the value of deckType, or the value of tarotLayout, changes.
     // We don't actually care about the
     // new value, we just need to reset the dealtCards list when these change.
@@ -193,11 +187,11 @@ class SessionManager /* with DeckManager */ with Logging {
   );
 
   Future<void> _dealCards() async {
-    final sd = sl<StandardDeckProvider>();
     final ar = sl<AsyncRandoms>();
 
     if (tarotLayout.value is! NullLayout) {
-      final IList<TarotDeckCards> shuffledDeck = await sd.shuffledDeck.future;
+      final IList<TarotDeckCards> shuffledDeck =
+          await StandardDeckProvider.shuffledDeck.future;
 
       final int howMany = tarotLayout.value.numCards;
 

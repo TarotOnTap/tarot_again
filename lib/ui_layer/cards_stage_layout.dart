@@ -1,7 +1,5 @@
 import 'package:align_positioned/align_positioned.dart';
 import 'package:flutter/material.dart';
-import 'package:signals/signals_flutter.dart';
-import 'package:tarot_again/managers/session_manager/session_manager.dart';
 import 'package:tarot_again/util/util.dart';
 
 import 'layout_widget/layout_widget.dart';
@@ -22,7 +20,7 @@ class CardsStageLayout extends StatelessWidget with Logging {
           touch: Touch.inside,
           child: Watch(
             (context) => Text(
-              sl<SessionManager>().tarotLayout.value.displayName,
+              LayoutRepository.tarotLayout.value.displayName,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),

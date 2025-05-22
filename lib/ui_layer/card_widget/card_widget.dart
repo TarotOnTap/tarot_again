@@ -1,12 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:signals/signals_flutter.dart';
-// import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/managers/session_manager/session_manager.dart';
 import 'package:tarot_again/util/util.dart';
-
-// import 'package:toastification/toastification.dart';
 
 import 'deck_card_widget.dart';
 
@@ -124,8 +119,7 @@ class CardWidget extends StatelessWidget {
     //   builder:
     return Watch(
       (context) => RotatedBox(
-        quarterTurns:
-            sl<SessionManager>().reversalsAllowed.value && deckCard.reversed
+        quarterTurns: SessionManager.reversalsAllowed.value && deckCard.reversed
             ? 2
             : 0,
         child: Container(

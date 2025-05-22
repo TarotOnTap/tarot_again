@@ -3,10 +3,8 @@ import 'package:tarot_again/managers/session_manager/types.dart';
 import 'package:tarot_again/util/util.dart';
 
 class LayoutRepository extends SingletonRepository {
-  final LoggingSignal<TarotLayout> tarotLayout = loggingSignal<TarotLayout>(
-    TarotLayout.nullLayout(),
-    name: "tarotLayout",
-  );
+  static final LoggingSignal<TarotLayout> tarotLayout =
+      loggingSignal<TarotLayout>(TarotLayout.nullLayout(), name: "tarotLayout");
 
   TarotLayout getLayoutByLayoutName(String name) =>
       LayoutProvider.layoutsByName.value[name] ??

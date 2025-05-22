@@ -45,9 +45,8 @@ class LayoutProvider extends BaseProvider with Logging {
     verbose("layoutsByDisplayName.value is ${layoutsByDisplayName.value}");
 
     effect(
-      () => sl<AssetProvider>().tarotLayoutAssetPaths.value.also(
-        (_) => loadLayouts(),
-      ),
+      () =>
+          AssetProvider.tarotLayoutAssetPaths.value.also((_) => loadLayouts()),
     );
 
     loadLayouts();
@@ -93,10 +92,12 @@ class LayoutProvider extends BaseProvider with Logging {
   Future<void> _loadLayouts() async {
     final ap = sl<AssetProvider>();
 
-    IList<String> names = ap.layoutAssetPaths.value.map(_layoutName).toIList();
+    IList<String> names = AssetProvider.layoutAssetPaths.value
+        .map(_layoutName)
+        .toIList();
 
     final sPaths = await Stream<String>.fromIterable(
-      ap.layoutAssetPaths.value,
+      AssetProvider.layoutAssetPaths.value,
     ).asyncMap((event) => loadLayout(event)).toList();
 
     layoutsByName.value = IMap<String, TarotLayout>.fromIterables(
