@@ -108,8 +108,12 @@ class SessionManager /* with DeckManager */ with Logging {
 
   late final LoggingComputed<String> deckString;
   late final LoggingComputed<IMap<String, String>> tarotLayoutMap;
-  late final LoggingComputed<IList<String>> layoutNames;
-  late final LoggingComputed<IList<String>> layoutDisplayNames;
+
+  LoggingComputed<IList<String>> get layoutNames => LayoutProvider.layoutNames;
+
+  LoggingComputed<IList<String>> get layoutDisplayNames =>
+      LayoutProvider.layoutDisplayNames;
+
   late final LoggingComputed<bool> assetsNeedReloading;
   late final LoggingComputed<IList<Signal<SlotState>>> slotStates;
 
@@ -121,9 +125,9 @@ class SessionManager /* with DeckManager */ with Logging {
       () => "decks/${deckType.value.name}/${deckName.value.name}",
       name: "deckString",
     );
-
-    layoutNames = sl<LayoutProvider>().layoutNames;
-    layoutDisplayNames = sl<LayoutProvider>().layoutDisplayNames;
+    //
+    // layoutNames = sl<LayoutProvider>().layoutNames;
+    // layoutDisplayNames = sl<LayoutProvider>().layoutDisplayNames;
 
     slotStates = loggingComputed(
       () => tarotLayout.value.let(

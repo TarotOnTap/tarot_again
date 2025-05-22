@@ -9,14 +9,14 @@ class LayoutRepository extends SingletonRepository {
   );
 
   TarotLayout getLayoutByLayoutName(String name) =>
-      sl<LayoutProvider>().layoutsByName.value[name] ??
+      LayoutProvider.layoutsByName.value[name] ??
       TarotLayout.nullLayout(displayName: "No Such Layout");
 
   void setLayoutByLayoutName(String name) =>
       tarotLayout.value = getLayoutByLayoutName(name);
 
   TarotLayout getLayoutByDisplayName(String displayName) =>
-      sl<LayoutProvider>().layoutsByDisplayName.value[displayName] ??
+      LayoutProvider.layoutsByDisplayName.value[displayName] ??
       TarotLayout.nullLayout(displayName: "No Such Layout");
 
   void setLayoutByDisplayName(String displayName) =>

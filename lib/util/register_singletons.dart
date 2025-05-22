@@ -4,15 +4,15 @@ import 'package:watch_it/watch_it.dart';
 
 // register all of our singletons with GetIt, right up front.
 void registerSingletons() {
-  sl.registerLazySingleton<AsyncRandoms>(AsyncRandoms.new);
-  sl.registerLazySingleton<AssetProvider>(AssetProvider.new);
-  sl.registerLazySingleton<CardAssetsProvider>(CardAssetsProvider.new);
-  sl.registerLazySingleton<LayoutProvider>(LayoutProvider.new);
-  sl.registerLazySingleton<StandardDeckProvider>(StandardDeckProvider.new);
-  sl.registerLazySingleton<AssetRepository>(AssetRepository.new);
-  // sl.registerLazySingleton<DeckManager>(DeckManager.new);
-  sl.registerLazySingleton<LayoutRepository>(LayoutRepository.new);
-  sl.registerLazySingleton<SessionManager>(SessionManager.new);
+  sl.registerSingleton<AsyncRandoms>(AsyncRandoms());
+  sl.registerSingleton<AssetProvider>(AssetProvider());
+  sl.registerSingleton<CardAssetsProvider>(CardAssetsProvider());
+  sl.registerSingleton<LayoutProvider>(LayoutProvider());
+  sl.registerSingleton<StandardDeckProvider>(StandardDeckProvider());
+  sl.registerSingleton<AssetRepository>(AssetRepository());
+  // sl.registerSingleton<DeckManager>(DeckManager());
+  sl.registerSingleton<LayoutRepository>(LayoutRepository());
+  sl.registerSingleton<SessionManager>(SessionManager());
   // sl.registerSingleton<BulkCardControlBloc>(BulkCardControlBloc());0.
   // sl.registerSingleton<LayoutBloc>(LayoutBloc());
   // sl.registerSingleton<SettingsBloc>(SettingsBloc());

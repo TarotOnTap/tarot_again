@@ -1,59 +1,62 @@
 import 'package:tarot_again/util/util.dart';
 
 part 'types.freezed.dart';
-
 part 'types.g.dart';
 
 class LoggingSignal<T> extends Signal<T> with TrackedSignalMixin<T>, Logging {
   final String? name;
 
-  LoggingSignal(super.value, {
+  LoggingSignal(
+    super.value, {
     this.name,
     super.debugLabel,
     super.autoDispose = false,
   }) {
+    verbose("LoggingSignal constructor; name is $name");
     subscribe((v) => verbose("Signal $name changed from $previousValue to $v"));
   }
 }
 
-LoggingSignal<T> loggingSignal<T>(T value, {
+LoggingSignal<T> loggingSignal<T>(
+  T value, {
   String? name,
   String? debugLabel,
   bool autoDispose = false,
-}) =>
-    LoggingSignal<T>(
-      value,
-      name: name,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
+}) => LoggingSignal<T>(
+  value,
+  name: name,
+  debugLabel: debugLabel,
+  autoDispose: autoDispose,
+);
 
 class LoggingComputed<T> extends Computed<T>
     with TrackedSignalMixin<T>, Logging {
   final String? name;
 
-  LoggingComputed(super.fn, {
+  LoggingComputed(
+    super.fn, {
     this.name,
     super.debugLabel,
     super.autoDispose = false,
   }) {
+    verbose("LoggingComputed constructor; name is $name");
     subscribe(
-          (v) => verbose("Computed $name changed from $previousValue to $v"),
+      (v) => verbose("Computed $name changed from $previousValue to $v"),
     );
   }
 }
 
-LoggingComputed<T> loggingComputed<T>(T Function() fn, {
+LoggingComputed<T> loggingComputed<T>(
+  T Function() fn, {
   String? name,
   String? debugLabel,
   bool autoDispose = false,
-}) =>
-    LoggingComputed<T>(
-      fn,
-      name: name,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
+}) => LoggingComputed<T>(
+  fn,
+  name: name,
+  debugLabel: debugLabel,
+  autoDispose: autoDispose,
+);
 
 @JsonEnum()
 enum StandardTarotDecksEnum {
@@ -95,10 +98,10 @@ sealed class SlotState with _$SlotState {
     required DealtCard card,
     @JsonKey(includeFromJson: false, includeToJson: false) AssetGenImage? image,
     @JsonKey(includeFromJson: false, includeToJson: false) String? description,
-    @JsonKey(
-        includeFromJson: false, includeToJson: false) String? uprightMeaning,
-    @JsonKey(
-        includeFromJson: false, includeToJson: false) String? reversedMeaning,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    String? uprightMeaning,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    String? reversedMeaning,
   }) = SlotStateDealt;
 
   factory SlotState.fromJson(Map<String, dynamic> json) =>

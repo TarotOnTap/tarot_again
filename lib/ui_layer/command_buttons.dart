@@ -65,80 +65,82 @@ class CommandButtons extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    final SessionManager sm = sl<SessionManager>();
     final LayoutRepository lr = sl<LayoutRepository>();
+    final SessionManager sm = sl<SessionManager>();
 
-    return Column(
-      children: <Widget>[
-        CommandButtonGroup(
-          groupLabel: "Bulk Command",
-          buttons: [
-            ("Allow reversals", null, sm.allowReversals),
-            ("Disallow reversals", null, sm.disallowReversals),
-            ("FaceUp on", null, sm.turnAllCardsFaceUp),
-            ("FaceUp off", null, sm.turnAllCardsFaceDown),
-          ],
-        ),
-        ElevatedButton(
-          onPressed: () => sm.dealCards(),
-
-          child: Text("Deal cards"),
-        ),
-
-        Gap(30),
-        PromptedChoice<String>.single(
-          title: "Select a layout",
-          clearable: true,
-          value: lr.tarotLayout.value.displayName,
-          // this changes after setNewLayout is called
-          onChanged: (String? value) {
-            if (value != null) {
-              verbose("  onChanged: value is $value");
-              lr.getLayoutByDisplayName(value);
-            }
-          },
-          itemCount: sm.layoutDisplayNames.value.length,
-          itemBuilder: (state, i) {
-            return ChoiceChip(
-              selected: state.selected(sm.layoutDisplayNames.value[i]),
-              onSelected: state.onSelected(sm.layoutDisplayNames.value[i]),
-              label: Text(sm.layoutDisplayNames.value[i]),
-            );
-          },
-          listBuilder: ChoiceList.createWrapped(
-            spacing: 10,
-            runSpacing: 10,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+    return Watch(
+      (context) => Column(
+        children: <Widget>[
+          CommandButtonGroup(
+            groupLabel: "Bulk Command",
+            buttons: [
+              ("Allow reversals", null, sm.allowReversals),
+              ("Disallow reversals", null, sm.disallowReversals),
+              ("FaceUp on", null, sm.turnAllCardsFaceUp),
+              ("FaceUp off", null, sm.turnAllCardsFaceDown),
+            ],
           ),
-        ),
+          ElevatedButton(
+            onPressed: () => sm.dealCards(),
 
-        Gap(5),
-        PromptedChoice<String>.single(
-          title: "Select a source of randomness",
-          clearable: true,
-          value: sl<AsyncRandoms>().currentGenerator.displayName,
-          onChanged: (String? value) {
-            if (value != null) {
-              sl<AsyncRandoms>().setRandomSource(value);
-            }
-          },
-          itemCount: RandomGenerators.values.length,
-          itemBuilder: (state, index) => ChoiceChip(
-            selected: state.selected(
-              sl<AsyncRandoms>().randomGeneratorNames[index],
+            child: Text("Deal cards"),
+          ),
+
+          Gap(30),
+          PromptedChoice<String>.single(
+            title: "Select a layout",
+            clearable: true,
+            value: lr.tarotLayout.value.displayName,
+            // this changes after setNewLayout is called
+            onChanged: (String? value) {
+              if (value != null) {
+                verbose("  onChanged: value is $value");
+                lr.getLayoutByDisplayName(value);
+              }
+            },
+            itemCount: sm.layoutDisplayNames.value.length,
+            itemBuilder: (state, i) {
+              return ChoiceChip(
+                selected: state.selected(sm.layoutDisplayNames.value[i]),
+                onSelected: state.onSelected(sm.layoutDisplayNames.value[i]),
+                label: Text(sm.layoutDisplayNames.value[i]),
+              );
+            },
+            listBuilder: ChoiceList.createWrapped(
+              spacing: 10,
+              runSpacing: 10,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
             ),
-            onSelected: state.onSelected(
-              sl<AsyncRandoms>().randomGeneratorNames[index],
+          ),
+
+          Gap(5),
+          PromptedChoice<String>.single(
+            title: "Select a source of randomness",
+            clearable: true,
+            value: sl<AsyncRandoms>().currentGenerator.displayName,
+            onChanged: (String? value) {
+              if (value != null) {
+                sl<AsyncRandoms>().setRandomSource(value);
+              }
+            },
+            itemCount: RandomGenerators.values.length,
+            itemBuilder: (state, index) => ChoiceChip(
+              selected: state.selected(
+                sl<AsyncRandoms>().randomGeneratorNames[index],
+              ),
+              onSelected: state.onSelected(
+                sl<AsyncRandoms>().randomGeneratorNames[index],
+              ),
+              label: Text(sl<AsyncRandoms>().randomGeneratorNames[index]),
             ),
-            label: Text(sl<AsyncRandoms>().randomGeneratorNames[index]),
+            listBuilder: ChoiceList.createWrapped(
+              spacing: 10,
+              runSpacing: 10,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            ),
           ),
-          listBuilder: ChoiceList.createWrapped(
-            spacing: 10,
-            runSpacing: 10,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

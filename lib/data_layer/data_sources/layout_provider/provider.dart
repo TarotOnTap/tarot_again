@@ -14,45 +14,43 @@ import 'package:tarot_again/util/util.dart';
 typedef LayoutAssetCache = IMap<String, TarotLayout>;
 
 class LayoutProvider extends BaseProvider with Logging {
-  // late final FutureSignal<LayoutAssetCache> layoutAssetMap;
-
-  final LoggingSignal<LayoutAssetCache> layoutsByName = loggingSignal(
+  static final LoggingSignal<LayoutAssetCache> layoutsByName = loggingSignal(
     const LayoutAssetCache.empty(),
     name: "layoutsByName",
   );
 
-  late final LoggingComputed<LayoutAssetCache> layoutsByDisplayName;
+  static final LoggingComputed<LayoutAssetCache> layoutsByDisplayName =
+      loggingComputed(() {
+        final keys = layoutsByName.value.values.map(
+          (TarotLayout l) => l.displayName,
+        );
 
-  late final LoggingComputed<IList<String>> layoutNames;
-  late final LoggingComputed<IList<String>> layoutDisplayNames;
+        return LayoutAssetCache.fromIterables(keys, layoutsByName.value.values);
+      }, name: "layoutsByDisplayName");
+
+  static final LoggingComputed<IList<String>> layoutNames = loggingComputed(
+    () => layoutsByName.value.keys.toIList(),
+    name: "layoutNames",
+  );
+
+  static final LoggingComputed<IList<String>> layoutDisplayNames =
+      loggingComputed(
+        () => layoutsByDisplayName.value.keys.toIList(),
+        name: "layoutDisplayNames",
+      );
 
   LayoutProvider() {
-    layoutsByDisplayName = loggingComputed(() {
-      final keys = layoutsByDisplayName.value.values.map(
-        (TarotLayout l) => l.displayName,
-      );
+    verbose("LayoutProvider constructor");
 
-      return LayoutAssetCache.fromIterables(
-        keys,
-        layoutsByDisplayName.value.values,
-      );
-    }, name: "layoutsByDisplayName");
-
-    layoutNames = loggingComputed(
-      () => layoutsByName.value.keys.toIList(),
-      name: "layoutNames",
-    );
-
-    layoutDisplayNames = loggingComputed(
-      () => layoutsByDisplayName.value.keys.toIList(),
-      name: "layoutDisplayNames",
-    );
+    verbose("layoutsByDisplayName.value is ${layoutsByDisplayName.value}");
 
     effect(
       () => sl<AssetProvider>().tarotLayoutAssetPaths.value.also(
         (_) => loadLayouts(),
       ),
     );
+
+    loadLayouts();
   }
 
   String _layoutName(String assetPath) {
