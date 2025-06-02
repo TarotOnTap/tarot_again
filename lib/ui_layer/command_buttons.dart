@@ -65,32 +65,37 @@ class CommandButtons extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    final LayoutRepository lr = sl<LayoutRepository>();
+    final LayoutManager lr = sl<LayoutManager>();
     final SessionManager sm = sl<SessionManager>();
+    // final Reactives reactives = sl<Reactives>();
 
-    return Watch(
-      (context) => Column(
-        children: <Widget>[
-          CommandButtonGroup(
-            groupLabel: "Bulk Command",
-            buttons: [
-              ("Allow reversals", null, sm.allowReversals),
-              ("Disallow reversals", null, sm.disallowReversals),
-              ("FaceUp on", null, sm.turnAllCardsFaceUp),
-              ("FaceUp off", null, sm.turnAllCardsFaceDown),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () => sm.dealCards(),
+    return Column(
+      children: <Widget>[
+        CommandButtonGroup(
+          groupLabel: "Bulk Command",
+          buttons: [
+            ("Allow reversals", null, sm.allowReversals),
+            ("Disallow reversals", null, sm.disallowReversals),
+            ("FaceUp on", null, sm.turnAllCardsFaceUp),
+            ("FaceUp off", null, sm.turnAllCardsFaceDown),
+          ],
+        ),
+        ElevatedButton(
+          onPressed: () async => await SessionManager.dealCards(),
 
-            child: Text("Deal cards"),
-          ),
+          child: Text("Deal cards"),
+        ),
+        ElevatedButton(
+          onPressed: () => sm.freshSpread(),
+          child: Text("Lay out fresh cards"),
+        ),
 
-          Gap(30),
-          PromptedChoice<String>.single(
+        Gap(30),
+        Watch(
+          (context) => PromptedChoice<String>.single(
             title: "Select a layout",
             clearable: true,
-            value: LayoutRepository.tarotLayout.value.displayName,
+            value: tarotLayout.value.displayName,
             // this changes after setNewLayout is called
             onChanged: (String? value) {
               if (value != null) {
@@ -98,16 +103,12 @@ class CommandButtons extends StatelessWidget with Logging {
                 lr.setLayoutByDisplayName(value);
               }
             },
-            itemCount: LayoutProvider.layoutDisplayNames.value.length,
+            itemCount: layoutDisplayNames.value.length,
             itemBuilder: (state, i) {
               return ChoiceChip(
-                selected: state.selected(
-                  LayoutProvider.layoutDisplayNames.value[i],
-                ),
-                onSelected: state.onSelected(
-                  LayoutProvider.layoutDisplayNames.value[i],
-                ),
-                label: Text(LayoutProvider.layoutDisplayNames.value[i]),
+                selected: state.selected(layoutDisplayNames.value[i]),
+                onSelected: state.onSelected(layoutDisplayNames.value[i]),
+                label: Text(layoutDisplayNames.value[i]),
               );
             },
             listBuilder: ChoiceList.createWrapped(
@@ -116,35 +117,35 @@ class CommandButtons extends StatelessWidget with Logging {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
             ),
           ),
-
-          Gap(5),
-          PromptedChoice<String>.single(
-            title: "Select a source of randomness",
-            clearable: true,
-            value: sl<AsyncRandoms>().currentGenerator.displayName,
-            onChanged: (String? value) {
-              if (value != null) {
-                sl<AsyncRandoms>().setRandomSource(value);
-              }
-            },
-            itemCount: RandomGenerators.values.length,
-            itemBuilder: (state, index) => ChoiceChip(
-              selected: state.selected(
-                sl<AsyncRandoms>().randomGeneratorNames[index],
-              ),
-              onSelected: state.onSelected(
-                sl<AsyncRandoms>().randomGeneratorNames[index],
-              ),
-              label: Text(sl<AsyncRandoms>().randomGeneratorNames[index]),
+          debugLabel: "Layout choice",
+        ),
+        Gap(5),
+        PromptedChoice<String>.single(
+          title: "Select a source of randomness",
+          clearable: true,
+          value: sl<AsyncRandoms>().currentGenerator.displayName,
+          onChanged: (String? value) {
+            if (value != null) {
+              sl<AsyncRandoms>().setRandomSource(value);
+            }
+          },
+          itemCount: RandomGenerators.values.length,
+          itemBuilder: (state, index) => ChoiceChip(
+            selected: state.selected(
+              sl<AsyncRandoms>().randomGeneratorNames[index],
             ),
-            listBuilder: ChoiceList.createWrapped(
-              spacing: 10,
-              runSpacing: 10,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            onSelected: state.onSelected(
+              sl<AsyncRandoms>().randomGeneratorNames[index],
             ),
+            label: Text(sl<AsyncRandoms>().randomGeneratorNames[index]),
           ),
-        ],
-      ),
+          listBuilder: ChoiceList.createWrapped(
+            spacing: 10,
+            runSpacing: 10,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+          ),
+        ),
+      ],
     );
   }
 }

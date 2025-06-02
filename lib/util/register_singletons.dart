@@ -1,19 +1,14 @@
-import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/managers/session_manager/session_manager.dart';
-import 'package:watch_it/watch_it.dart';
+import 'package:tarot_again/util/util.dart';
 
 // register all of our singletons with GetIt, right up front.
 void registerSingletons() {
+  sl.registerSingleton<Reactives>(Reactives());
   sl.registerSingleton<AsyncRandoms>(AsyncRandoms());
-  sl.registerSingleton<AssetProvider>(AssetProvider());
-  sl.registerSingleton<CardAssetsProvider>(CardAssetsProvider());
-  sl.registerSingleton<LayoutProvider>(LayoutProvider());
+  sl.registerSingleton<AssetManager>(AssetManager());
+  // sl.registerSingleton<CardAssetsProvider>(CardAssetsProvider());
+  sl.registerSingleton<LayoutManager>(LayoutManager());
   sl.registerSingleton<StandardDeckProvider>(StandardDeckProvider());
   sl.registerSingleton<AssetRepository>(AssetRepository());
-  // sl.registerSingleton<DeckManager>(DeckManager());
-  sl.registerSingleton<LayoutRepository>(LayoutRepository());
+  // sl.registerSingleton<LayoutManager>(LayoutManager());
   sl.registerSingleton<SessionManager>(SessionManager());
-  // sl.registerSingleton<BulkCardControlBloc>(BulkCardControlBloc());0.
-  // sl.registerSingleton<LayoutBloc>(LayoutBloc());
-  // sl.registerSingleton<SettingsBloc>(SettingsBloc());
 }

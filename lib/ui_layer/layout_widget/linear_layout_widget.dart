@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:signals/signals_flutter.dart';
 import 'package:tarot_again/ui_layer/card_widget/position_slot_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -11,21 +10,23 @@ class LinearLayoutWidget extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    verbose("build method");
+    verbose("LinearLayoutWidget.build method");
+
+    final Reactives reactives = sl<Reactives>();
+
+    verbose("  SessionManager.cardSlots.value is ${reactives.cardSlots}");
+    verbose(
+      "  SessionManager.cardSlots.value.length is ${reactives.cardSlots.value.length}",
+    );
 
     return Watch(
       (context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: sl<SessionManager>().tarotLayout.value.numCards
-            .repeat((index) => PositionSlotWidget(index: index))
-            .cast<Widget>()
+        children: reactives.cardSlots.value
+            .map((slotState) => PositionSlotWidget(slotState: slotState))
             .toList(),
-        // <Widget>[
-        //   for (var index
-        //       in sl<LayoutRepository>().tarotLayout.value.numCards.range())
-        //     PositionSlotWidget(index: index),
-        // ],
       ),
+      debugLabel: "LinearLayoutWidget",
     );
   }
 }

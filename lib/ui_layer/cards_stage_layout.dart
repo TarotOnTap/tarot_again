@@ -20,7 +20,7 @@ class CardsStageLayout extends StatelessWidget with Logging {
           touch: Touch.inside,
           child: Watch(
             (context) => Text(
-              LayoutRepository.tarotLayout.value.displayName,
+              tarotLayout.value.displayName,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),

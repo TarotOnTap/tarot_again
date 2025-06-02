@@ -7,21 +7,26 @@ import 'tc_minor_arcana_widget.dart';
 
 @immutable
 class DeckCardWidget extends StatelessWidget with Logging {
-  final DeckCard card;
+  final SlotState slotState;
 
-  const DeckCardWidget({super.key, required this.card});
+  const DeckCardWidget({super.key, required this.slotState});
 
   @override
-  Widget build(BuildContext context) => switch (card.tcCard.arcana) {
-    Arcana.major => TCMajorArcanaWidget(
-      assetName: card.tcCard.name,
-      card: card.tcCard,
-    ),
-    Arcana.minor => TCMinorArcanaWidget(
-      card: card.tcCard,
-      assetName: card.tcCard.name,
-    ),
-    // DeckInitial() => Column(children: [Text("Deck"), Text("Initial")]),
-    // DeckEmpty() => Column(children: [Text("Deck"), Text("Empty")]),
-  };
+  Widget build(BuildContext context) {
+    Widget retVal = Placeholder(
+      child: Text("DeckCardWidget: $slotState shouldn't ever get here"),
+    );
+
+    if (slotState.isDealt) {
+      final card = slotState.deckCard.value!;
+
+      Watch(
+        (context) => switch (card.arcana) {
+          Arcana.major => TCMajorArcanaWidget(slotState: slotState),
+          Arcana.minor => TCMinorArcanaWidget(slotState: slotState),
+        },
+      );
+    }
+    return retVal;
+  }
 }

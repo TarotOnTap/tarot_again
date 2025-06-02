@@ -7,8 +7,8 @@ import 'deck_card_widget.dart';
 
 export 'position_slot_widget.dart';
 
-part 'deck_empty_widget.dart';
-part 'deck_initial_widget.dart';
+part 'deck_empty_widget.dart'; // keep
+part 'deck_initial_widget.dart'; // keep
 
 @immutable
 class AnimatedColorCardBackWidget extends StatelessWidget {
@@ -108,32 +108,30 @@ class _CardColorBackState extends State<CardColorBack>
 
 @immutable
 class CardWidget extends StatelessWidget {
-  final int index;
-  final DeckCard deckCard;
+  // final Signal<SlotState> slotStateSignal;
+  final SlotState slotState;
 
-  const CardWidget({super.key, required this.index, required this.deckCard});
+  const CardWidget({super.key, required this.slotState});
 
   @override
   Widget build(BuildContext context) {
-    // return BlocBuilder<BulkCardControlBloc, BulkCardControlState>(
-    //   builder:
     return Watch(
-      (context) => RotatedBox(
-        quarterTurns: SessionManager.reversalsAllowed.value && deckCard.reversed
-            ? 2
-            : 0,
-        child: Container(
-          // width: 70,
-          // height: 120,
-          padding: const EdgeInsets.all(1.0),
-          // decoration: BoxDecoration(
-          //   border: Border.all(width: 1),
-          //   borderRadius: BorderRadius.circular(10),
-          // ),
-          alignment: Alignment.center,
-          child: DeckCardWidget(card: deckCard),
+      (context) => switch (slotState.isDealt) {
+        true => RotatedBox(
+          quarterTurns:
+              sl<Reactives>().reversalsAllowed.value && slotState.reversed.value
+              ? 2
+              : 0,
+          child: Container(
+            padding: const EdgeInsets.all(1.0),
+            alignment: Alignment.center,
+            child: DeckCardWidget(slotState: slotState),
+          ),
         ),
-      ),
+        _ => Placeholder(
+          child: Text("CardWidget: is not dealt; slotState: $slotState"),
+        ),
+      },
     );
   }
 }

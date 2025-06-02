@@ -2,97 +2,74 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/util/util.dart';
 
-class TCMinorArcanaWidget extends StatefulWidget {
+class PlaintextMinorArcanaWidget extends StatelessWidget with Logging {
   final TarotDeckCards card;
 
-  // final TCModelAssets? assets;
-  final String assetName;
+  PlaintextMinorArcanaWidget({super.key, required this.card});
+
+  @override
+  Widget build(BuildContext context) => Watch((context) {
+    // watch is only watching for changes in our theme, here
+    final theme = TextTheme.of(context);
+
+    final List<Widget> names = [
+      card.pips.name,
+      "of",
+      card.suit.name,
+    ].map((item) => Text(item, style: theme.titleSmall)).toList();
+
+    final List<Widget> columnChildren = [];
+
+    for (var item in names) {
+      columnChildren.add(item);
+      columnChildren.add(Gap(5));
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: columnChildren,
+    );
+  });
+}
+
+class TCMinorArcanaWidget extends StatelessWidget with Logging {
+  // final TarotDeckCards card;
+  final SlotState slotState;
 
   const TCMinorArcanaWidget({
     super.key,
-    required this.card,
-    required this.assetName,
+    required this.slotState,
+    // required this.card,
+    // required this.assetName,
     // this.assets,
   });
 
   @override
-  State<TCMinorArcanaWidget> createState() => _TCMinorArcanaWidgetState();
-}
-
-class _TCMinorArcanaWidgetState extends State<TCMinorArcanaWidget>
-    with Logging {
-  TCModelAssets? assets;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // sl<DeckRepository>().loadCardAssets(widget.card, setCardAssets);
-  }
-
-  // callback for loadCardAssets
-  void setCardAssets(TCModelAssets? newAssets) {
-    final lg = bufferedVerbose("TCMinorArcanaWidgetState.setCardAssets()");
-    lg.addln("  newAssets is '$newAssets'");
-    if (assets == null && newAssets != null) {
-      lg.addln("  setting assets to newAssets");
-      setState(() => assets = newAssets);
-    } else {
-      lg.addln("  not setting new assets.");
-    }
-
-    lg.commit();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Watch((context) {
     final lg = bufferedVerbose("TCMinorArcanaWidget.build()");
-    // lg.addln("  assetName is '$assetName'");
-    lg.addln("  card is ${widget.card}");
-    lg.addln("  assets is $assets");
+    lg.addln("  card is ${slotState.deckCard.value}");
+    lg.addln("  assets is ${slotState.assets.value}");
     Widget returnWidget = Placeholder(child: Text("TCMinorArcanaWidget"));
 
-    final theme = TextTheme.of(context);
+    if (slotState.isDealt) {
+      final card = slotState.deckCard.value!;
+      final assets = slotState.assets.value!;
 
-    final imageAsset = assets?.image;
-    lg.addln("  imageAsset is $imageAsset");
-    lg.commit();
+      final imageAsset = assets.image;
+      lg.addln("  imageAsset is $imageAsset");
+      lg.commit();
 
-    if (imageAsset != null) {
-      returnWidget = imageAsset.image(
-        errorBuilder:
-            (BuildContext context, Object error, StackTrace? stacktrace) {
-              final List<Widget> names = [
-                widget.card.pips.name,
-                "of",
-                widget.card.suit.name,
-              ].map((item) => Text(item, style: theme.titleSmall)).toList();
-
-              final List<Widget> columnChildren = [];
-
-              for (var item in names) {
-                columnChildren.add(item);
-                columnChildren.add(Gap(5));
-              }
-
-              // columnChildren.add(
-              //   Expanded(
-              //     flex: 4,
-              //     child: Text(
-              //       widget.card.romanNumber.name.toUpperCase(),
-              //       style: theme.titleSmall,
-              //     ),
-              //   ),
-              // );
-
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: columnChildren,
-              );
-            },
-      );
+      if (imageAsset != null) {
+        returnWidget = imageAsset.image(
+          errorBuilder:
+              (BuildContext context, Object error, StackTrace? stacktrace) =>
+                  PlaintextMinorArcanaWidget(card: card),
+        );
+      } else {
+        returnWidget = PlaintextMinorArcanaWidget(card: card);
+      }
     }
 
     return returnWidget;
-  }
+  });
 }

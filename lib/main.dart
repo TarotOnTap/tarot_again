@@ -10,15 +10,17 @@ void main() async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      initializeLoggingService();
+      Logging.staticVerbose("\n*******\nApp starting\n*******");
       // serviceLocatorConfig();
+
+      registerSingletons();
 
       ErrorWidget.builder = (FlutterErrorDetails details) {
         // If we're in debug mode, use the normal error widget which shows the error
         // message:
         return ErrorWidget(details.exception);
       };
-
-      await initializeEverything();
 
       // await _initFirebase();
       runApp(TarotAgainApp());
@@ -27,12 +29,6 @@ void main() async {
       sl<Talker>().handle(error, stack, 'Uncaught app exception');
     },
   );
-}
-
-Future<void> initializeEverything() async {
-  initializeLoggingService();
-
-  registerSingletons();
 }
 
 class TarotAgainApp extends StatelessWidget {

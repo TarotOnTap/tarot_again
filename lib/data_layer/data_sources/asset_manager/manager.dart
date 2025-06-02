@@ -1,41 +1,28 @@
 import 'package:flutter/services.dart';
 import 'package:tarot_again/util/util.dart';
 
-class AssetProvider extends BaseProvider with Logging {
-  static final Signal<IList<String>> allAssetPaths = signal(
-    const IList<String>.empty(),
-  );
+export 'types.dart';
 
-  static final Computed<IList<String>> deckAssetPaths = computed(() {
-    final String ds = SessionManager.deckString.value;
-    return allAssetPaths.value.where((path) => path.contains(ds)).toIList();
-  });
+class AssetManager with Logging {
+  AssetManager() {
+    verbose("AssetProvider.AssetProvider");
 
-  static final Computed<IList<String>> layoutAssetPaths = computed(
-    () => allAssetPaths.value
-        .where((path) => path.contains("assets/layouts"))
-        .toIList(),
-  );
-
-  static final Computed<IList<String>> tarotLayoutAssetPaths = computed(
-    () => layoutAssetPaths.value
-        .where((asset) => asset.contains("tarotLayouts"))
-        .toIList(),
-  );
-
-  AssetProvider() {
-    unawaited(_getAllAssetPaths());
+    // getAllAssetPaths().then((paths) {
+    //   allAssetPaths.value = paths.toIList();
+    // });
   }
 
-  Future<void> _getAllAssetPaths() async {
+  Future<Iterable<String>> getAllAssetPaths() async {
+    verbose("AssetProvider._getAllAssetPaths");
     final AssetManifest assetManifest = await AssetManifest.loadFromAssetBundle(
       rootBundle,
     );
 
-    allAssetPaths.value = assetManifest.listAssets().toIList();
+    return assetManifest.listAssets();
   }
 
   Future<String> loadMarkdownAsset(String assetPath) async {
+    verbose("AssetProvider.loadMarkdownAsset");
     String? result;
 
     try {

@@ -43,16 +43,9 @@ class AsyncRandoms extends BaseProvider with Logging {
 
   // AsyncRandoms._() {
   AsyncRandoms() {
+    verbose("AsyncRandoms.AsyncRandoms");
     setRandomSource(RandomGenerators.none.displayName);
   }
-
-  // factory AsyncRandoms() {
-  //   if (!sl.isRegistered<AsyncRandoms>()) {
-  //     return sl.registerSingleton<AsyncRandoms>(AsyncRandoms._());
-  //   }
-  //
-  //   return sl<AsyncRandoms>();
-  // }
 
   void setRandomSource(String name) {
     // this *always* inserts a new random generator of the source type, even if it's
@@ -67,17 +60,6 @@ class AsyncRandoms extends BaseProvider with Logging {
 
     currentProvider = currentGenerator.genCreator();
   }
-
-  // Future<(E, Iterable<E>)> getRandomElementFromIterable<E>(
-  //   Iterable<E> iterable,
-  // ) async {
-  //   final int index = await getNextInt(rangeHigh: iterable.length - 1);
-  //   Iterable<E> frontList = iterable.take(index);
-  //   Iterable<E> restList = iterable.skip(index + 1);
-  //   E element = iterable.elementAt(index);
-  //
-  //   return (element, frontList.followedBy(restList));
-  // }
 
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>
       currentProvider.getNextInt(rangeLow: rangeLow = 0, rangeHigh: rangeHigh);

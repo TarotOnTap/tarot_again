@@ -1,6 +1,4 @@
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
-// import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:tarot_again/managers/session_manager/session_manager.dart';
 import 'package:tarot_again/ui_layer/ui_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -14,7 +12,9 @@ class GridLayoutWidget extends StatelessWidget with Logging {
   Widget build(BuildContext context) => Watch(
     (context) => LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final int numCards = sl<SessionManager>().tarotLayout.value.numCards;
+        final Reactives reactives = sl<Reactives>();
+
+        final int numCards = tarotLayout.value.numCards;
 
         int numColumns = (constraints.maxWidth / 110.0).toInt();
 
@@ -30,20 +30,14 @@ class GridLayoutWidget extends StatelessWidget with Logging {
             columnGap: 10.0,
             rowGap: 10,
             autoPlacement: AutoPlacement.rowDense,
-            children: numCards
-                .repeat(
-                  (index) => GridPlacement(
-                    child: Center(child: PositionSlotWidget(index: index)),
+            children: [
+              for (var slotState in reactives.cardSlots.value)
+                GridPlacement(
+                  child: Center(
+                    child: PositionSlotWidget(slotState: slotState),
                   ),
-                )
-                .cast<Widget>()
-                .toList(),
-            // [
-            //       for (var index in numCards.range())
-            //         GridPlacement(
-            //           child: Center(child: PositionSlotWidget(index: index)),
-            //         ),
-            //     ],
+                ),
+            ].toList(),
           ),
         );
       },
