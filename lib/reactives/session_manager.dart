@@ -4,9 +4,9 @@ import 'package:tarot_again/util/util.dart';
 /// where a session is the total set of choices about a particular reading session -
 /// what deck is used, whether reversals are allowed, what layout is chosen,
 /// what cards are dealt into that layout, etc.
-class SessionManager with Logging {
+class SessionManager {
   SessionManager() {
-    verbose("SessionManager.SessionManager");
+    log("SessionManager.SessionManager");
     // this happens when the value of deckType, or the value of tarotLayout, changes.
     // We don't actually care about the
     // new value, we just need to reset the dealtCards list when these change.
@@ -17,43 +17,44 @@ class SessionManager with Logging {
   }
 
   void _emptySlots() {
-    untracked(() {
-      sl<Reactives>().cardsDealt.value = false;
+    untracked(
+      () => batch(() {
+        SignalsManager.cardsDealt.value = false;
 
-      for (var (slot) in sl<Reactives>().cardSlots.value) {
-        slot.deckCard.value = null;
-        slot.assets.value = null;
+        for (var (slot) in ComputedsManager.cardSlots.value) {
+          slot.deckCard.value = null;
+          slot.assets.value = null;
 
-        slot.faceUp.value = false;
-        slot.reversed.value = false;
+          slot.faceUp.value = false;
+          slot.reversed.value = false;
 
-        // slotName stays just as it is.
-      }
+          // slotName stays just as it is.
+        }
 
-      sl<Reactives>().allCardsFaceUp.value = false;
-    });
+        SignalsManager.allCardsFaceUp.value = false;
+      }),
+    );
   }
 
-  static Future<void> dealCards() async {
+  Future<void> dealCards() async {
     // requires that slots have already been laid out
-    Logging.staticVerbose("SessionManager._dealCards");
-
-    final Reactives reactives = sl<Reactives>();
+    log("SessionManager.dealCards");
 
     final AsyncRandoms ar = sl<AsyncRandoms>();
-    // final AssetRepository assetRepo = sl<AssetRepository>();
 
-    if (tarotLayout.value is! NullLayout) {
-      Logging.staticVerbose("  tarotLayout.value is ${tarotLayout.value}");
+    if (SignalsManager.tarotLayout.value is! NullLayout) {
+      Logging.staticVerbose(
+        "  tarotLayout.value is ${SignalsManager.tarotLayout.value}",
+      );
 
       Logging.staticVerbose(
-        "  cardsDealt.value is ${reactives.cardsDealt.value}",
+        "  cardsDealt.value is ${SignalsManager.cardsDealt.value}",
       );
-      if (!reactives.cardsDealt.value) {
+      if (!SignalsManager.cardsDealt.value) {
         await StandardDeckProvider.shuffleDeck();
 
-        final int howMany = tarotLayout.value.numCards;
-        Logging.staticVerbose("  howMany is $howMany");
+        final int howMany = SignalsManager.tarotLayout.value.numCards;
+        log("  howMany is $howMany");
 
         // after switching shuffledDeck on StandardDeckProvider to an asyncSignal,
         // we shouldn't ever have an empty deck. Instead, the deck is initialized
@@ -61,11 +62,13 @@ class SessionManager with Logging {
         // been given. This way, we're never trying to deal from a deck that hasn't been
         // shuffled.
 
-        if (reactives.shuffledDeck.value.isNotEmpty) {
+        if (SignalsManager.shuffledDeck.value.isNotEmpty) {
           Logging.staticVerbose("  shuffledDeck.isNotEmpty");
-          final Iterable<TarotDeckCards> cards = reactives.shuffledDeck.value
+          final Iterable<TarotDeckCards> cards = SignalsManager
+              .shuffledDeck
+              .value
               .take(howMany);
-          // final Iterable<SlotState> slots = ;
+
           final Iterable<bool> reversals = await [
             for (var _ in howMany.range()) ar.getNextBool(),
           ].wait;
@@ -76,7 +79,7 @@ class SessionManager with Logging {
               )
               in zipIt([
                 cards,
-                reactives.cardSlots.value as Iterable<SlotState>,
+                ComputedsManager.cardSlots.value as Iterable<SlotState>,
                 reversals,
               ]).indexed) {
             Logging.staticVerbose(
@@ -90,7 +93,7 @@ class SessionManager with Logging {
           }
 
           Logging.staticVerbose("  calling _loadAssets for each card");
-          for (var slotState in reactives.cardSlots.value) {
+          for (var slotState in ComputedsManager.cardSlots.value) {
             Logging.staticVerbose(
               "  before loadAssets: slotState is $slotState",
             );
@@ -100,50 +103,35 @@ class SessionManager with Logging {
             );
           }
 
-          // cardSlots.value.forEach(_loadAssets);
-
           Logging.staticVerbose("  setting cardsDealt.value to true");
-          reactives.cardsDealt.value = true;
+          SignalsManager.cardsDealt.value = true;
         }
       }
     }
   }
 
   void changeDeckName(StandardTarotDecksEnum newName) =>
-      sl<Reactives>().deckName.value = newName;
+      SignalsManager.deckName.value = newName;
 
   void changeDeckType(DeckTypesEnum newType) =>
-      sl<Reactives>().deckType.value = newType;
+      SignalsManager.deckType.value = newType;
 
   void changeCardBacks() {}
 
   void selectLayout() {}
 
-  void turnAllCardsFaceUp() => sl<Reactives>().allCardsFaceUp.value = true;
+  void turnAllCardsFaceUp() => SignalsManager.allCardsFaceUp.value = true;
 
-  void turnAllCardsFaceDown() => sl<Reactives>().allCardsFaceUp.value = false;
+  void turnAllCardsFaceDown() => SignalsManager.allCardsFaceUp.value = false;
 
-  void flipAllCardsFace() => sl<Reactives>().allCardsFaceUp.value =
-      !sl<Reactives>().allCardsFaceUp.value;
+  void flipAllCardsFace() => SignalsManager.allCardsFaceUp.value =
+      !SignalsManager.allCardsFaceUp.value;
 
-  void allowReversals() => sl<Reactives>().reversalsAllowed.value = true;
+  void allowReversals() => SignalsManager.reversalsAllowed.value = true;
 
-  void disallowReversals() => sl<Reactives>().reversalsAllowed.value = false;
+  void disallowReversals() => SignalsManager.reversalsAllowed.value = false;
 
   bool _isDealt(SlotState slot) => slot.deckCard.value != null;
-
-  // Option<SlotState> _getSlotByIndex(int index) =>
-  //     sl<Reactives>().cardSlots.value.isNotEmpty
-  //     ? Option<SlotState>.of(sl<Reactives>().cardSlots.value[index])
-  //     : Option<SlotState>.none();
-  //
-  // Option<SlotState> _getDealtByIndex(int index) =>
-  //     sl<Reactives>().cardSlots.value.isNotEmpty
-  //     ? switch (_isDealt(sl<Reactives>().cardSlots.value[index])) {
-  //         true => Option<SlotState>.of(sl<Reactives>().cardSlots.value[index]),
-  //         _ => Option<SlotState>.none(),
-  //       }
-  //     : Option<SlotState>.none();
 
   void setCardFaceUp(SlotState slot) {
     if (_isDealt(slot)) {

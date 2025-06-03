@@ -14,7 +14,7 @@ void main() async {
       Logging.staticVerbose("\n*******\nApp starting\n*******");
       // serviceLocatorConfig();
 
-      registerSingletons();
+      await registerSingletons();
 
       ErrorWidget.builder = (FlutterErrorDetails details) {
         // If we're in debug mode, use the normal error widget which shows the error

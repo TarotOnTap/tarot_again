@@ -119,7 +119,7 @@ class CardWidget extends StatelessWidget {
       (context) => switch (slotState.isDealt) {
         true => RotatedBox(
           quarterTurns:
-              sl<Reactives>().reversalsAllowed.value && slotState.reversed.value
+              SignalsManager.reversalsAllowed.value && slotState.reversed.value
               ? 2
               : 0,
           child: Container(
@@ -132,6 +132,7 @@ class CardWidget extends StatelessWidget {
           child: Text("CardWidget: is not dealt; slotState: $slotState"),
         ),
       },
+      debugLabel: "CardWidget",
     );
   }
 }

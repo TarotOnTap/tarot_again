@@ -12,17 +12,20 @@ class LinearLayoutWidget extends StatelessWidget with Logging {
   Widget build(BuildContext context) {
     verbose("LinearLayoutWidget.build method");
 
-    final Reactives reactives = sl<Reactives>();
+    // final SignalsManager sm = sl<SignalsManager>();
+    // final ComputedsManager cm = sl<ComputedsManager>();
 
-    verbose("  SessionManager.cardSlots.value is ${reactives.cardSlots}");
     verbose(
-      "  SessionManager.cardSlots.value.length is ${reactives.cardSlots.value.length}",
+      "  SessionManager.cardSlots.value is ${ComputedsManager.cardSlots}",
+    );
+    verbose(
+      "  SessionManager.cardSlots.value.length is ${ComputedsManager.cardSlots.value.length}",
     );
 
     return Watch(
       (context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: reactives.cardSlots.value
+        children: ComputedsManager.cardSlots.value
             .map((slotState) => PositionSlotWidget(slotState: slotState))
             .toList(),
       ),

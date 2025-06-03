@@ -12,9 +12,7 @@ class GridLayoutWidget extends StatelessWidget with Logging {
   Widget build(BuildContext context) => Watch(
     (context) => LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final Reactives reactives = sl<Reactives>();
-
-        final int numCards = tarotLayout.value.numCards;
+        final int numCards = SignalsManager.tarotLayout.value.numCards;
 
         int numColumns = (constraints.maxWidth / 110.0).toInt();
 
@@ -31,7 +29,7 @@ class GridLayoutWidget extends StatelessWidget with Logging {
             rowGap: 10,
             autoPlacement: AutoPlacement.rowDense,
             children: [
-              for (var slotState in reactives.cardSlots.value)
+              for (var slotState in ComputedsManager.cardSlots.value)
                 GridPlacement(
                   child: Center(
                     child: PositionSlotWidget(slotState: slotState),

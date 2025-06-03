@@ -58,10 +58,11 @@ class PositionSlotWidget extends StatelessWidget with Logging {
                   false => NoCardDealt(),
                   true => Watch(
                     (context) =>
-                        sl<Reactives>().allCardsFaceUp.value ||
+                        SignalsManager.allCardsFaceUp.value ||
                             slotState.faceUp.value
                         ? CardWidget(slotState: slotState)
                         : CardColorBack(),
+                    debugLabel: "PositionSlotWidget",
                   ),
                 },
               ),

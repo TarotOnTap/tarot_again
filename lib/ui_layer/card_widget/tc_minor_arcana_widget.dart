@@ -29,7 +29,7 @@ class PlaintextMinorArcanaWidget extends StatelessWidget with Logging {
       mainAxisAlignment: MainAxisAlignment.start,
       children: columnChildren,
     );
-  });
+  }, debugLabel: "PlaintextMinorArcanaWidget");
 }
 
 class TCMinorArcanaWidget extends StatelessWidget with Logging {

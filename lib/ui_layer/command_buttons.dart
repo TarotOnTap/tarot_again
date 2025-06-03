@@ -65,9 +65,8 @@ class CommandButtons extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    final LayoutManager lr = sl<LayoutManager>();
+    final LayoutManager lm = sl<LayoutManager>();
     final SessionManager sm = sl<SessionManager>();
-    // final Reactives reactives = sl<Reactives>();
 
     return Column(
       children: <Widget>[
@@ -81,7 +80,7 @@ class CommandButtons extends StatelessWidget with Logging {
           ],
         ),
         ElevatedButton(
-          onPressed: () async => await SessionManager.dealCards(),
+          onPressed: () async => await sm.dealCards(),
 
           child: Text("Deal cards"),
         ),
@@ -91,24 +90,30 @@ class CommandButtons extends StatelessWidget with Logging {
         ),
 
         Gap(30),
-        Watch(
-          (context) => PromptedChoice<String>.single(
+        Watch((context) {
+          final tL = SignalsManager.tarotLayout.value;
+          verbose("  tarotLayout.value is $tL");
+
+          final lDN = ComputedsManager.layoutDisplayNames.value;
+          verbose("  layoutDisplayNames.value is $lDN");
+
+          return PromptedChoice<String>.single(
             title: "Select a layout",
             clearable: true,
-            value: tarotLayout.value.displayName,
+            value: tL.displayName,
             // this changes after setNewLayout is called
             onChanged: (String? value) {
               if (value != null) {
                 verbose("  onChanged: value is $value");
-                lr.setLayoutByDisplayName(value);
+                lm.setLayoutByDisplayName(value);
               }
             },
-            itemCount: layoutDisplayNames.value.length,
+            itemCount: lDN.length,
             itemBuilder: (state, i) {
               return ChoiceChip(
-                selected: state.selected(layoutDisplayNames.value[i]),
-                onSelected: state.onSelected(layoutDisplayNames.value[i]),
-                label: Text(layoutDisplayNames.value[i]),
+                selected: state.selected(lDN[i]),
+                onSelected: state.onSelected(lDN[i]),
+                label: Text(lDN[i]),
               );
             },
             listBuilder: ChoiceList.createWrapped(
@@ -116,9 +121,8 @@ class CommandButtons extends StatelessWidget with Logging {
               runSpacing: 10,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
             ),
-          ),
-          debugLabel: "Layout choice",
-        ),
+          );
+        }, debugLabel: "Layout choice"),
         Gap(5),
         PromptedChoice<String>.single(
           title: "Select a source of randomness",

@@ -29,11 +29,14 @@ Iterable<List<T>> zipIt<T>(Iterable<Iterable<T>> iterables) sync* {
   }
 }
 
-abstract class Singleton {
-  /// This constructor does one thing - it registers the newly created instance of this
-  /// type with GetIt.  This has the potential to be messy if the constructor is called
-  /// more than once, so don't.
-  static void selfRegister() {}
+abstract class PostInit {
+  // each singleton may have a function postInit that will be invoked after
+  // the singleton is initialized. This allows all of the singletons to be
+  // registered with get it and initialized, to avoid references to
+  // uncreated objects.
+  // Subclass' postInit functions should invoke super.postInit() as the last item
+  // in their own postInit functions.
+  Future<void> postInit();
 }
 
 abstract class ReactiveState {}

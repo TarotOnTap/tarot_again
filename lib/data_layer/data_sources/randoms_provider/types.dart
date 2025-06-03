@@ -22,7 +22,7 @@ abstract class RandomsProvider {
   Future<bool> getNextBool();
 }
 
-class AsyncRandoms extends BaseProvider with Logging {
+class AsyncRandoms with Logging {
   IList<String> _randomGeneratorNames = const IList<String>.empty();
 
   // lazy loaded. Not really needed, unless we switch to a dynamically-loaded

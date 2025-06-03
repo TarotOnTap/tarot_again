@@ -2,6 +2,7 @@ import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:watch_it/watch_it.dart';
 
 export 'dart:async' hide AsyncError;
+export 'dart:developer';
 
 export 'package:async/async.dart';
 export 'package:change_case/change_case.dart';

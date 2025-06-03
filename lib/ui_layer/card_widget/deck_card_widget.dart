@@ -25,6 +25,7 @@ class DeckCardWidget extends StatelessWidget with Logging {
           Arcana.major => TCMajorArcanaWidget(slotState: slotState),
           Arcana.minor => TCMinorArcanaWidget(slotState: slotState),
         },
+        debugLabel: "DeckCardWidget",
       );
     }
     return retVal;
