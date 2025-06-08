@@ -1,19 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:tarot_again/ui_layer/card_widget/position_slot_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
 class ComputedsManager {
-  static final Computed<IList<SlotState>> cardSlots = computed(
-    () => switch (SignalsManager.tarotLayout.value) {
-      NullLayout _ => const IList<SlotState>.empty(),
-      _ => untracked(
-        () => [
-          for (var i in SignalsManager.tarotLayout.value.numCards.range())
-            SlotState(slotIndex: i),
-        ].toIList(),
-      ),
-    },
-    debugLabel: "cardSlots",
-  );
-
   static final Computed<String> deckString = computed(
     () =>
         "decks/${SignalsManager.deckType.value.name}/${SignalsManager.deckName.value.name}",
@@ -53,6 +42,28 @@ class ComputedsManager {
     debugLabel: "deckAssetPaths",
   );
 
+  static final Computed<IList<GlobalKey<PositionSlotWidgetState>>>
+  slotKeys = computed(
+    () => switch (SignalsManager.tarotLayout.value) {
+      NullLayout _ => const IList<GlobalKey<PositionSlotWidgetState>>.empty(),
+      HorizontalLinear hl =>
+        hl.slotNames
+            .map(
+              (slotName) =>
+                  GlobalKey<PositionSlotWidgetState>(debugLabel: slotName),
+            )
+            .toIList(),
+      SimpleGrid sg =>
+        sg.numCards
+            .range()
+            .map(
+              (index) =>
+                  GlobalKey<PositionSlotWidgetState>(debugLabel: "slot $index"),
+            )
+            .toIList(),
+    },
+  );
+
   static final Computed<Iterable<String>> tarotLayoutAssetPaths = computed(
     () => SignalsManager.allAssetPaths.value.where(
       (path) => path.contains("assets/layouts"),
@@ -62,7 +73,7 @@ class ComputedsManager {
   );
 
   void ensureComputeds() {
-    var _ = cardSlots.value;
+    // var _ = cardSlots.value;
     var _ = deckString.value;
     var _ = layoutAssetPaths.value;
     var _ = layoutDisplayNames.value;

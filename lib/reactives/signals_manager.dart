@@ -14,21 +14,16 @@ class SignalsManager {
     debugLabel: "cardBackStyle",
   );
 
-  static final Signal<bool> cardsDealt = signal<bool>(
-    false,
-    debugLabel: "cardsDealt",
-  );
-
-  static final Signal<DeckTypesEnum> deckType = signal<DeckTypesEnum>(
-    DeckTypesEnum.standardTarot,
-    debugLabel: "deckType",
-  );
-
   static final Signal<StandardTarotDecksEnum> deckName =
       signal<StandardTarotDecksEnum>(
         StandardTarotDecksEnum.rws,
         debugLabel: "deckName",
       );
+
+  static final Signal<DeckTypesEnum> deckType = signal<DeckTypesEnum>(
+    DeckTypesEnum.standardTarot,
+    debugLabel: "deckType",
+  );
 
   static final Signal<bool> reversalsAllowed = signal<bool>(
     true,
@@ -56,7 +51,7 @@ class SignalsManager {
       allAssetPaths,
       allCardsFaceUp,
       cardBackStyle,
-      cardsDealt,
+      // cardsDealt,
       deckType,
       deckName,
       shuffledDeck,

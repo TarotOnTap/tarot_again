@@ -28,14 +28,20 @@ class GridLayoutWidget extends StatelessWidget with Logging {
             columnGap: 10.0,
             rowGap: 10,
             autoPlacement: AutoPlacement.rowDense,
-            children: [
-              for (var slotState in ComputedsManager.cardSlots.value)
-                GridPlacement(
-                  child: Center(
-                    child: PositionSlotWidget(slotState: slotState),
+            children: layoutDetails.numCards
+                .range()
+                .map(
+                  (index) => GridPlacement(
+                    child: Center(
+                      child: PositionSlotWidget(
+                        key: ComputedsManager.slotKeys.value[index],
+                        slotIndex: index,
+                        slotName: "slot $index",
+                      ),
+                    ),
                   ),
-                ),
-            ].toList(),
+                )
+                .toList(),
           ),
         );
       },

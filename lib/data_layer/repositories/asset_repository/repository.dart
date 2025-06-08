@@ -6,17 +6,18 @@ class AssetRepository {
     log("AssetRepository.AssetRepository");
   }
 
-  static Future<void> loadAssetsForSlot({required SlotState slot}) async {
-    log("AssetRepository.loadAssetsForCard: $slot");
-    if (slot.deckCard.value != null) {
-      log("  slot.deckCard.value is ${slot.deckCard.value}");
-      final assets = await sl<AssetManager>().loadAssetsForCard(
-        slot.deckCard.value!,
-      );
+  static Future<TCModelAssets?> loadAssetsForCard({
+    required TarotDeckCards card,
+  }) async {
+    log("AssetRepository.loadAssetsForCard: $card");
+    if (card != TarotDeckCards.noneCard) {
+      log("  card is $card");
+      final assets = await sl<AssetManager>().loadAssetsForCard(card);
       log("  assets is $assets");
 
-      slot.assets.value = assets;
-      log("  slot changed to $slot");
+      return assets;
     }
+
+    return null;
   }
 }

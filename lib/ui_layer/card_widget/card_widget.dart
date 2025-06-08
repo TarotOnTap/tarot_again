@@ -1,14 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:tarot_again/ui_layer/card_widget/tc_arcana_widget.dart';
 import 'package:tarot_again/util/util.dart';
-
-import 'deck_card_widget.dart';
 
 export 'position_slot_widget.dart';
 
-part 'deck_empty_widget.dart'; // keep
-part 'deck_initial_widget.dart'; // keep
+// part 'deck_empty_widget.dart'; // keep
+// part 'deck_initial_widget.dart'; // keep
 
 @immutable
 class AnimatedColorCardBackWidget extends StatelessWidget {
@@ -108,7 +107,6 @@ class _CardColorBackState extends State<CardColorBack>
 
 @immutable
 class CardWidget extends StatelessWidget {
-  // final Signal<SlotState> slotStateSignal;
   final SlotState slotState;
 
   const CardWidget({super.key, required this.slotState});
@@ -116,22 +114,18 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Watch(
-      (context) => switch (slotState.isDealt) {
-        true => RotatedBox(
-          quarterTurns:
-              SignalsManager.reversalsAllowed.value && slotState.reversed.value
-              ? 2
-              : 0,
-          child: Container(
-            padding: const EdgeInsets.all(1.0),
-            alignment: Alignment.center,
-            child: DeckCardWidget(slotState: slotState),
-          ),
+      (context) => RotatedBox(
+        quarterTurns:
+            SignalsManager.reversalsAllowed.value &&
+                slotState.reversal == ReversalEnum.reversed
+            ? 2
+            : 0,
+        child: Container(
+          padding: const EdgeInsets.all(1.0),
+          alignment: Alignment.center,
+          child: TCArcanaWidget(slotState: slotState),
         ),
-        _ => Placeholder(
-          child: Text("CardWidget: is not dealt; slotState: $slotState"),
-        ),
-      },
+      ),
       debugLabel: "CardWidget",
     );
   }

@@ -29,7 +29,7 @@ enum RomanNumerals {
 }
 
 @JsonEnum()
-enum Arcana { major, minor }
+enum Arcana { major, minor, none }
 
 @JsonEnum()
 enum TarotDeckCards {
@@ -478,6 +478,11 @@ enum TarotDeckCards {
     arcana: Arcana.minor,
     suit: Suits.pentacles,
     pips: Pips.king,
+  ),
+  noneCard(
+    displayName: "None",
+    romanNumber: RomanNumerals.none,
+    arcana: Arcana.none,
   );
 
   final String displayName;

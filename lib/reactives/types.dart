@@ -1,5 +1,7 @@
 import 'package:tarot_again/util/util.dart';
 
+part 'types.freezed.dart';
+
 // @JsonEnum()
 enum StandardTarotDecksEnum {
   rws(displayName: "RWS");
@@ -19,30 +21,38 @@ enum DeckTypesEnum {
   final String displayName;
 }
 
-final class SlotState {
-  late final Signal<TarotDeckCards?> deckCard;
-  late final Signal<bool> faceUp;
-  late final Signal<bool> reversed;
-  late final Signal<TCModelAssets?> assets;
-  late final Signal<String> slotName;
+enum ShowingFaceEnum {
+  front(displayName: "Front"),
+  back(displayName: "Back");
 
-  final int slotIndex;
+  const ShowingFaceEnum({required this.displayName});
 
-  SlotState({required this.slotIndex}) {
-    deckCard = signal(null, debugLabel: "deckCard slot[$slotIndex]");
-    faceUp = signal(false, debugLabel: "faceUp slot[$slotIndex]");
-    reversed = signal(false, debugLabel: "reversed slot[$slotIndex]");
-    assets = signal(null, debugLabel: "assets slot[$slotIndex]");
-    slotName = signal("", debugLabel: "slotName slot[$slotIndex]");
-  }
+  final String displayName;
+}
 
-  bool get isDealt => deckCard.value != null;
+enum ReversalEnum {
+  upright(displayName: "Upright"),
+  reversed(displayName: "Reversed");
 
-  bool get hasAssets => assets.value != null;
+  const ReversalEnum({required this.displayName});
 
-  @override
-  String toString() {
-    return "SlotState(slotIndex: $slotIndex, slotName: $slotName\n"
-        "  deckCard: $deckCard,\n  faceUp: $faceUp,\n  reversed: $reversed,\n  assets: $assets\n)";
-  }
+  final String displayName;
+}
+
+@freezed
+abstract class SlotState with _$SlotState {
+  const SlotState._();
+
+  const factory SlotState({
+    @Default(TarotDeckCards.noneCard) TarotDeckCards deckCard,
+    @Default(ShowingFaceEnum.back) ShowingFaceEnum showingFace,
+    @Default(ReversalEnum.upright) ReversalEnum reversal,
+    @Default(null) TCModelAssets? assets,
+    required String slotName,
+    required int slotIndex,
+  }) = _SlotState;
+
+  bool get isDealt => deckCard != TarotDeckCards.noneCard;
+
+  bool get hasAssets => assets != null;
 }

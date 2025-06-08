@@ -41,6 +41,15 @@ abstract class PostInit {
 
 abstract class ReactiveState {}
 
-class Manager<R extends ReactiveState> with Logging {
-  final R reactives = sl<R>();
+// class Manager<R extends ReactiveState> with Logging {
+//   final R reactives = sl<R>();
+// }
+
+class ImmutableSignal<T> extends Signal<T> with TrackedSignalMixin<T> {
+  ImmutableSignal(super.value, {super.debugLabel}) {
+    effect(() => log("  previous value is $this.previousValue"));
+  }
 }
+
+ImmutableSignal<T> immutableSignal<T>(T value, {String? debugLabel}) =>
+    ImmutableSignal<T>(value, debugLabel: debugLabel);

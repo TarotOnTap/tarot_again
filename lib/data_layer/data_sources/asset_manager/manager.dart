@@ -28,18 +28,18 @@ class AssetManager implements PostInit {
     var assetPaths = <String>[];
 
     try {
-      log("  loading asset manifest from asset bundle");
+      // log("  loading asset manifest from asset bundle");
       assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-      log("  asset manifest loaded from asset bundle");
+      // log("  asset manifest loaded from asset bundle");
       log("  assetManifest is $assetManifest");
-      log("  assetManifest.listAssets() is ${assetManifest.listAssets()}");
+      // log("  assetManifest.listAssets() is ${assetManifest.listAssets()}");
       assetPaths = assetManifest.listAssets();
     } catch (e, s) {
       log("  loadFromAssetBundle raised error $e");
       assetPaths = [e.toString(), s.toString()];
     }
 
-    log("  assetManifest.listAssets() is '${assetManifest?.listAssets()}'");
+    // log("  assetManifest.listAssets() is '${assetManifest?.listAssets()}'");
 
     return assetPaths;
   }
@@ -59,17 +59,17 @@ class AssetManager implements PostInit {
     String assetData = "";
 
     try {
-      log("trying rootBundle.loadString on layoutAsset");
+      // log("trying rootBundle.loadString on layoutAsset");
       assetData = await rootBundle.loadString(layoutAsset);
-      log("  assetData is $assetData");
+      // log("  assetData is $assetData");
 
       if (assetData.isNotEmpty) {
-        log("  assetData is not empty");
+        // log("  assetData is not empty");
         final resultMap = jsonDecode(assetData);
-        log("  resultMap is $resultMap");
+        // log("  resultMap is $resultMap");
 
         retVal = TarotLayout.fromJson(resultMap);
-        log("  retVal is $retVal");
+        // log("  retVal is $retVal");
       }
     } catch (e) {
       log("loadLayout raised error $e on asset string $layoutAsset");
@@ -130,37 +130,44 @@ class AssetManager implements PostInit {
     log("  cardAssets is $cardAssets");
 
     if (cardAssets.isNotEmpty) {
+      String? description;
+      String? reversedMeaning;
+      String? uprightMeaning;
+      AssetGenImage? image;
+
       retVal = TCModelAssets();
 
       for (var asset in cardAssets) {
         final assetPathParts = asset.split("/");
 
         final String assetName = assetPathParts.last;
-        final String assetKind = assetPathParts[assetPathParts.length - 1];
+        final String assetKind = assetPathParts[assetPathParts.length - 2];
 
-        final IList<String> info = assetName.split(".").toIList();
-        final String fileType = info[1];
+        final String fileType = assetName.split(".").last;
 
         switch (assetKind) {
           case "descriptions":
-            String description = await loadMarkdownAsset(asset);
-            retVal = retVal?.copyWith(description: description);
+            description = await loadMarkdownAsset(asset);
 
           case "reversedMeanings":
-            String reversed = await loadMarkdownAsset(asset);
-            retVal = retVal?.copyWith(reversedMeaning: reversed);
+            reversedMeaning = await loadMarkdownAsset(asset);
 
           case "uprightMeanings":
-            String upright = await loadMarkdownAsset(asset);
-            retVal = retVal?.copyWith(uprightMeaning: upright);
+            uprightMeaning = await loadMarkdownAsset(asset);
 
           case "images":
             if (["jpg", "jpeg", "png", "gif"].contains(fileType)) {
-              // AssetGenImage image = AssetGenImage(asset);
-              retVal = retVal?.copyWith(image: AssetGenImage(asset));
+              image = AssetGenImage(asset);
             }
         }
       }
+
+      retVal = TCModelAssets(
+        description: description,
+        reversedMeaning: reversedMeaning,
+        uprightMeaning: uprightMeaning,
+        image: image,
+      );
     }
 
     return retVal;

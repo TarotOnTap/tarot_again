@@ -3,73 +3,144 @@ import 'package:tarot_again/util/util.dart';
 import 'package:toastification/toastification.dart';
 
 import 'card_widget.dart';
+import 'no_card_dealt_widget.dart';
 
 @immutable
-class NoCardDealt extends StatelessWidget {
-  const NoCardDealt({super.key});
+class SelectSlotWidget extends StatelessWidget with Logging {
+  final SlotState slotState;
+
+  SelectSlotWidget({super.key, required this.slotState});
 
   @override
   Widget build(BuildContext context) {
-    // TODO I think I would prefer to display an icon here to plain text.
-    return SizedBox(width: 70, height: 120, child: Center(child: Text("?")));
+    if (slotState.deckCard == TarotDeckCards.noneCard) {
+      return NoCardDealt();
+    }
+
+    return Watch((context) {
+      if (SignalsManager.allCardsFaceUp.value ||
+          slotState.showingFace == ShowingFaceEnum.front) {
+        return CardWidget(slotState: slotState);
+      } else {
+        // verbose("  returning CardColorBack()");
+        return CardColorBack();
+      }
+    }, debugLabel: "SelectSlotWidget");
   }
 }
 
-@immutable
-class PositionSlotWidget extends StatelessWidget with Logging {
-  // final int index;
-  final SlotState slotState;
+class PositionSlotWidget extends StatefulWidget {
+  final String slotName;
+  final int slotIndex;
 
-  PositionSlotWidget({
+  const PositionSlotWidget({
     super.key,
-    // required this.index,
-    required this.slotState,
-  }) {
-    verbose("PositionSlotWidget constructor; slotState is $slotState");
-  }
+    required this.slotName,
+    required this.slotIndex,
+  });
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    width: 88,
-    height: 170,
-    child: Container(
-      foregroundDecoration: BoxDecoration(
-        border: Border.all(width: 1.0),
-        borderRadius: BorderRadius.all(Radius.circular(2.0)),
-      ),
+  State<PositionSlotWidget> createState() => PositionSlotWidgetState();
+}
 
-      child: Watch(
-        (context) => Column(
-          children: <Widget>[
-            Text(slotState.slotName.value),
-            Expanded(
-              child: GestureDetector(
-                onDoubleTap: () =>
-                    slotState.faceUp.value = !slotState.faceUp.value,
-                onSecondaryTap: () => toastification.show(
-                  title: Text("onSecondaryTap handler"),
-                  style: ToastificationStyle.flat,
-                  autoCloseDuration: const Duration(seconds: 3),
-                  description: RichText(
-                    text: const TextSpan(text: 'received a secondary tap. '),
-                  ),
-                ),
-                child: switch (slotState.isDealt) {
-                  false => NoCardDealt(),
-                  true => Watch(
-                    (context) =>
-                        SignalsManager.allCardsFaceUp.value ||
-                            slotState.faceUp.value
-                        ? CardWidget(slotState: slotState)
-                        : CardColorBack(),
-                    debugLabel: "PositionSlotWidget",
-                  ),
-                },
-              ),
-            ),
-          ],
+class PositionSlotWidgetState extends State<PositionSlotWidget> {
+  late SlotState slotState;
+
+  @override
+  void initState() {
+    super.initState();
+
+    slotState = SlotState(
+      slotName: widget.slotName,
+      slotIndex: widget.slotIndex,
+    );
+  }
+
+  Future<void> setCard(TarotDeckCards card) async {
+    if (card == TarotDeckCards.noneCard) {
+      setState(
+            () =>
+        slotState = SlotState(
+          slotIndex: slotState.slotIndex,
+          slotName: slotState.slotName,
         ),
-      ),
-    ),
-  );
+      );
+    } else {
+      final assets = await sl<AssetManager>().loadAssetsForCard(card);
+      final reversed = await sl<AsyncRandoms>().getNextInt(rangeHigh: 1);
+      final ReversalEnum reversal = reversed == 0
+          ? ReversalEnum.upright
+          : ReversalEnum.reversed;
+
+      setState(
+            () =>
+        slotState = slotState.copyWith(
+          deckCard: card,
+          assets: assets,
+          reversal: reversal,
+        ),
+      );
+    }
+  }
+
+  void setFaceUp(ShowingFaceEnum showingFace) =>
+      setState(
+            () =>
+        slotState = slotState.copyWith(showingFace: ShowingFaceEnum.front),
+      );
+
+  void setFaceDown(ShowingFaceEnum showingFace) =>
+      setState(
+            () =>
+        slotState = slotState.copyWith(showingFace: ShowingFaceEnum.back),
+      );
+
+  void flipFaceUp() =>
+      setState(
+            () =>
+        slotState = slotState.copyWith(
+          showingFace: slotState.showingFace == ShowingFaceEnum.front
+              ? ShowingFaceEnum.back
+              : ShowingFaceEnum.front,
+        ),
+      );
+
+  void setReversal(ReversalEnum reversal) =>
+      setState(() => slotState = slotState.copyWith(reversal: reversal));
+
+  @override
+  Widget build(BuildContext context) =>
+      SizedBox(
+        width: 88,
+        height: 170,
+        child: Container(
+          foregroundDecoration: BoxDecoration(
+            border: Border.all(width: 1.0),
+            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+          ),
+
+          child: Column(
+            children: <Widget>[
+              Text(widget.slotName),
+
+              Expanded(
+                child: GestureDetector(
+                  onDoubleTap: () => flipFaceUp(),
+                  onSecondaryTap: () =>
+                      toastification.show(
+                        title: Text("onSecondaryTap handler"),
+                        style: ToastificationStyle.flat,
+                        autoCloseDuration: const Duration(seconds: 3),
+                        description: RichText(
+                          text: const TextSpan(
+                              text: 'received a secondary tap. '),
+                        ),
+                      ),
+                  child: SelectSlotWidget(slotState: slotState),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }
