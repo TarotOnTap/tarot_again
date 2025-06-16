@@ -68,10 +68,10 @@ class _CardColorBackState extends State<CardColorBack>
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    );
+    final bias = Random.secure().nextInt(1000) - 500;
+    final duration = Duration(milliseconds: 3000 + bias);
+
+    controller = AnimationController(duration: duration, vsync: this);
 
     colorAnimation = colorCycle.animate(controller)
       ..addStatusListener(animationStatusListener);
