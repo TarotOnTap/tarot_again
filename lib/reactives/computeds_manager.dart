@@ -54,8 +54,7 @@ class ComputedsManager {
             )
             .toIList(),
       SimpleGrid sg =>
-        sg.numCards
-            .range()
+        sg.numCards.range
             .map(
               (index) =>
                   GlobalKey<PositionSlotWidgetState>(debugLabel: "slot $index"),
@@ -71,6 +70,11 @@ class ComputedsManager {
 
     debugLabel: "layoutAssetPaths",
   );
+
+  // static final tarotLayoutDescription = computedAsync(() => sl<AssetManager>().loadMarkdownAsset(
+  //   "",
+  //   debugLabel: "tarotLayoutDescription",
+  // );
 
   void ensureComputeds() {
     // var _ = cardSlots.value;

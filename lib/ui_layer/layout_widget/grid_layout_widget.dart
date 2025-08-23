@@ -28,8 +28,7 @@ class GridLayoutWidget extends StatelessWidget with Logging {
             columnGap: 10.0,
             rowGap: 10,
             autoPlacement: AutoPlacement.rowDense,
-            children: layoutDetails.numCards
-                .range()
+            children: layoutDetails.numCards.range
                 .map(
                   (index) => GridPlacement(
                     child: Center(

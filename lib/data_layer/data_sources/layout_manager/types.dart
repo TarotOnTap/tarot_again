@@ -35,3 +35,20 @@ sealed class TarotLayout with _$TarotLayout {
   factory TarotLayout.fromJson(Map<String, dynamic> json) =>
       _$TarotLayoutFromJson(json);
 }
+
+@freezed
+sealed class TarotLayoutInfo with _$TarotLayoutInfo {
+  factory TarotLayoutInfo.regularLayoutInfo({
+    required String name,
+    required String basePath,
+    required String displayName,
+    required String layoutJson,
+    required String layoutDescription,
+    required TarotLayout associatedLayout,
+  }) = RegularLayoutInfo;
+
+  factory TarotLayoutInfo.nullLayoutInfo() = NullLayoutInfo;
+
+  factory TarotLayoutInfo.fromJson(Map<String, dynamic> json) =>
+      _$TarotLayoutInfoFromJson(json);
+}

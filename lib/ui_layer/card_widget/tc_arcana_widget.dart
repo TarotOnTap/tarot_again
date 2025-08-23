@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -53,10 +54,6 @@ class TCArcanaWidget extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) => Watch((context) {
-    // final lg = bufferedVerbose("TCMajorArcanaWidget.build()");
-    // lg.addln("  card is ${slotSignal.value.deckCard}");
-    // lg.addln("  assets is ${slotSignal.value.assets}");
-
     final card = slotState.deckCard;
 
     Iterable<String> names = switch (card.arcana) {
@@ -70,17 +67,14 @@ class TCArcanaWidget extends StatelessWidget with Logging {
       names: names,
     );
 
-    final imageAsset = slotState.assets?.image;
-    // lg.addln("  imageAsset is $imageAsset");
-    // lg.commit();
-
-    if (imageAsset != null) {
-      returnWidget = imageAsset.image(
+    returnWidget = switch (slotState.assets.image) {
+      Some<AssetGenImage>(value: final asset) => asset.image(
         errorBuilder:
             (BuildContext context, Object error, StackTrace? stacktrace) =>
                 returnWidget,
-      );
-    }
+      ),
+      None() => PlaintextArcanaWidget(card: slotState.deckCard, names: names),
+    };
 
     return returnWidget;
   });

@@ -13,7 +13,7 @@ class BufferedLog {
 
   BufferedLog(this._level, {this.autoFlush = false});
 
-  BufferedLog add(msg) {
+  BufferedLog add(Object msg) {
     _logger.write("$runtimeType:$msg");
 
     if (autoFlush) {
@@ -60,7 +60,7 @@ class BufferedLog {
     return (this, either);
   }
 
-  BufferedLog addln(msg) {
+  BufferedLog addln(Object msg) {
     _logger.writeln(msg);
 
     if (autoFlush) {
@@ -94,22 +94,22 @@ mixin Logging {
   // final Talker _log = sl<Talker>();
   /* static */
 
-  void debug(msg) => sl<Talker>().debug("$this:$msg");
+  void debug(Object msg) => sl<Talker>().debug("$this:$msg");
 
-  BufferedLog bufferedDebug(msg, {autoFlush = false}) =>
+  BufferedLog bufferedDebug(Object msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.debug, autoFlush: autoFlush);
 
-  static void staticDebug(msg) => sl<Talker>().debug("static: $msg");
+  static void staticDebug(Object msg) => sl<Talker>().debug("static: $msg");
 
-  void errorLog(msg) => sl<Talker>().error("$this:$msg");
+  void errorLog(Object msg) => sl<Talker>().error("$this:$msg");
 
-  BufferedLog bufferedError(msg, {autoFlush = false}) =>
+  BufferedLog bufferedError(Object msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.error, autoFlush: autoFlush);
 
-  static void staticError(msg) => sl<Talker>().debug("static: $msg");
+  static void staticError(Object msg) => sl<Talker>().debug("static: $msg");
 
   /* static */
-  T verbose<T>(msg, {T Function()? runIt, Object? afterMessage}) {
+  T verbose<T>(Object msg, {T Function()? runIt, Object? afterMessage}) {
     final talker = sl<Talker>();
 
     runIt ??= () {} as T Function();
@@ -146,18 +146,18 @@ mixin Logging {
     return tmp;
   }
 
-  BufferedLog bufferedVerbose(msg, {autoFlush = false}) =>
+  BufferedLog bufferedVerbose(Object msg, {bool autoFlush = false}) =>
       BufferedLog(LoggingLevels.verbose, autoFlush: autoFlush);
 
-  static void staticVerbose(msg) => sl<Talker>().verbose("static: $msg");
+  static void staticVerbose(Object msg) => sl<Talker>().verbose("static: $msg");
 
   /* static */
-  void warning(msg) => sl<Talker>().warning("$this:$msg");
+  void warning(Object msg) => sl<Talker>().warning("$this:$msg");
 
-  BufferedLog bufferedWarning(msg, {autoFlush = false}) =>
+  BufferedLog bufferedWarning(Object msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.warning, autoFlush: autoFlush);
 
-  static void staticWarning(msg) => sl<Talker>().warning("static: $msg");
+  static void staticWarning(Object msg) => sl<Talker>().warning("static: $msg");
 }
 
 class GoodLog extends TalkerLog {
@@ -175,9 +175,9 @@ class GoodLog extends TalkerLog {
   @override
   AnsiPen get pen => getPen;
 
-  static get getPen => AnsiPen()..xterm(121);
+  static AnsiPen get getPen => AnsiPen()..xterm(121);
 
-  static get getKey => 'good';
+  static String get getKey => 'good';
 }
 
 Talker _talkerInit() => TalkerFlutter.init(

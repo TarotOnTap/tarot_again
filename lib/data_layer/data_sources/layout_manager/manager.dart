@@ -14,17 +14,20 @@ class LayoutManager {
     log("LayoutManager.LayoutManager");
   }
 
-  TarotLayout? getLayoutByLayoutName(String name) =>
-      SignalsManager.tarotLayoutsByName.value[name];
+  TarotLayout getLayoutByLayoutName(String name) =>
+      SignalsManager.tarotLayoutsByName.value[name] ?? TarotLayout.nullLayout();
 
-  void setLayoutByLayoutName(String name) => SignalsManager.tarotLayout.value =
-      getLayoutByLayoutName(name) ?? TarotLayout.nullLayout();
+  void setLayoutByLayoutName(String name) =>
+      SignalsManager.tarotLayout.value = getLayoutByLayoutName(name);
 
-  TarotLayout? getLayoutByDisplayName(String displayName) =>
+  TarotLayout getLayoutByDisplayName(String displayName) =>
       ComputedsManager.layoutsByDisplayName.value[displayName] ??
       TarotLayout.nullLayout(displayName: "No Such Layout");
 
   void setLayoutByDisplayName(String displayName) =>
-      SignalsManager.tarotLayout.value =
-          getLayoutByDisplayName(displayName) ?? TarotLayout.nullLayout();
+      SignalsManager.tarotLayout.value = getLayoutByDisplayName(displayName);
+
+  Future<String> loadCurrentLayoutDescription() async {
+    return Future.value("#Description#");
+  }
 }

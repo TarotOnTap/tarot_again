@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tarot_again/util/util.dart';
+import 'package:fpdart/fpdart.dart';
 
-part 'types.freezed.dart'; // leave this here
+// part 'types.freezed.dart'; // leave this here
 
+@immutable
 class AssetGenImage {
   const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 
@@ -73,12 +74,26 @@ class AssetGenImage {
   String get keyName => _assetName;
 }
 
-@Freezed(fromJson: false, toJson: false)
-abstract class TCModelAssets with _$TCModelAssets {
-  const factory TCModelAssets({
-    @Default(null) String? description,
-    @Default(null) String? reversedMeaning,
-    @Default(null) String? uprightMeaning,
-    @Default(null) AssetGenImage? image,
-  }) = _TCModelAssets;
-}
+typedef TCModelAssets = ({
+  Option<String> description,
+  Option<String> reversedMeaning,
+  Option<String> uprightMeaning,
+  Option<AssetGenImage> image,
+});
+
+const TCModelAssets emptyTCModelAssets = (
+  description: Option.none(),
+  reversedMeaning: Option.none(),
+  uprightMeaning: Option.none(),
+  image: Option.none(),
+);
+
+// @Freezed(fromJson: false, toJson: false)
+// abstract class TCModelAssets with _$TCModelAssets {
+//   const factory TCModelAssets({
+//     @Default(Option<String>.none()) Option<String> description,
+//     @Default(Option<String>.none()) Option<String> reversedMeaning,
+//     @Default(Option<String>.none()) Option<String> uprightMeaning,
+//     @Default(Option<AssetGenImage>.none()) Option<AssetGenImage> image,
+//   }) = _TCModelAssets;
+// }

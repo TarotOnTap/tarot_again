@@ -1,4 +1,5 @@
 // import 'package:tarot_again/data_layer/data_layer.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:tarot_again/util/util.dart';
 
 class AssetRepository {
@@ -6,18 +7,12 @@ class AssetRepository {
     log("AssetRepository.AssetRepository");
   }
 
-  static Future<TCModelAssets?> loadAssetsForCard({
+  static Task<TCModelAssets> loadAssetsForCard({
     required TarotDeckCards card,
-  }) async {
-    log("AssetRepository.loadAssetsForCard: $card");
-    if (card != TarotDeckCards.noneCard) {
-      log("  card is $card");
-      final assets = await sl<AssetManager>().loadAssetsForCard(card);
-      log("  assets is $assets");
-
-      return assets;
-    }
-
-    return null;
-  }
+  }) => Task<TCModelAssets>(
+    () async => switch (card) {
+      TarotDeckCards.noneCard => emptyTCModelAssets,
+      _ => sl<AssetManager>().loadAssetsForCard(card),
+    },
+  );
 }

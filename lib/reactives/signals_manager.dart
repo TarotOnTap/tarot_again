@@ -1,5 +1,26 @@
 import 'package:tarot_again/util/util.dart';
 
+// @immutable
+// class TarotLayoutInfo {
+//   final String name;
+//   final String basePath;
+//   final String displayName;
+//
+//   final String layoutJson;
+//   final String layoutDescription;
+//
+//   final TarotLayout associatedLayout;
+//
+//   const TarotLayoutInfo({
+//     this.name = "",
+//     this.basePath = "",
+//     this.displayName = "",
+//     this.layoutJson = "",
+//     this.layoutDescription = "",
+//     this.associatedLayout = const TarotLayout.nullLayout(),
+//   });
+// }
+
 class SignalsManager {
   static final Signal<Iterable<String>> allAssetPaths =
       signal<Iterable<String>>([], debugLabel: "allAssetPaths");
@@ -40,6 +61,17 @@ class SignalsManager {
     debugLabel: "tarotLayout",
   );
 
+  static final Signal<IMap<String, TarotLayoutInfo>> tarotLayoutInfos =
+      signal<IMap<String, TarotLayoutInfo>>(
+        const IMap<String, TarotLayoutInfo>.empty(),
+      );
+
+  // static final Signal<IMap<String, String>> tarotLayoutNamesPath =
+  //     signal<IMap<String, String>>(
+  //       const IMap<String, String>.empty(),
+  //       debugLabel: "tarotLayoutNamesPath",
+  //     );
+  //
   static final Signal<IMap<String, TarotLayout>> tarotLayoutsByName =
       signal<IMap<String, TarotLayout>>(
         const IMap<String, TarotLayout>.empty(),

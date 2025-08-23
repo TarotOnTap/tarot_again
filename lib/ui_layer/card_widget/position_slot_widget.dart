@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart' show Some, None;
 import 'package:tarot_again/util/util.dart';
 import 'package:toastification/toastification.dart';
 
@@ -59,8 +60,7 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
   Future<void> setCard(TarotDeckCards card) async {
     if (card == TarotDeckCards.noneCard) {
       setState(
-            () =>
-        slotState = SlotState(
+        () => slotState = SlotState(
           slotIndex: slotState.slotIndex,
           slotName: slotState.slotName,
         ),
@@ -73,8 +73,7 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
           : ReversalEnum.reversed;
 
       setState(
-            () =>
-        slotState = slotState.copyWith(
+        () => slotState = slotState.copyWith(
           deckCard: card,
           assets: assets,
           reversal: reversal,
@@ -83,64 +82,72 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
     }
   }
 
-  void setFaceUp(ShowingFaceEnum showingFace) =>
-      setState(
-            () =>
-        slotState = slotState.copyWith(showingFace: ShowingFaceEnum.front),
-      );
+  void setFaceUp(ShowingFaceEnum showingFace) => setState(
+    () => slotState = slotState.copyWith(showingFace: ShowingFaceEnum.front),
+  );
 
-  void setFaceDown(ShowingFaceEnum showingFace) =>
-      setState(
-            () =>
-        slotState = slotState.copyWith(showingFace: ShowingFaceEnum.back),
-      );
+  void setFaceDown(ShowingFaceEnum showingFace) => setState(
+    () => slotState = slotState.copyWith(showingFace: ShowingFaceEnum.back),
+  );
 
-  void flipFaceUp() =>
-      setState(
-            () =>
-        slotState = slotState.copyWith(
-          showingFace: slotState.showingFace == ShowingFaceEnum.front
-              ? ShowingFaceEnum.back
-              : ShowingFaceEnum.front,
-        ),
-      );
+  void flipFaceUp() => setState(
+    () => slotState = slotState.copyWith(
+      showingFace: slotState.showingFace == ShowingFaceEnum.front
+          ? ShowingFaceEnum.back
+          : ShowingFaceEnum.front,
+    ),
+  );
 
   void setReversal(ReversalEnum reversal) =>
       setState(() => slotState = slotState.copyWith(reversal: reversal));
 
   @override
-  Widget build(BuildContext context) =>
-      SizedBox(
-        width: 88,
-        height: 170,
-        child: Container(
-          foregroundDecoration: BoxDecoration(
-            border: Border.all(width: 1.0),
-            borderRadius: BorderRadius.all(Radius.circular(2.0)),
-          ),
+  Widget build(BuildContext context) => SizedBox(
+    width: 88,
+    height: 170,
+    child: Container(
+      foregroundDecoration: BoxDecoration(
+        border: Border.all(width: 1.0),
+        borderRadius: BorderRadius.all(Radius.circular(2.0)),
+      ),
 
-          child: Column(
-            children: <Widget>[
-              Text(widget.slotName),
+      child: Column(
+        children: <Widget>[
+          Text(widget.slotName),
 
-              Expanded(
-                child: GestureDetector(
-                  onDoubleTap: () => flipFaceUp(),
-                  onSecondaryTap: () =>
-                      toastification.show(
-                        title: Text("onSecondaryTap handler"),
-                        style: ToastificationStyle.flat,
-                        autoCloseDuration: const Duration(seconds: 3),
-                        description: RichText(
-                          text: const TextSpan(
-                              text: 'received a secondary tap. '),
-                        ),
-                      ),
-                  child: SelectSlotWidget(slotState: slotState),
+          Expanded(
+            child: GestureDetector(
+              onLongPress: () => switch (slotState.assets.description) {
+                Some<String>(value: final String description) =>
+                  toastification.show(
+                    title: Text("Description"),
+                    style: ToastificationStyle.flat,
+                    autoCloseDuration: const Duration(seconds: 10),
+                    description: RichText(text: TextSpan(text: description)),
+                  ),
+                None() => toastification.show(
+                  title: Text("Description"),
+                  style: ToastificationStyle.flat,
+                  autoCloseDuration: const Duration(seconds: 10),
+                  description: RichText(
+                    text: const TextSpan(text: 'no description'),
+                  ),
+                ),
+              },
+              onDoubleTap: () => flipFaceUp(),
+              onSecondaryTap: () => toastification.show(
+                title: Text("onSecondaryTap handler"),
+                style: ToastificationStyle.flat,
+                autoCloseDuration: const Duration(seconds: 3),
+                description: RichText(
+                  text: const TextSpan(text: 'received a secondary tap. '),
                 ),
               ),
-            ],
+              child: SelectSlotWidget(slotState: slotState),
+            ),
           ),
-        ),
-      );
+        ],
+      ),
+    ),
+  );
 }

@@ -47,12 +47,10 @@ abstract class SlotState with _$SlotState {
     @Default(TarotDeckCards.noneCard) TarotDeckCards deckCard,
     @Default(ShowingFaceEnum.back) ShowingFaceEnum showingFace,
     @Default(ReversalEnum.upright) ReversalEnum reversal,
-    @Default(null) TCModelAssets? assets,
+    @Default(emptyTCModelAssets) TCModelAssets assets,
     required String slotName,
     required int slotIndex,
   }) = _SlotState;
 
   bool get isDealt => deckCard != TarotDeckCards.noneCard;
-
-  bool get hasAssets => assets != null;
 }

@@ -5,7 +5,7 @@ import 'util.dart';
 extension RangeGen on int {
   /// [range] is a generator that produces values from 0 up to the int it's applied to.
   /// it's useful replacing a for (var i=0; i<someInt; i++) (and that's all its useful for)
-  Iterable<int> range() sync* {
+  Iterable<int> get range sync* {
     for (var i = 0; i < this; i++) {
       yield i;
     }

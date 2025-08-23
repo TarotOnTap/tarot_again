@@ -1,4 +1,5 @@
 import 'cards_stage_layout.dart';
+import 'sidebar_layout/sidebar_layout.dart';
 import 'ui_layer.dart';
 
 class TopLevelLayout extends StatelessWidget {
@@ -9,7 +10,8 @@ class TopLevelLayout extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(flex: 1, child: CommandButtons()),
-        Expanded(flex: 3, child: CardsStageLayout()),
+        Expanded(flex: 2, child: CardsStageLayout()),
+        Expanded(flex: 1, child: SidebarLayout()),
       ],
     );
   }
