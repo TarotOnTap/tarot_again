@@ -6,6 +6,18 @@ import 'package:tarot_again/util/util.dart';
 
 export 'types.dart';
 
+class LayoutPathInfo {
+  final String name;
+  final String path;
+  final String? descriptionFile;
+
+  LayoutPathInfo({
+    required this.name,
+    required this.path,
+    this.descriptionFile,
+  });
+}
+
 class AssetManager implements PostInit {
   AssetManager() {
     log("AssetManager.AssetManager");
@@ -14,7 +26,7 @@ class AssetManager implements PostInit {
   @override
   Future<void> postInit() async {
     final assetPaths = await getAllAssetPaths();
-    final layoutsByName = await fetchLayouts(assetPaths);
+    final layoutsByName = await fetchLayouts();
 
     // initialize all of our fixed assets, here, in one go
     batch(() {
@@ -45,61 +57,34 @@ class AssetManager implements PostInit {
     return assetPaths;
   }
 
-  static (String, String) _layoutNameAndPath(String assetPath) {
-    final partsList = assetPath.split("/");
-    final nameParts = partsList.last.split(".");
-
-    return (nameParts[0], partsList.sublist(0, partsList.length - 2).join("/"));
-  }
-
-  static Future<TarotLayout> loadLayout(String layoutAsset) async {
-    log("LayoutProvider.loadLayout\n  layoutAsset is $layoutAsset");
-
-    TarotLayout retVal = TarotLayout.nullLayout();
-
-    String assetData = "";
-
-    try {
-      assetData = await rootBundle.loadString(layoutAsset);
-
-      if (assetData.isNotEmpty) {
-        retVal = TarotLayout.fromJson(jsonDecode(assetData));
-      }
-    } catch (e) {
-      log("loadLayout raised error $e on asset string $layoutAsset");
-    }
-
-    return retVal;
-  }
-
-  Future<IMap<String, TarotLayout>> fetchLayouts(
-    Iterable<String> assetPaths,
-  ) async {
+  Future<IMap<String, TarotLayout>> fetchLayouts() async {
+    /// This function loads a json file at assets/tarotLayouts.json that describes all of the different
+    /// tarotLayouts available, captured as a single object where each key represents a different camelCase layout name
+    /// and the contents of each key are a json-encoded TarotLayout.  This is simple to read and the function
+    /// requires no inputs to achieve its results.
     log("LayoutProvider.fetchLayouts");
 
-    // return await Stream<String>.fromIterable(
-    //   assetPaths.where((path) => path.contains("assets/layouts")),
-    // ).asyncMap((event) => loadLayout(event)).fold(const IMap<String, TarotLayout>.empty(), (map, layout) => map.add(layout.name, layout));
+    String? layoutsJson;
 
-    IMap<String, TarotLayout> retVal = const IMap<String, TarotLayout>.empty();
+    try {
+      // try to load our asset file from the fixed location given
+      layoutsJson = await rootBundle.loadString("assets/tarotLayouts.json");
+    } catch (e, _) {
+      // if that fails, log an error
+      log("fetchLayouts raised error $e");
 
-    final layoutPaths = assetPaths.where(
-      (path) => path.contains("assets/layouts"),
+      // and return an empty layout map
+      return const IMap<String, TarotLayout>.empty();
+    }
+
+    // otherwise, decode the whole json into a map
+    IMap<String, dynamic> layoutsItems = jsonDecode(layoutsJson).lock;
+
+    // and return a map that uses the same keys as our json file input, but has TarotLayout objects as values
+    return layoutsItems.map<String, TarotLayout>(
+      (key, value) =>
+          MapEntry<String, TarotLayout>(key, TarotLayout.fromJson(value)),
     );
-
-    // final Iterable<String> names = layoutPaths.map(
-    //   ((String name, String path)) => _layoutNameAndPath(name),
-    // );
-
-    final Iterable<String> names = [''];
-
-    final sPaths = await Stream<String>.fromIterable(
-      layoutPaths,
-    ).asyncMap((event) => loadLayout(event)).toList();
-
-    retVal = IMap<String, TarotLayout>.fromIterables(names, sPaths);
-
-    return retVal;
   }
 
   Future<Option<String>> loadMarkdownAsset(String assetPath) async =>

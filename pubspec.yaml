@@ -31,23 +31,23 @@ dependencies:
   flutter:
     sdk: flutter
 
-  watch_it: ^1.6.5
+  args: ^2.7.0
+  async: ^2.12.0
+  choice: ^2.3.2
   drift: ^2.28.1
   drift_flutter: ^0.2.5
-  fast_immutable_collections: ^11.0.3
   equatable: ^2.0.7
   event_bus: ^2.0.1
+  fast_immutable_collections: ^11.0.3
+  flutter_html: ^3.0.0
+  flutter_svg: ^2.0.17
+  fpdart: ^1.1.1
+  freezed_annotation: ^3.0.0
+  gap: ^3.0.1
+  json_annotation: ^4.9.0
+  markd: ^7.2.3+1
   talker: ^4.7.1
   talker_flutter: ^4.7.1
-  async: ^2.12.0
-  markd: ^7.2.3+1
-  flutter_html: ^3.0.0
-  freezed_annotation: ^3.0.0
-  json_annotation: ^4.9.0
-  fpdart: ^1.1.1
-  flutter_svg: ^2.0.17
-  choice: ^2.3.2
-  gap: ^3.0.1
   toastification: ^3.0.2
   change_case: ^2.2.0
   align_positioned: ^5.0.1
@@ -66,6 +66,7 @@ dependencies:
   gpt_markdown: ^1.1.2
   path_provider: ^2.1.5
   sqlite3_flutter_libs: ^0.5.39
+  watch_it: ^1.6.5
 
 dev_dependencies:
   flutter_test:
@@ -105,6 +106,7 @@ flutter:
     - assets/layouts/tarotLayouts/
     - assets/layouts/tarotLayouts/allCards/
     - assets/layouts/tarotLayouts/pastPresentFuture/
+
 
 
 

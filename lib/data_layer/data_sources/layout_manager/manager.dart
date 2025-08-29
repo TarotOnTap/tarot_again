@@ -22,7 +22,7 @@ class LayoutManager {
 
   TarotLayout getLayoutByDisplayName(String displayName) =>
       ComputedsManager.layoutsByDisplayName.value[displayName] ??
-      TarotLayout.nullLayout(displayName: "No Such Layout");
+      TarotLayout.nullLayout();
 
   void setLayoutByDisplayName(String displayName) =>
       SignalsManager.tarotLayout.value = getLayoutByDisplayName(displayName);

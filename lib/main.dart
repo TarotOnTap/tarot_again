@@ -1,4 +1,5 @@
 // import 'package:flutter/material.dart';
+import 'package:args/args.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:toastification/toastification.dart';
 
@@ -6,29 +7,38 @@ import 'ui_layer/ui_layer.dart';
 import 'util/register_singletons.dart';
 import 'util/util.dart';
 
-void main() async {
-  runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      initializeLoggingService();
-      Logging.staticVerbose("\n*******\nApp starting\n*******");
-      // serviceLocatorConfig();
+void main(List<String> args) async {
+  final parser = ArgParser();
 
-      await registerSingletons();
+  parser.addFlag("create-assets", negatable: false);
+  final ArgResults argResults = parser.parse(args);
+  final bool createAssets = argResults["create-assets"];
 
-      ErrorWidget.builder = (FlutterErrorDetails details) {
-        // If we're in debug mode, use the normal error widget which shows the error
-        // message:
-        return ErrorWidget(details.exception);
-      };
+  if (createAssets) {
+  } else {
+    runZonedGuarded(
+      () async {
+        WidgetsFlutterBinding.ensureInitialized();
+        initializeLoggingService();
+        Logging.staticVerbose("\n*******\nApp starting\n*******");
+        // serviceLocatorConfig();
 
-      // await _initFirebase();
-      runApp(TarotAgainApp());
-    },
-    (Object error, StackTrace stack) {
-      sl<Talker>().handle(error, stack, 'Uncaught app exception');
-    },
-  );
+        await registerSingletons();
+
+        ErrorWidget.builder = (FlutterErrorDetails details) {
+          // If we're in debug mode, use the normal error widget which shows the error
+          // message:
+          return ErrorWidget(details.exception);
+        };
+
+        // await _initFirebase();
+        runApp(TarotAgainApp());
+      },
+      (Object error, StackTrace stack) {
+        sl<Talker>().handle(error, stack, 'Uncaught app exception');
+      },
+    );
+  }
 }
 
 class TarotAgainApp extends StatelessWidget {
