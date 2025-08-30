@@ -71,11 +71,6 @@ class ComputedsManager {
     debugLabel: "layoutAssetPaths",
   );
 
-  // static final tarotLayoutDescription = computedAsync(() => sl<AssetManager>().loadMarkdownAsset(
-  //   "",
-  //   debugLabel: "tarotLayoutDescription",
-  // );
-
   void ensureComputeds() {
     // var _ = cardSlots.value;
     var _ = deckString.value;

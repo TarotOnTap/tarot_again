@@ -2,7 +2,8 @@
   "allCards": {
     "displayName": "All Cards in a grid",
     "layoutType": "SimpleGrid",
-    "numCards": 78
+    "numCards": 78,
+    "mdLayoutDescription": "# All Cards in a grid\n\nThis is for testing and demonstration purposes, not a real layout."
   },
   "pastPresentFuture": {
     "displayName": "Past, Present, Future",
@@ -16,6 +17,6 @@
       "Present",
       "Future"
     ],
-    "mdLayoutDescription": "\n# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or any other identified *entity*.\n\n[Wikipedia](https://en.wikipedia.org/)."
+    "mdLayoutDescription": "# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or any other identified *entity*.\n\n[Wikipedia](https://en.wikipedia.org/)."
   }
 }

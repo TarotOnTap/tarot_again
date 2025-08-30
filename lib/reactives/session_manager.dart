@@ -21,21 +21,12 @@ class SessionManager {
     // requires that slots have already been laid out
     log("SessionManager.dealCards");
 
-    // final AsyncRandoms ar = sl<AsyncRandoms>();
-
     if (SignalsManager.tarotLayout.value is! NullLayout) {
       Logging.staticVerbose(
         "  tarotLayout.value is ${SignalsManager.tarotLayout.value}",
       );
 
-      // Logging.staticVerbose(
-      //   "  cardsDealt.value is ${SignalsManager.cardsDealt.value}",
-      // );
-      // if (!SignalsManager.cardsDealt.value) {
       await StandardDeckProvider.shuffleDeck();
-
-      // final int howMany = SignalsManager.tarotLayout.value.numCards;
-      // log("  howMany is $howMany");
 
       // after switching shuffledDeck on StandardDeckProvider to an asyncSignal,
       // we shouldn't ever have an empty deck. Instead, the deck is initialized
@@ -49,40 +40,9 @@ class SessionManager {
         for (var (index, key) in ComputedsManager.slotKeys.value.indexed) {
           key.currentState?.setCard(SignalsManager.shuffledDeck.value[index]);
         }
-        // final IList<TarotDeckCards> cards = SignalsManager.shuffledDeck.value
-        //     .take(howMany)
-        //     .toIList();
-
-        // final Iterable<bool> reversals = await [
-        //   for (var _ in howMany.range()) ar.getNextBool(),
-        // ].wait;
-
-        // final cardInfos = cards.zip(reversals).toIList();
-        //
-        // for (var (index, slotSignal)
-        //     in ComputedsManager.cardSlots.value.indexed) {
-        //   final slot = slotSignal.value;
-        //   final cardInfo = cardInfos[index];
-        //   final card = cardInfo.$1;
-        //   final reversal = cardInfo.$2;
-        //
-        //   final TCModelAssets? assets = await sl<AssetManager>()
-        //       .loadAssetsForCard(card);
-        //
-        //   slotSignal.value = slot.copyWith(
-        //     faceUp: false,
-        //     reversed: reversal,
-        //     deckCard: card,
-        //     assets: assets,
-        //   );
       }
     }
-
-    // Logging.staticVerbose("  setting cardsDealt.value to true");
-    // SignalsManager.cardsDealt.value = true;
   }
-
-  // }
 
   void changeDeckName(StandardTarotDecksEnum newName) =>
       SignalsManager.deckName.value = newName;
@@ -104,27 +64,6 @@ class SessionManager {
   void allowReversals() => SignalsManager.reversalsAllowed.value = true;
 
   void disallowReversals() => SignalsManager.reversalsAllowed.value = false;
-
-  // bool _isDealt(SlotSignal slot) =>
-  //     slot.value.deckCard != TarotDeckCards.noneCard;
-  //
-  // void setCardFaceUp(SlotSignal slot) {
-  //   if (_isDealt(slot)) {
-  //     slot.value = slot.value.copyWith(faceUp: true);
-  //   }
-  // }
-
-  // void setCardFaceDown(SlotSignal slot) {
-  //   if (_isDealt(slot)) {
-  //     slot.value = slot.value.copyWith(faceUp: false);
-  //   }
-  // }
-  //
-  // void setCardFlipFace(SlotSignal slot) {
-  //   if (_isDealt(slot)) {
-  //     slot.value = slot.value.copyWith(faceUp: !slot.value.faceUp);
-  //   }
-  // }
 
   void freshSpread() {
     _emptySlots();

@@ -9,11 +9,7 @@ class LayoutSlot {
 
 @Freezed(unionKey: 'layoutType', unionValueCase: FreezedUnionCase.pascal)
 sealed class TarotLayout with _$TarotLayout {
-  /// These classes are only data and do not have any methods
-  // TODO: make mdLayoutDescription required with no default; this forces the json file these are built from to
-  //       have a mdLayoutDescription field so that this file can be stable - doesn't require as many invocations of
-  //       build runner that way. Move the internal texts to the json file; move the nullLayout definition to the
-  //       json file, too.
+  /// These classes are only data and do not have any methods beyond toJson / fromJson
   factory TarotLayout.horizontalLinear({
     required String displayName,
     required String layoutType,
@@ -22,15 +18,14 @@ sealed class TarotLayout with _$TarotLayout {
     required String verticalAlign,
     required int alignOnCard,
     required Iterable<String> slotNames,
-    @Default("# HorizontalLinear Description Undefined")
-    String mdLayoutDescription,
+    required String mdLayoutDescription,
   }) = HorizontalLinear;
 
   factory TarotLayout.simpleGrid({
     required String displayName,
     required String layoutType,
     required int numCards,
-    @Default("# SimpleGrid Description Undefined") String mdLayoutDescription,
+    required String mdLayoutDescription,
   }) = SimpleGrid;
 
   const factory TarotLayout.nullLayout({
@@ -43,21 +38,3 @@ sealed class TarotLayout with _$TarotLayout {
   factory TarotLayout.fromJson(Map<String, dynamic> json) =>
       _$TarotLayoutFromJson(json);
 }
-
-// @freezed
-// sealed class TarotLayoutInfo with _$TarotLayoutInfo {
-//   factory TarotLayoutInfo.regularLayoutInfo({
-//     required String name,
-//     required String basePath,
-//     required String displayName,
-//     required String layoutJson,
-//     required String layoutDescription,
-//     required TarotLayout associatedLayout,
-//   }) = RegularLayoutInfo;
-//
-//   factory TarotLayoutInfo.nullLayoutInfo({@Default("No Such Layout") String displayName}) =
-//       NullLayoutInfo;
-//
-//   factory TarotLayoutInfo.fromJson(Map<String, dynamic> json) =>
-//       _$TarotLayoutInfoFromJson(json);
-// }

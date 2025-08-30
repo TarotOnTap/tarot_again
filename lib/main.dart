@@ -31,6 +31,7 @@ void main(List<String> args) async {
           return ErrorWidget(details.exception);
         };
 
+        // TODO: init sqlite db, using device's per-user storage. Make sure to include migration!
         // await _initFirebase();
         runApp(TarotAgainApp());
       },
