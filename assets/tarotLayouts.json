@@ -1,25 +1,21 @@
 {
   "allCards": {
-    "layout": {
-      "displayName": "All Cards in a grid",
-      "layoutType": "SimpleGrid",
-      "numCards": 78
-    }
+    "displayName": "All Cards in a grid",
+    "layoutType": "SimpleGrid",
+    "numCards": 78
   },
   "pastPresentFuture": {
-    "layout": {
-      "displayName": "Past, Present, Future",
-      "layoutType": "HorizontalLinear",
-      "horizontalAlign": "center",
-      "verticalAlign": "center",
-      "alignOnCard": 1,
-      "numCards": 3,
-      "slotNames": [
-        "Past",
-        "Present",
-        "Future"
-      ]
-    },
-    "description": "#Past, Present, Future\n\nThe __Past, Present, Future__ layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or any other identified 'entity'."
+    "displayName": "Past, Present, Future",
+    "layoutType": "HorizontalLinear",
+    "horizontalAlign": "center",
+    "verticalAlign": "center",
+    "alignOnCard": 1,
+    "numCards": 3,
+    "slotNames": [
+      "Past",
+      "Present",
+      "Future"
+    ],
+    "mdLayoutDescription": "\n# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or any other identified *entity*.\n\n[Wikipedia](https://en.wikipedia.org/)."
   }
 }

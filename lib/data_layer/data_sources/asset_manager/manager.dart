@@ -78,7 +78,26 @@ class AssetManager implements PostInit {
     }
 
     // otherwise, decode the whole json into a map
-    IMap<String, dynamic> layoutsItems = jsonDecode(layoutsJson).lock;
+    IMap<String, dynamic> layoutsItems = IMap<String, dynamic>(
+      jsonDecode(layoutsJson),
+    );
+
+    // log("  layoutsItems is $layoutsItems");
+    //
+    // IMap<String, TarotLayout> retVal = const IMap<String, TarotLayout>.empty();
+    //
+    // for (String key in layoutsItems.keys) {
+    //   log("attempting to add $key:${layoutsItems.keys} to retVal");
+    //
+    //   try {
+    //     retVal = retVal.add(key, TarotLayout.fromJson(layoutsItems[key]));
+    //   } catch (e, _) {
+    //     log("  key $key raised error $e");
+    //   }
+    // }
+    //
+    // log("  retval is $retVal");
+    // return retVal;
 
     // and return a map that uses the same keys as our json file input, but has TarotLayout objects as values
     return layoutsItems.map<String, TarotLayout>(

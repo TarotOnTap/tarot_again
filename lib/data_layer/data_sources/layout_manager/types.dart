@@ -10,6 +10,10 @@ class LayoutSlot {
 @Freezed(unionKey: 'layoutType', unionValueCase: FreezedUnionCase.pascal)
 sealed class TarotLayout with _$TarotLayout {
   /// These classes are only data and do not have any methods
+  // TODO: make mdLayoutDescription required with no default; this forces the json file these are built from to
+  //       have a mdLayoutDescription field so that this file can be stable - doesn't require as many invocations of
+  //       build runner that way. Move the internal texts to the json file; move the nullLayout definition to the
+  //       json file, too.
   factory TarotLayout.horizontalLinear({
     required String displayName,
     required String layoutType,
@@ -18,21 +22,22 @@ sealed class TarotLayout with _$TarotLayout {
     required String verticalAlign,
     required int alignOnCard,
     required Iterable<String> slotNames,
-    required String mdLayoutDescription,
+    @Default("# HorizontalLinear Description Undefined")
+    String mdLayoutDescription,
   }) = HorizontalLinear;
 
   factory TarotLayout.simpleGrid({
     required String displayName,
     required String layoutType,
     required int numCards,
-    required String mdLayoutDescription,
+    @Default("# SimpleGrid Description Undefined") String mdLayoutDescription,
   }) = SimpleGrid;
 
   const factory TarotLayout.nullLayout({
     @Default("Empty Layout") String displayName,
     @Default("nullLayout") String layoutType,
     @Default(0) int numCards,
-    @Default("#NULL LAYOUT#") String mdLayoutDescription,
+    @Default("# NULL LAYOUT") String mdLayoutDescription,
   }) = NullLayout;
 
   factory TarotLayout.fromJson(Map<String, dynamic> json) =>
