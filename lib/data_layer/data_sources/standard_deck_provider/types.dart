@@ -138,7 +138,7 @@ enum TarotDeckCards {
     romanNumber: RomanNumerals.xx,
     arcana: Arcana.major,
   ),
-  theWorld(
+  world(
     displayName: "The World",
     romanNumber: RomanNumerals.xxi,
     arcana: Arcana.major,

@@ -6,17 +6,7 @@ import 'package:tarot_again/util/util.dart';
 
 export 'types.dart';
 
-class LayoutPathInfo {
-  final String name;
-  final String path;
-  final String? descriptionFile;
-
-  LayoutPathInfo({
-    required this.name,
-    required this.path,
-    this.descriptionFile,
-  });
-}
+typedef JsonMap = IMap<String, dynamic>;
 
 class AssetManager implements PostInit {
   AssetManager() {
@@ -41,69 +31,70 @@ class AssetManager implements PostInit {
     var assetPaths = <String>[];
 
     try {
-      // log("  loading asset manifest from asset bundle");
       assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-      // log("  asset manifest loaded from asset bundle");
       log("  assetManifest is $assetManifest");
-      // log("  assetManifest.listAssets() is ${assetManifest.listAssets()}");
       assetPaths = assetManifest.listAssets();
     } catch (e, s) {
       log("  loadFromAssetBundle raised error $e");
       assetPaths = [e.toString(), s.toString()];
     }
 
-    // log("  assetManifest.listAssets() is '${assetManifest?.listAssets()}'");
-
     return assetPaths;
   }
 
+  TaskEither<FlutterError, String> _loadTarotLayoutsJson() =>
+      TaskEither<FlutterError, String>.tryCatch(() async {
+        return await rootBundle.loadString("assets/tarotLayouts.json");
+      }, (e, s) => e as FlutterError);
+
+  Either<FormatException, JsonMap> _parseTarotLayoutsJson(String json) =>
+      Either<FormatException, JsonMap>.tryCatch(
+        () => IMap<String, dynamic>(jsonDecode(json)),
+        (e, s) => e as FormatException,
+      );
+
   Future<IMap<String, TarotLayout>> fetchLayouts() async {
     /// This function loads a json file at assets/tarotLayouts.json that describes all of the different
-    /// tarotLayouts available, captured as a single object where each key represents a different camelCase layout name
+    /// tarotLayouts available, captured as a single object where each key represents a different pascalCase layout name
     /// and the contents of each key are a json-encoded TarotLayout.  This is simple to read and the function
     /// requires no inputs to achieve its results.
     log("LayoutProvider.fetchLayouts");
 
-    String? layoutsJson;
+    IMap<String, TarotLayout> retVal = const IMap<String, TarotLayout>.empty();
 
-    try {
-      // try to load our asset file from the fixed location given
-      layoutsJson = await rootBundle.loadString("assets/tarotLayouts.json");
-    } catch (e, _) {
-      // if that fails, log an error
-      log("fetchLayouts raised error $e");
+    String layoutsJson = await rootBundle.loadString(
+      "assets/tarotLayouts.json",
+    );
 
-      // and return an empty layout map
-      return const IMap<String, TarotLayout>.empty();
+    if (layoutsJson.isNotEmpty) {
+      // KEEP the comments below, they document the former effort to safely retrieve
+      // our asset. Dart documentation tells that errors derived from Error are not meant
+      // to be caught; they represent a programming error.
+      // try {
+      //   // try to load our asset file from the fixed location given
+      //   layoutsJson = await rootBundle.loadString("assets/tarotLayouts.json");
+      // } catch (e, _) {
+      //   // if that fails, log an error
+      //   log("fetchLayouts raised error $e");
+      //
+      //   return retVal; // return an empty map
+      // }
+
+      try {
+        retVal = IMap<String, dynamic>(jsonDecode(layoutsJson))
+            .map<String, TarotLayout>(
+              (key, value) => MapEntry<String, TarotLayout>(
+                key,
+                TarotLayout.fromJson(value),
+              ),
+            );
+      } catch (e, _) {
+        log("error decoding json: $e");
+      }
     }
 
-    // otherwise, decode the whole json into a map
-    IMap<String, dynamic> layoutsItems = IMap<String, dynamic>(
-      jsonDecode(layoutsJson),
-    );
-
-    // log("  layoutsItems is $layoutsItems");
-    //
-    // IMap<String, TarotLayout> retVal = const IMap<String, TarotLayout>.empty();
-    //
-    // for (String key in layoutsItems.keys) {
-    //   log("attempting to add $key:${layoutsItems.keys} to retVal");
-    //
-    //   try {
-    //     retVal = retVal.add(key, TarotLayout.fromJson(layoutsItems[key]));
-    //   } catch (e, _) {
-    //     log("  key $key raised error $e");
-    //   }
-    // }
-    //
-    // log("  retval is $retVal");
-    // return retVal;
-
     // and return a map that uses the same keys as our json file input, but has TarotLayout objects as values
-    return layoutsItems.map<String, TarotLayout>(
-      (key, value) =>
-          MapEntry<String, TarotLayout>(key, TarotLayout.fromJson(value)),
-    );
+    return retVal;
   }
 
   Future<Option<String>> loadMarkdownAsset(String assetPath) async =>
@@ -115,15 +106,13 @@ class AssetManager implements PostInit {
     Iterable<String> assetPaths,
     String kind,
   ) async {
-    String? assetPath = assetPaths
+    return assetPaths
         .where((asset) => assetKind(asset) == kind)
-        .firstOrNull;
-
-    if (assetPath == null) {
-      return Option<String>.none();
-    } else {
-      return loadMarkdownAsset(assetPath);
-    }
+        .firstOrNull
+        .letWithElse(
+          (asset) => loadMarkdownAsset(asset),
+          orElse: Option<String>.none(),
+        );
   }
 
   Option<AssetGenImage> tryImageAsset(

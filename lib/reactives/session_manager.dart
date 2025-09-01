@@ -26,7 +26,11 @@ class SessionManager {
         "  tarotLayout.value is ${SignalsManager.tarotLayout.value}",
       );
 
-      await StandardDeckProvider.shuffleDeck();
+      if (SignalsManager.tarotLayout.value is SimpleGrid) {
+        await StandardDeckProvider.unShuffleDeck();
+      } else {
+        await StandardDeckProvider.shuffleDeck();
+      }
 
       // after switching shuffledDeck on StandardDeckProvider to an asyncSignal,
       // we shouldn't ever have an empty deck. Instead, the deck is initialized
