@@ -33,7 +33,15 @@ class HomePageWidget extends StatelessWidget {
         // the App.build method, and use it to set our appbar title.
         title: Text(title),
       ),
-      body: Center(child: TopLevelLayout()),
+      body: SafeArea(child: Center(child: TopLevelLayout())),
     );
   }
 }
+
+// home: Scaffold(
+// body: SafeArea(
+// child: Center(
+// child: const HomePageWidget(title: 'Flutter Demo Home Page'),
+// ),
+// ),
+// ),

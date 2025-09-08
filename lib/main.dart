@@ -49,7 +49,8 @@ class TarotAgainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToastificationWrapper(
-      child: MaterialApp(
+      child: MaterialApp.router(
+        routerConfig: rootRouter,
         title: 'Tarot Again',
         theme: ThemeData(
           // This is the theme of your application.
@@ -69,13 +70,13 @@ class TarotAgainApp extends StatelessWidget {
           // tested with just a hot reload.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: Scaffold(
-          body: SafeArea(
-            child: Center(
-              child: const HomePageWidget(title: 'Flutter Demo Home Page'),
-            ),
-          ),
-        ),
+        // home: Scaffold(
+        //   body: SafeArea(
+        //     child: Center(
+        //       child: const HomePageWidget(title: 'Flutter Demo Home Page'),
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }
