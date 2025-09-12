@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' show Some, None;
+import 'package:go_router/go_router.dart';
 import 'package:tarot_again/util/util.dart';
 import 'package:toastification/toastification.dart';
 
@@ -134,7 +135,11 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
                   ),
                 ),
               },
-              onDoubleTap: () => flipFaceUp(),
+              onTap: () => context.pushNamed(
+                'cardDetails',
+                pathParameters: {"slotIndex": "${slotState.slotIndex}"},
+              ),
+              onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
               onSecondaryTap: () => toastification.show(
                 title: Text("onSecondaryTap handler"),
                 style: ToastificationStyle.flat,

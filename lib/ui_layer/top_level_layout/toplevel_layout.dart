@@ -1,6 +1,6 @@
+import '../sidebar_layout/sidebar_layout.dart';
+import '../ui_layer.dart';
 import 'cards_stage_layout.dart';
-import 'sidebar_layout/sidebar_layout.dart';
-import 'ui_layer.dart';
 
 class TopLevelLayout extends StatelessWidget {
   const TopLevelLayout({super.key});

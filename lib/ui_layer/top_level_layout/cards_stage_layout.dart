@@ -2,7 +2,7 @@ import 'package:align_positioned/align_positioned.dart';
 import 'package:flutter/material.dart';
 import 'package:tarot_again/util/util.dart';
 
-import 'layout_widget/layout_widget.dart';
+import '../layout_widget/layout_widget.dart';
 
 @immutable
 class CardsStageLayout extends StatelessWidget with Logging {

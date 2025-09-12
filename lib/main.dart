@@ -70,13 +70,6 @@ class TarotAgainApp extends StatelessWidget {
           // tested with just a hot reload.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        // home: Scaffold(
-        //   body: SafeArea(
-        //     child: Center(
-        //       child: const HomePageWidget(title: 'Flutter Demo Home Page'),
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }
