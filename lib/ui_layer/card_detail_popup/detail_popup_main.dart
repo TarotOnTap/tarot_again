@@ -6,6 +6,28 @@ import 'package:tarot_again/util/util.dart';
 
 import '../card_widget/card_widget.dart';
 
+class DetailHostWidget extends StatelessWidget {
+  final int slotIndex;
+
+  const DetailHostWidget({super.key, required this.slotIndex});
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: Column(
+      children: [
+        Row(
+          children: [
+            BackButton(onPressed: () => context.goNamed("home")),
+            Spacer(),
+            CloseButton(onPressed: () => context.goNamed("home")),
+          ],
+        ),
+        Expanded(child: DetailPopupMain(slotIndex: slotIndex)),
+      ],
+    ),
+  );
+}
+
 class DetailPopupMain extends StatelessWidget {
   final int slotIndex;
 

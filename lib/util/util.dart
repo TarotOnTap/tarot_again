@@ -13,6 +13,7 @@ export 'package:fast_immutable_collections/fast_immutable_collections.dart';
 export 'package:flutter/foundation.dart' hide binarySearch, mergeSort;
 export 'package:freezed_annotation/freezed_annotation.dart';
 export 'package:get_it/get_it.dart';
+export 'package:go_router/go_router.dart';
 export 'package:json_annotation/json_annotation.dart';
 export 'package:meta/meta.dart';
 export 'package:signals/signals_flutter.dart';

@@ -68,6 +68,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.39
   watch_it: ^1.6.5
   go_router: ^16.2.1
+  floating_dialog: ^1.1.1+1
 
 dev_dependencies:
   flutter_test:

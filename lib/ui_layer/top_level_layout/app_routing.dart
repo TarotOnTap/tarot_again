@@ -37,7 +37,7 @@ final GoRouter rootRouter = GoRouter(
               name: "cardDetails",
               path: 'cardDetails/:slotIndex',
               builder: (BuildContext context, GoRouterState state) {
-                return DetailPopupMain(
+                return DetailHostWidget(
                   slotIndex: int.parse(
                     state.pathParameters["slotIndex"] ?? "-1",
                   ),
