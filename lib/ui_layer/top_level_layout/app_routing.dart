@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 
-import "../card_detail_popup/detail_popup_main.dart";
+import "../card_detail_popup/detail_popup_main.dart";";
+
 // import "home_page_widget.dart";
 import "main_scaffold.dart";
 import "toplevel_layout.dart";
@@ -37,11 +38,12 @@ final GoRouter rootRouter = GoRouter(
               name: "cardDetails",
               path: 'cardDetails/:slotIndex',
               builder: (BuildContext context, GoRouterState state) {
-                return DetailHostWidget(
+                final DetailPopupMain<void> pum = DetailPopupMain<void>(
                   slotIndex: int.parse(
                     state.pathParameters["slotIndex"] ?? "-1",
-                  ),
-                );
+                  ));
+
+                return pum.buildPage(context);
               },
             ),
           ],

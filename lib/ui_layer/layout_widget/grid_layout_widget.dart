@@ -1,4 +1,5 @@
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:tarot_again/ui_layer/card_detail_popup/detail_popup_main.dart';
 import 'package:tarot_again/ui_layer/ui_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -32,10 +33,15 @@ class GridLayoutWidget extends StatelessWidget with Logging {
                 .map(
                   (index) => GridPlacement(
                     child: Center(
-                      child: PositionSlotWidget(
-                        key: ComputedsManager.slotKeys.value[index],
-                        slotIndex: index,
-                        slotName: "slot $index",
+                      child: ElevatedButton(
+                        onPressed: () => context.push(
+                          DetailPopupMain<void>(slotIndex: index),
+                        ),
+                        child: PositionSlotWidget(
+                          key: ComputedsManager.slotKeys.value[index],
+                          slotIndex: index,
+                          slotName: "slot $index",
+                        ),
                       ),
                     ),
                   ),
