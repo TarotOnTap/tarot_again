@@ -1,32 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:gap/gap.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:tarot_again/util/util.dart';
 
 import '../card_widget/card_widget.dart';
 
-// class DetailHostWidget extends StatelessWidget {
-//   final int slotIndex;
-//
-//   const DetailHostWidget({super.key, required this.slotIndex});
-//
-//   @override
-//   Widget build(BuildContext context) => Center(
-//     child: Column(
-//       children: [
-//         Row(
-//           children: [
-//             BackButton(onPressed: () => context.goNamed("home")),
-//             Spacer(),
-//             CloseButton(onPressed: () => context.goNamed("home")),
-//           ],
-//         ),
-//         Expanded(child: DetailPopupMain(slotIndex: slotIndex)),
-//       ],
-//     ),
-//   );
-// }
+class DetailHostWidget extends StatefulWidget {
+  final int slotIndex;
+  late final Duration _duration;
+
+  DetailHostWidget({super.key, required this.slotIndex, double? duration}) {
+    duration = duration ?? 0.3;
+    _duration = Duration(milliseconds: (duration * 1000).toInt());
+  }
+
+  @override
+  State<DetailHostWidget> createState() => _DetailHostWidgetState();
+}
+
+class _DetailHostWidgetState extends State<DetailHostWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late DetailPopupMain _popup;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this, // the SingleTickerProviderStateMixin
+      duration: widget._duration,
+    );
+
+    _popup = DetailPopupMain(slotIndex: widget.slotIndex);
+  }
+
+  @override
+  void didUpdateWidget(DetailHostWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.duration = widget._duration;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _popup.buildPage(context, _controller, _controller);
+  }
+}
 
 class DetailPopupMain<T> extends PopupRoute<T> {
   final int slotIndex;
