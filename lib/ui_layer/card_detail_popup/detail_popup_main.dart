@@ -92,32 +92,60 @@ class DetailPopupMain<T> extends PopupRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) => ComputedsManager.slotKeys.value[slotIndex].currentState.letWithElse(
-    (PositionSlotWidgetState it) => Center(
-      child: Row(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: CardWidget(slotState: it.slotState),
-          ),
-          Gap(50),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    (PositionSlotWidgetState it) => UnconstrainedBox(
+      child: SizedBox(
+        width: 800,
+        height: 600,
+        child: Container(
+          // TODO: turn this container into a material Card? It might look better.
+          color: Colors.white,
+          child: Center(
+            child: Row(
               children: [
-                GptMarkdown("# ${it.slotState.deckCard.displayName}"),
-                Gap(20),
-                GptMarkdown(
-                  _meaning("Upright", it.slotState.assets.uprightMeaning),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CardWidget(slotState: it.slotState),
+                  ),
                 ),
-                Gap(100),
-                GptMarkdown(
-                  _meaning("Reversed", it.slotState.assets.reversedMeaning),
+                Gap(50),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: GptMarkdown(
+                            "# ${it.slotState.deckCard.displayName}",
+                          ),
+                        ),
+                        Gap(20),
+                        Expanded(
+                          child: GptMarkdown(
+                            _meaning(
+                              "Upright",
+                              it.slotState.assets.uprightMeaning,
+                            ),
+                          ),
+                        ),
+                        Gap(100),
+                        Expanded(
+                          child: GptMarkdown(
+                            _meaning(
+                              "Reversed",
+                              it.slotState.assets.reversedMeaning,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     ),
     orElse: Placeholder(child: Text("Card data not found")),
