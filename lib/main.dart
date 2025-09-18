@@ -3,6 +3,7 @@ import 'package:args/args.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:toastification/toastification.dart';
 
+import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'ui_layer/ui_layer.dart';
 import 'util/register_singletons.dart';
 import 'util/util.dart';
@@ -49,8 +50,11 @@ class TarotAgainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToastificationWrapper(
-      child: MaterialApp.router(
-        routerConfig: rootRouter,
+      child: MaterialApp(
+        initialRoute: "/",
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) => const TopLevelLayout(),
+        },
         title: 'Tarot Again',
         theme: ThemeData(
           // This is the theme of your application.

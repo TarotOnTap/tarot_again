@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' show Some, None;
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 import 'package:tarot_again/util/util.dart';
 import 'package:toastification/toastification.dart';
 
+import '../card_detail_popup/detail_popup_main.dart';
 import 'card_widget.dart';
 import 'no_card_dealt_widget.dart';
 
@@ -135,10 +136,9 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
                   ),
                 ),
               },
-              onTap: () => context.pushNamed(
-                'cardDetails',
-                pathParameters: {"slotIndex": "${slotState.slotIndex}"},
-              ),
+              onTap: () => Navigator.of(
+                context,
+              ).push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
               onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
               onSecondaryTap: () => toastification.show(
                 title: Text("onSecondaryTap handler"),
