@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' hide State;
-import 'package:gap/gap.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -86,6 +85,12 @@ class DetailPopupMain<T> extends PopupRoute<T> {
   String _meaning(String orientation, Option<String> meaning) =>
       "## $orientation meaning ${meaning.fold(() => 'undefined', (it) => '\n\n$it')}";
 
+  String _displayMd(PositionSlotWidgetState slotData) {
+    return "# ${slotData.slotState.deckCard.displayName}\n\n"
+        "${_meaning('Upright', slotData.slotState.assets.uprightMeaning)}\n\n"
+        "${_meaning('Reversed', slotData.slotState.assets.reversedMeaning)}";
+  }
+
   @override
   Widget buildPage(
     BuildContext context,
@@ -96,8 +101,7 @@ class DetailPopupMain<T> extends PopupRoute<T> {
       child: SizedBox(
         width: 800,
         height: 600,
-        child: Container(
-          // TODO: turn this container into a material Card? It might look better.
+        child: Card(
           color: Colors.white,
           child: Center(
             child: Row(
@@ -108,38 +112,10 @@ class DetailPopupMain<T> extends PopupRoute<T> {
                     child: CardWidget(slotState: it.slotState),
                   ),
                 ),
-                Gap(50),
+                // Gap(20),
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: GptMarkdown(
-                            "# ${it.slotState.deckCard.displayName}",
-                          ),
-                        ),
-                        Gap(20),
-                        Expanded(
-                          child: GptMarkdown(
-                            _meaning(
-                              "Upright",
-                              it.slotState.assets.uprightMeaning,
-                            ),
-                          ),
-                        ),
-                        Gap(100),
-                        Expanded(
-                          child: GptMarkdown(
-                            _meaning(
-                              "Reversed",
-                              it.slotState.assets.reversedMeaning,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: SingleChildScrollView(
+                    child: GptMarkdown(_displayMd(it)),
                   ),
                 ),
               ],
