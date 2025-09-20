@@ -16,6 +16,31 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
   bool showTrailing = false;
   double groupAlignment = -1.0;
 
+  Future<void> _randomSourceDialogBuilder(BuildContext context) => showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: Text(
+        "Select the source of randomness",
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+      actions: List<Widget>.generate(RandomGenerators.values.length, (
+        int index,
+      ) {
+        return Watch(
+          (BuildContext build) => ChoiceChip(
+            label: Text(RandomGenerators.values[index].displayName),
+            selected:
+                SignalsManager.currentRandomGenerator.value.index == index,
+            onSelected: (bool selected) {
+              SignalsManager.currentRandomGenerator.value =
+                  RandomGenerators.values[index];
+            },
+          ),
+        );
+      }).toList(),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
@@ -25,12 +50,13 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
         setState(() {
           _selectedIndex = index;
 
-          switch (_selectedIndex) {
-            case 3:
-              Navigator.of(context).push(RandomSourcePopupMain());
-            case _:
-              ;
-          }
+          // switch (_selectedIndex) {
+          //   case 3:
+          //     Navigator.of(context).restorablePush(_randomSourceDialogBuilder);
+          //   // Navigator.of(context).push(RandomSourcePopupMain());
+          //   case _:
+          //     ;
+          // }
         });
       },
       labelType: labelType,
@@ -68,12 +94,18 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
           label: Text('Third'),
         ),
         NavigationRailDestination(
-          icon: Badge(
-            label: Watch(
-              (BuildContext context) =>
-                  Text(SignalsManager.currentRandomGenerator.value.displayName),
+          icon: IconButton(
+            onPressed: () {
+              _randomSourceDialogBuilder(context);
+            },
+            icon: Badge(
+              label: Watch(
+                (BuildContext context) => Text(
+                  SignalsManager.currentRandomGenerator.value.displayName,
+                ),
+              ),
+              child: Icon(LucideIcons.dices),
             ),
-            child: Icon(LucideIcons.dices),
           ),
           selectedIcon: Badge(
             label: Watch(
