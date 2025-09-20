@@ -5,53 +5,6 @@ import 'package:tarot_again/util/util.dart';
 
 import '../card_widget/card_widget.dart';
 
-// class DetailHostWidget extends StatefulWidget {
-//   final int slotIndex;
-//   late final Duration _duration;
-//
-//   DetailHostWidget({super.key, required this.slotIndex, double? duration}) {
-//     duration = duration ?? 0.3;
-//     _duration = Duration(milliseconds: (duration * 1000).toInt());
-//   }
-//
-//   @override
-//   State<DetailHostWidget> createState() => _DetailHostWidgetState();
-// }
-//
-// class _DetailHostWidgetState extends State<DetailHostWidget>
-//     with SingleTickerProviderStateMixin {
-//   late AnimationController _controller;
-//   late DetailPopupMain _popup;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _controller = AnimationController(
-//       vsync: this, // the SingleTickerProviderStateMixin
-//       duration: widget._duration,
-//     );
-//
-//     _popup = DetailPopupMain(slotIndex: widget.slotIndex);
-//   }
-//
-//   @override
-//   void didUpdateWidget(DetailHostWidget oldWidget) {
-//     super.didUpdateWidget(oldWidget);
-//     _controller.duration = widget._duration;
-//   }
-//
-//   @override
-//   void dispose() {
-//     _controller.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return _popup.buildPage(context, _controller, _controller);
-//   }
-// }
-
 class DetailPopupMain<T> extends PopupRoute<T> {
   final int slotIndex;
 

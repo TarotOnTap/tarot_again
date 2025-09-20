@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:tarot_again/ui_layer/ui_layer.dart';
+import 'package:tarot_again/util/util.dart';
 
 class MainNavigationRail extends StatefulWidget {
   const MainNavigationRail({super.key});
@@ -22,6 +24,13 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
       onDestinationSelected: (int index) {
         setState(() {
           _selectedIndex = index;
+
+          switch (_selectedIndex) {
+            case 3:
+              Navigator.of(context).push(RandomSourcePopupMain());
+            case _:
+              ;
+          }
         });
       },
       labelType: labelType,
@@ -42,7 +51,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
               icon: const Icon(Icons.more_horiz_rounded),
             )
           : const SizedBox(),
-      destinations: const <NavigationRailDestination>[
+      destinations: <NavigationRailDestination>[
         NavigationRailDestination(
           icon: Icon(Icons.favorite_border),
           selectedIcon: Icon(Icons.favorite),
@@ -57,6 +66,23 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
           icon: Badge(label: Text('4'), child: Icon(Icons.star_border)),
           selectedIcon: Badge(label: Text('4'), child: Icon(Icons.star)),
           label: Text('Third'),
+        ),
+        NavigationRailDestination(
+          icon: Badge(
+            label: Watch(
+              (BuildContext context) =>
+                  Text(SignalsManager.currentRandomGenerator.value.displayName),
+            ),
+            child: Icon(LucideIcons.dices),
+          ),
+          selectedIcon: Badge(
+            label: Watch(
+              (BuildContext context) =>
+                  Text(SignalsManager.currentRandomGenerator.value.displayName),
+            ),
+            child: Icon(LucideIcons.dices, color: Colors.green),
+          ),
+          label: Text("Randomness"),
         ),
       ],
       //         ),

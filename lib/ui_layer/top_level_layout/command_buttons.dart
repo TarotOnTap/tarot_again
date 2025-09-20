@@ -127,7 +127,7 @@ class CommandButtons extends StatelessWidget with Logging {
         PromptedChoice<String>.single(
           title: "Select a source of randomness",
           clearable: true,
-          value: sl<AsyncRandoms>().currentGenerator.displayName,
+          value: SignalsManager.currentRandomGenerator.value.displayName,
           onChanged: (String? value) {
             if (value != null) {
               sl<AsyncRandoms>().setRandomSource(value);

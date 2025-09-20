@@ -25,6 +25,15 @@ class SignalsManager {
     debugLabel: "deckType",
   );
 
+  static final Signal<RandomGenerators> currentRandomGenerator =
+      signal<RandomGenerators>(
+        RandomGenerators.none,
+        debugLabel: "currentGenerator",
+      );
+
+  static final Signal<RandomsProvider> currentRandomProvider =
+      signal<RandomsProvider>(SecureRandom(), debugLabel: "currentProvider");
+
   static final Signal<bool> reversalsAllowed = signal<bool>(
     true,
     debugLabel: "reversalsAllowed",
@@ -57,6 +66,8 @@ class SignalsManager {
       allCardsFaceUp,
       cardBackStyle,
       // cardsDealt,
+      currentRandomGenerator,
+      currentRandomProvider,
       deckType,
       deckName,
       shuffledDeck,

@@ -1,12 +1,11 @@
 import 'dart:math';
 
-// import 'package:tarot_again/data_layer/data_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
 enum RandomGenerators {
-  none(displayName: "None", genCreator: SecureRandom.new),
-  local(displayName: "Local", genCreator: SecureRandom.new),
-  secureRandom(displayName: "Secure Random", genCreator: SecureRandom.new);
+  none(displayName: "Default", genCreator: SecureRandom.new),
+  local(displayName: "Device", genCreator: SecureRandom.new);
+  // secureRandom(displayName: "Device", genCreator: SecureRandom.new);
 
   const RandomGenerators({required this.displayName, required this.genCreator});
 
@@ -38,8 +37,8 @@ class AsyncRandoms with Logging {
     return _randomGeneratorNames;
   }
 
-  RandomGenerators currentGenerator = RandomGenerators.none;
-  late RandomsProvider currentProvider;
+  // RandomGenerators currentGenerator = RandomGenerators.none;
+  // late RandomsProvider currentProvider;
 
   // AsyncRandoms._() {
   AsyncRandoms() {
@@ -53,20 +52,29 @@ class AsyncRandoms with Logging {
     // along the way
     verbose("setRandomSource: newSource is $name");
 
-    currentGenerator = RandomGenerators.values.firstWhere(
-      (elem) => elem.displayName == name,
-      orElse: () => RandomGenerators.none,
-    );
+    SignalsManager.currentRandomGenerator.value = RandomGenerators.values
+        .firstWhere(
+          (elem) => elem.displayName == name,
+          orElse: () => RandomGenerators.none,
+        );
 
-    currentProvider = currentGenerator.genCreator();
+    SignalsManager.currentRandomProvider.value = SignalsManager
+        .currentRandomGenerator
+        .value
+        .genCreator();
   }
 
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>
-      currentProvider.getNextInt(rangeLow: rangeLow = 0, rangeHigh: rangeHigh);
+      SignalsManager.currentRandomProvider.value.getNextInt(
+        rangeLow: rangeLow = 0,
+        rangeHigh: rangeHigh,
+      );
 
-  Future<double> getNextDouble() => currentProvider.getNextDouble();
+  Future<double> getNextDouble() =>
+      SignalsManager.currentRandomProvider.value.getNextDouble();
 
-  Future<bool> getNextBool() => currentProvider.getNextBool();
+  Future<bool> getNextBool() =>
+      SignalsManager.currentRandomProvider.value.getNextBool();
 
   Future<IList<E>> shuffleIterable<E>(
     // The goal is to return a list of cards in shuffled order.
