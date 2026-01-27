@@ -55,8 +55,8 @@ class AsyncRandoms with Logging {
     SignalsManager.currentRandomGenerator.value = RandomGenerators.values
         .firstWhere(
           (elem) => elem.displayName == name,
-          orElse: () => RandomGenerators.none,
-        );
+      orElse: () => RandomGenerators.none,
+    );
 
     SignalsManager.currentRandomProvider.value = SignalsManager
         .currentRandomGenerator
@@ -77,12 +77,11 @@ class AsyncRandoms with Logging {
       SignalsManager.currentRandomProvider.value.getNextBool();
 
   Future<IList<E>> shuffleIterable<E>(
-    // The goal is to return a list of cards in shuffled order.
-    // upstream processing can handle cards popping out of the shuffle, etc.
-    // where it might be useful to use a stream, drawing one card at a time with
-    // the occasional exception.
-    Iterable<E> remaining,
-  ) async {
+      // The goal is to return a list of cards in shuffled order.
+      // upstream processing can handle cards popping out of the shuffle, etc.
+      // where it might be useful to use a stream, drawing one card at a time with
+      // the occasional exception.
+      Iterable<E> remaining,) async {
     IList<E> copy = IList(remaining);
     // Output<E> removedItem = Output<E>();
     IList<E> resultList = IList<E>.empty();
@@ -90,6 +89,8 @@ class AsyncRandoms with Logging {
     if (copy.isNotEmpty) {
       // taskChoice never fails
       int index = await getNextInt(rangeHigh: copy.length - 1);
+
+      // E bob = E
 
       // final int choice = await getNextInt(rangeHigh: copy.length - 1);
       E item = copy[index];
