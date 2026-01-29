@@ -3,13 +3,17 @@ import 'package:args/args.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:toastification/toastification.dart';
 
+import 'main/tarot_game.dart';
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'ui_layer/ui_layer.dart';
+import 'util/app_settings.dart';
+import 'util/flutter_util.dart';
 import 'util/register_singletons.dart';
 import 'util/util.dart';
 
 void main(List<String> args) async {
   final parser = ArgParser();
+  // final game = TarotGame();
 
   parser.addFlag("create-assets", negatable: false);
   final ArgResults argResults = parser.parse(args);
@@ -24,7 +28,10 @@ void main(List<String> args) async {
         Logging.staticVerbose("\n*******\nApp starting\n*******");
         // serviceLocatorConfig();
 
-        await registerSingletons();
+        await Settings.init();
+        await firstRunSettings();
+
+        await registerSingletons(); // default settings provider, per platform
 
         ErrorWidget.builder = (FlutterErrorDetails details) {
           // If we're in debug mode, use the normal error widget which shows the error
@@ -34,7 +41,7 @@ void main(List<String> args) async {
 
         // TODO: init sqlite db, using device's per-user storage. Make sure to include migration!
         // await _initFirebase();
-        runApp(TarotAgainApp());
+        runApp(GameWidget(game: TarotGame()));
       },
       (Object error, StackTrace stack) {
         sl<Talker>().handle(error, stack, 'Uncaught app exception');

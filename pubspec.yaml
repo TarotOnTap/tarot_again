@@ -71,6 +71,7 @@ dependencies:
   floating_dialog: ^1.1.1+1
   flutter_lucide: ^1.7.0
   flame: ^1.34.0
+  flutter_settings_screens: ^0.3.4
 
 dev_dependencies:
   flutter_test:
@@ -99,17 +100,21 @@ flutter:
 
   assets:
     - assets/
-    - assets/decks/
-    - assets/decks/standardTarot/
-    - assets/decks/standardTarot/rws/
-    - assets/decks/standardTarot/rws/descriptions/
-    - assets/decks/standardTarot/rws/images/
-    - assets/decks/standardTarot/rws/reversedMeanings/
-    - assets/decks/standardTarot/rws/uprightMeanings/
+    - assets/audio/
+    - assets/images/
+    - assets/images/decks/
+    - assets/images/decks/standardTarot/
+    - assets/images/decks/standardTarot/rws/
+    - assets/images/decks/standardTarot/rws/descriptions/
+    - assets/images/decks/standardTarot/rws/images/
+    - assets/images/decks/standardTarot/rws/reversedMeanings/
+    - assets/images/decks/standardTarot/rws/uprightMeanings/
     - assets/layouts/
     - assets/layouts/tarotLayouts/
     - assets/layouts/tarotLayouts/allCards/
     - assets/layouts/tarotLayouts/pastPresentFuture/
+    - assets/tiles/
+
 
 
 
