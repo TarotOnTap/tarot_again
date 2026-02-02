@@ -71,8 +71,8 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
       final assets = await sl<AssetManager>().loadAssetsForCard(card);
       final reversed = await sl<AsyncRandoms>().getNextInt(rangeHigh: 1);
       final ReversalEnum reversal = reversed == 0
-          ? ReversalEnum.upright
-          : ReversalEnum.reversed;
+          ? ReversalEnum.reversalUpright
+          : ReversalEnum.reversalReversed;
 
       setState(
         () => slotState = slotState.copyWith(
@@ -85,18 +85,20 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
   }
 
   void setFaceUp(ShowingFaceEnum showingFace) => setState(
-    () => slotState = slotState.copyWith(showingFace: ShowingFaceEnum.front),
+    () => slotState = slotState.copyWith(
+      showingFace: ShowingFaceEnum.showingFaceFront,
+    ),
   );
 
   void setFaceDown(ShowingFaceEnum showingFace) => setState(
-    () => slotState = slotState.copyWith(showingFace: ShowingFaceEnum.back),
+    () => slotState = slotState.copyWith(showingFace: .showingFaceBack),
   );
 
   void flipFaceUp() => setState(
     () => slotState = slotState.copyWith(
-      showingFace: slotState.showingFace == ShowingFaceEnum.front
-          ? ShowingFaceEnum.back
-          : ShowingFaceEnum.front,
+      showingFace: slotState.showingFace == ShowingFaceEnum.showingFaceFront
+          ? ShowingFaceEnum.showingFaceBack
+          : ShowingFaceEnum.showingFaceFront,
     ),
   );
 
@@ -139,7 +141,7 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
               onTap: () => Navigator.of(
                 context,
               ).push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
-              onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
+              onDoubleTap: () => setFaceUp(ShowingFaceEnum.showingFaceFront),
               onSecondaryTap: () => toastification.show(
                 title: Text("onSecondaryTap handler"),
                 style: ToastificationStyle.flat,

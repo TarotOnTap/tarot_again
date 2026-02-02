@@ -14,16 +14,19 @@ class SignalsManager {
     debugLabel: "cardBackStyle",
   );
 
-  static final Signal<StandardTarotDecksEnum> deckName =
-      signal<StandardTarotDecksEnum>(
-        StandardTarotDecksEnum.rws,
+  static final SettingsBackedSignal<StandardTarotDecks> deckName =
+      settingsBackedSignal<StandardTarotDecks>(
+        StandardTarotDecks.rwsTarotDeck,
         debugLabel: "deckName",
+        settingsKey: "deckName",
       );
 
-  static final Signal<DeckTypesEnum> deckType = signal<DeckTypesEnum>(
-    DeckTypesEnum.standardTarot,
-    debugLabel: "deckType",
-  );
+  static final SettingsBackedSignal<DeckTypesEnum> deckType =
+      settingsBackedSignal<DeckTypesEnum>(
+        DeckTypesEnum.standardTarotDeck,
+        debugLabel: "deckType",
+        settingsKey: "deckType",
+      );
 
   static final Signal<RandomGenerators> currentRandomGenerator =
       signal<RandomGenerators>(
@@ -34,10 +37,15 @@ class SignalsManager {
   static final Signal<RandomsProvider> currentRandomProvider =
       signal<RandomsProvider>(SecureRandom(), debugLabel: "currentProvider");
 
-  static final Signal<bool> reversalsAllowed = signal<bool>(
-    true,
-    debugLabel: "reversalsAllowed",
-  );
+  // a signal that is persisted to SharedPreferences storage.  When this is true,
+  // dealing out tarot cards will display cards as upright or reversed; setting
+  // it falls will deal out upright cards only.
+  static final SettingsBackedSignal<bool> reversalsAllowed =
+      settingsBackedSignal<bool>(
+        true,
+        debugLabel: "reversalsAllowed",
+        settingsKey: "reversalsAllowed",
+      );
 
   static final Signal<IList<TarotDeckCards>> shuffledDeck = signal(
     const IList<TarotDeckCards>.empty(),

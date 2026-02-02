@@ -48,7 +48,7 @@ class SessionManager {
     }
   }
 
-  void changeDeckName(StandardTarotDecksEnum newName) =>
+  void changeDeckName(StandardTarotDecks newName) =>
       SignalsManager.deckName.value = newName;
 
   void changeDeckType(DeckTypesEnum newType) =>

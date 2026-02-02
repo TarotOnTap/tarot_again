@@ -3,9 +3,7 @@ import 'package:args/args.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:toastification/toastification.dart';
 
-import 'main/tarot_game.dart';
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
-import 'ui_layer/ui_layer.dart';
 import 'util/app_settings.dart';
 import 'util/flutter_util.dart';
 import 'util/register_singletons.dart';
@@ -28,10 +26,14 @@ void main(List<String> args) async {
         Logging.staticVerbose("\n*******\nApp starting\n*******");
         // serviceLocatorConfig();
 
-        await Settings.init();
-        await firstRunSettings();
+        await Settings.init(); // default settings provider, per platform
+        await firstRunSettings(); // if this is the first run, set up our
+        // default settings.
 
-        await registerSingletons(); // default settings provider, per platform
+        // for any settingsBackedSignals, defaults have been set up during
+        // firstRunSettings() and the registered signals will pick up whatever
+        // value has been stored in Settings.
+        await registerSingletons();
 
         ErrorWidget.builder = (FlutterErrorDetails details) {
           // If we're in debug mode, use the normal error widget which shows the error
@@ -41,7 +43,8 @@ void main(List<String> args) async {
 
         // TODO: init sqlite db, using device's per-user storage. Make sure to include migration!
         // await _initFirebase();
-        runApp(GameWidget(game: TarotGame()));
+        // runApp(GameWidget(game: TarotGame()));
+        runApp(TarotAgainApp());
       },
       (Object error, StackTrace stack) {
         sl<Talker>().handle(error, stack, 'Uncaught app exception');
