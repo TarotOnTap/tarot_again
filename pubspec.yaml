@@ -72,6 +72,8 @@ dependencies:
   flutter_settings_screens: ^0.3.4
   serialize_enum: ^0.1.4
   flutter_it: ^2.1.1
+  exception_templates: ^0.3.2
+  hive_ce_flutter: ^2.3.4
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +92,7 @@ dev_dependencies:
   json_serializable: ^6.9.4
   custom_lint: 0.8.1
   freezed_lint: ^0.0.9
+  hive_ce_generator: ^1.10.0
 
 
 # For information on the generic Dart part of this file, see the

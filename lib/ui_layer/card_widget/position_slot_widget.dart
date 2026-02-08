@@ -71,8 +71,8 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
       final assets = await sl<AssetManager>().loadAssetsForCard(card);
       final reversed = await sl<AsyncRandoms>().getNextInt(rangeHigh: 1);
       final ReversalEnum reversal = reversed == 0
-          ? ReversalEnum.reversalUpright
-          : ReversalEnum.reversalReversed;
+          ? ReversalEnum.upright
+          : ReversalEnum.reversed;
 
       setState(
         () => slotState = slotState.copyWith(
@@ -85,20 +85,17 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
   }
 
   void setFaceUp(ShowingFaceEnum showingFace) => setState(
-    () => slotState = slotState.copyWith(
-      showingFace: ShowingFaceEnum.showingFaceFront,
-    ),
+    () => slotState = slotState.copyWith(showingFace: ShowingFaceEnum.front),
   );
 
-  void setFaceDown(ShowingFaceEnum showingFace) => setState(
-    () => slotState = slotState.copyWith(showingFace: .showingFaceBack),
-  );
+  void setFaceDown(ShowingFaceEnum showingFace) =>
+      setState(() => slotState = slotState.copyWith(showingFace: .back));
 
   void flipFaceUp() => setState(
     () => slotState = slotState.copyWith(
-      showingFace: slotState.showingFace == ShowingFaceEnum.showingFaceFront
-          ? ShowingFaceEnum.showingFaceBack
-          : ShowingFaceEnum.showingFaceFront,
+      showingFace: slotState.showingFace == ShowingFaceEnum.front
+          ? ShowingFaceEnum.back
+          : ShowingFaceEnum.front,
     ),
   );
 
@@ -141,7 +138,7 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
               onTap: () => Navigator.of(
                 context,
               ).push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
-              onDoubleTap: () => setFaceUp(ShowingFaceEnum.showingFaceFront),
+              onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
               onSecondaryTap: () => toastification.show(
                 title: Text("onSecondaryTap handler"),
                 style: ToastificationStyle.flat,

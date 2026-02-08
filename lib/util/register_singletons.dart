@@ -4,6 +4,7 @@ import 'package:tarot_again/util/util.dart';
 Future<void> registerSingletons() async {
   sl.registerSingleton<SignalsManager>(SignalsManager());
   sl.registerSingleton<ComputedsManager>(ComputedsManager());
+  sl.registerSingleton<EffectsManager>(EffectsManager());
 
   sl.registerSingleton<AsyncRandoms>(AsyncRandoms());
 

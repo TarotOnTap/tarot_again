@@ -22,11 +22,11 @@ abstract class RandomsProvider {
 }
 
 class AsyncRandoms with Logging {
-  IList<String> _randomGeneratorNames = const IList<String>.empty();
+  static IList<String> _randomGeneratorNames = const IList<String>.empty();
 
   // lazy loaded. Not really needed, unless we switch to a dynamically-loaded
   // model for generators.
-  IList<String> get randomGeneratorNames {
+  static IList<String> get randomGeneratorNames {
     if (_randomGeneratorNames.isEmpty) {
       _randomGeneratorNames = RandomGenerators.values
           .map((item) => item.displayName)
@@ -37,10 +37,6 @@ class AsyncRandoms with Logging {
     return _randomGeneratorNames;
   }
 
-  // RandomGenerators currentGenerator = RandomGenerators.none;
-  // late RandomsProvider currentProvider;
-
-  // AsyncRandoms._() {
   AsyncRandoms() {
     verbose("AsyncRandoms.AsyncRandoms");
     setRandomSource(RandomGenerators.none.displayName);
@@ -55,8 +51,8 @@ class AsyncRandoms with Logging {
     SignalsManager.currentRandomGenerator.value = RandomGenerators.values
         .firstWhere(
           (elem) => elem.displayName == name,
-      orElse: () => RandomGenerators.none,
-    );
+          orElse: () => RandomGenerators.none,
+        );
 
     SignalsManager.currentRandomProvider.value = SignalsManager
         .currentRandomGenerator
@@ -77,11 +73,12 @@ class AsyncRandoms with Logging {
       SignalsManager.currentRandomProvider.value.getNextBool();
 
   Future<IList<E>> shuffleIterable<E>(
-      // The goal is to return a list of cards in shuffled order.
-      // upstream processing can handle cards popping out of the shuffle, etc.
-      // where it might be useful to use a stream, drawing one card at a time with
-      // the occasional exception.
-      Iterable<E> remaining,) async {
+    // The goal is to return a list of cards in shuffled order.
+    // upstream processing can handle cards popping out of the shuffle, etc.
+    // where it might be useful to use a stream, drawing one card at a time with
+    // the occasional exception.
+    Iterable<E> remaining,
+  ) async {
     IList<E> copy = IList(remaining);
     // Output<E> removedItem = Output<E>();
     IList<E> resultList = IList<E>.empty();
@@ -90,9 +87,6 @@ class AsyncRandoms with Logging {
       // taskChoice never fails
       int index = await getNextInt(rangeHigh: copy.length - 1);
 
-      // E bob = E
-
-      // final int choice = await getNextInt(rangeHigh: copy.length - 1);
       E item = copy[index];
       copy = copy.removeAt(index);
 

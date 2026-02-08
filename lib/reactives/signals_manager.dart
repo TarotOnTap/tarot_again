@@ -16,14 +16,14 @@ class SignalsManager {
 
   static final SettingsBackedSignal<StandardTarotDecks> deckName =
       settingsBackedSignal<StandardTarotDecks>(
-        StandardTarotDecks.rwsTarotDeck,
+        StandardTarotDecks.rws,
         debugLabel: "deckName",
         settingsKey: "deckName",
       );
 
   static final SettingsBackedSignal<DeckTypesEnum> deckType =
       settingsBackedSignal<DeckTypesEnum>(
-        DeckTypesEnum.standardTarotDeck,
+        DeckTypesEnum.standardTarot,
         debugLabel: "deckType",
         settingsKey: "deckType",
       );

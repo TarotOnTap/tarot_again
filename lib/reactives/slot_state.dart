@@ -9,8 +9,8 @@ abstract class SlotState with _$SlotState {
 
   const factory SlotState({
     @Default(TarotDeckCards.noneCard) TarotDeckCards deckCard,
-    @Default(ShowingFaceEnum.showingFaceBack) ShowingFaceEnum showingFace,
-    @Default(ReversalEnum.reversalUpright) ReversalEnum reversal,
+    @Default(ShowingFaceEnum.back) ShowingFaceEnum showingFace,
+    @Default(ReversalEnum.upright) ReversalEnum reversal,
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(emptyTCModelAssets)
     TCModelAssets assets,

@@ -8,6 +8,7 @@ class FlameSystemWidget extends StatelessWidget {
 
   final game = TarotGame();
 
+  @override
   Widget build(BuildContext context) {
     return GameWidget(game: TarotGame());
   }

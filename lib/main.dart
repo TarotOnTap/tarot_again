@@ -1,11 +1,14 @@
 // import 'package:flutter/material.dart';
 import 'package:args/args.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:tarot_again/hive/hive_registrar.g.dart';
 import 'package:toastification/toastification.dart';
 
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'util/app_settings.dart';
 import 'util/flutter_util.dart';
+import 'util/hive_settings.dart';
 import 'util/register_singletons.dart';
 import 'util/util.dart';
 
@@ -26,7 +29,13 @@ void main(List<String> args) async {
         Logging.staticVerbose("\n*******\nApp starting\n*******");
         // serviceLocatorConfig();
 
-        await Settings.init(); // default settings provider, per platform
+        await Hive
+          ..initFlutter()
+          ..registerAdapters();
+
+        await Settings.init(
+          cacheProvider: HiveCache(),
+        ); // default settings provider, per platform
         await firstRunSettings(); // if this is the first run, set up our
         // default settings.
 

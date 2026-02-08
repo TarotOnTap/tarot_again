@@ -1,4 +1,5 @@
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:tarot_again/ui_layer/settings_ui/settings_ui.dart';
 import 'package:tarot_again/util/flutter_util.dart';
 // import 'package:tarot_again/ui_layer/ui_layer.dart';
 import 'package:tarot_again/util/util.dart';
@@ -10,12 +11,21 @@ class MainNavigationRail extends StatefulWidget {
   State<MainNavigationRail> createState() => _MainNavigationRailState();
 }
 
-class _MainNavigationRailState extends State<MainNavigationRail> {
+class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
   int _selectedIndex = 0;
   NavigationRailLabelType labelType = NavigationRailLabelType.all;
   bool showLeading = false;
   bool showTrailing = false;
   double groupAlignment = -1.0;
+
+  Future<void> _appSettingsDialog(BuildContext context) async =>
+      await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          debug("_appSettingsDialog; returning AlertDialog");
+          return AlertDialog(content: SettingsUi_Widget());
+        },
+      );
 
   Widget _buildTarotLayoutChoiceChip(
     BuildContext context, {
@@ -109,9 +119,15 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
           : const SizedBox(),
       destinations: <NavigationRailDestination>[
         NavigationRailDestination(
-          icon: Icon(Icons.favorite_border),
+          icon: IconButton(
+            icon: Icon(Icons.favorite),
+            onPressed: () {
+              debug("Navigation rail destination 0 (settings) onPressed.");
+              _appSettingsDialog(context);
+            },
+          ),
           selectedIcon: Icon(Icons.favorite),
-          label: Text('First'),
+          label: Text('Settings'),
         ),
         NavigationRailDestination(
           icon: Badge(child: Icon(Icons.bookmark_border)),

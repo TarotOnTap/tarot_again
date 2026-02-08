@@ -5,7 +5,7 @@ import 'package:tarot_again/util/util.dart';
 class ComputedsManager {
   static final Computed<String> deckString = computed(
     () =>
-        "decks/${(SignalsManager.deckType.value).toString()}/${(SignalsManager.deckName.value).toString()}",
+        "decks/${SignalsManager.deckType.value.name}/${SignalsManager.deckName.value.name}",
     debugLabel: "deckString",
   );
 
@@ -37,8 +37,7 @@ class ComputedsManager {
 
   static final Computed<Iterable<String>> deckAssetPaths = computed(
     () => SignalsManager.allAssetPaths.value.where(
-      (path) =>
-          path.contains("decks/${(SignalsManager.deckType.value).toString()}"),
+      (path) => path.contains("decks/${SignalsManager.deckType.value.name}"),
     ),
     debugLabel: "deckAssetPaths",
   );

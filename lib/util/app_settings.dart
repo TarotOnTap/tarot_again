@@ -14,6 +14,8 @@ export 'package:flutter_settings_screens/flutter_settings_screens.dart';
 // and settingsBackedSignal() function handle the mechanics of that, so we
 // don't have to fuss about those details here.
 
+const ISet<Type> baseSettings = ISetConst({int, double, bool, String});
+
 typedef InitialSettingsType<T> = ({String key, String label, T initialValue});
 
 final List<InitialSettingsType> settings = <InitialSettingsType>[
