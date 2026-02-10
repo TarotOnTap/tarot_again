@@ -79,6 +79,7 @@ dependencies:
   bloc_test: ^10.0.0
   hydrated_bloc: ^10.1.1
   replay_bloc: ^0.3.0
+  flutter_constraintlayout: ^1.7.0-stable
 
 dev_dependencies:
   flutter_test:
@@ -98,6 +99,7 @@ dev_dependencies:
   custom_lint: 0.8.1
   freezed_lint: ^0.0.9
   hive_ce_generator: ^1.10.0
+  bloc_lint: ^0.3.5
 
 
 # For information on the generic Dart part of this file, see the
