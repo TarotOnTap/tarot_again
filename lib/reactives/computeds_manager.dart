@@ -60,6 +60,9 @@ class ComputedsManager {
                   GlobalKey<PositionSlotWidgetState>(debugLabel: "slot $index"),
             )
             .toIList(),
+      StackLayout _ => const IList<GlobalKey<PositionSlotWidgetState>>.empty(),
+      ComplexLayout _ =>
+        const IList<GlobalKey<PositionSlotWidgetState>>.empty(),
     },
   );
 

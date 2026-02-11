@@ -30,12 +30,14 @@ sealed class TarotLayout with _$TarotLayout {
     required String displayName,
     required String layoutType,
     required int numCards,
+    required String mdLayoutDescription,
   }) = StackLayout;
 
   factory TarotLayout.complexLayout({
     required String displayName,
     required String layoutType,
     required int numCards,
+    required String mdLayoutDescription,
   }) = ComplexLayout;
 
   factory TarotLayout.horizontalLinear({
