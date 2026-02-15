@@ -5,7 +5,6 @@ export 'dart:async' hide AsyncError;
 export 'dart:developer';
 
 export 'package:async/async.dart';
-export 'package:bloc/bloc.dart';
 export 'package:change_case/change_case.dart';
 export 'package:collection/collection.dart';
 export 'package:dart_scope_functions/dart_scope_functions.dart';

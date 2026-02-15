@@ -1,0 +1,24 @@
+{
+  "name": "newppp",
+  "displayName": "NEW Past, Present, Future",
+  "positions": [
+    {
+      "name": "New Past",
+      "alignment": "centerLeft",
+      "moveByContainerWidth": 0.25,
+      "moveByChildWidth": -0.5
+    },
+    {
+      "name": "New Present",
+      "alignment": "centerLeft",
+      "moveByContainerWidth": 0.5,
+      "moveByChildWidth": -0.5
+    },
+    {
+      "name": "New Future",
+      "alignment": "centerLeft",
+      "moveByContainerWidth": 0.75,
+      "moveByChildWidth": -0.5
+    }
+  ]
+}

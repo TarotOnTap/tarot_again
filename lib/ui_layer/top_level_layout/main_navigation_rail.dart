@@ -53,11 +53,14 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
         ),
         actions: ComputedsManager.layoutDisplayNames.value
             .map(
-              (e) => _buildTarotLayoutChoiceChip(
-                context,
-                signal: SignalsManager.tarotLayout,
-                key: e,
-              ),
+              (e) =>
+                  _buildTarotLayoutChoiceChip(
+                    context,
+                    signal: SignalsManager.tarotLayout,
+                    key: e,
+                  ).also((chip) {
+                    verbose("  chip widget created, key is $e");
+                  }),
             )
             .toList(),
       ),

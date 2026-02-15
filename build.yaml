@@ -29,4 +29,5 @@ targets:
           field_rename: none
           generic_argument_factories: true
           ignore_unannotated: false
-          include_if_null: true
+          include_if_null: false
+          create_json_schema: true

@@ -22,7 +22,7 @@ class LayoutDescription extends StatelessWidget {
       //TODO: wrap the markdown into a top-aligned layout so that its contents start at the top
       // TODO: of its widget, rather than the center.
       (context) => GptMarkdown(
-        SignalsManager.tarotLayout.value.mdLayoutDescription,
+        SignalsManager.tarotLayout.value.mdLayoutDescription ?? "",
         // style: Theme.of(context).textTheme,
       ),
     );

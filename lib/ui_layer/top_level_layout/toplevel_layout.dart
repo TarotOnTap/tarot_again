@@ -15,8 +15,8 @@ class TopLevelLayout extends StatelessWidget {
     return MainScaffold(
       child: Row(
         children: <Widget>[
-          Expanded(flex: 1, child: CommandButtons()),
-          Expanded(flex: 2, child: CardsStageLayout()),
+          Flexible(child: CommandButtons()),
+          Expanded(flex: 3, child: CardsStageLayout()),
           Expanded(flex: 1, child: SidebarLayout()),
         ],
       ),

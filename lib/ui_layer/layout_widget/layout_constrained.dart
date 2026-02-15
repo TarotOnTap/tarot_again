@@ -1,49 +1,81 @@
 import 'package:align_positioned/align_positioned.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:tarot_again/ui_layer/card_widget/card_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
 class LayoutBackground extends StatelessWidget with Logging {
-  const LayoutBackground({super.key, required this.parentSize});
+  LayoutBackground({super.key, required this.parentSize}) {
+    verbose("LayoutBackground created, passed $parentSize");
+  }
 
   final BoxConstraints parentSize;
 
   @override
   Widget build(BuildContext context) {
-    return Container(constraints: parentSize, color: Colors.blue);
+    return ConstrainedBox(
+      constraints: parentSize,
+      child: Container(color: Colors.blue),
+    );
   }
 }
 
 class LayoutConstrained extends StatelessWidget with Logging {
-  @Preview(name: 'LayoutConstrained')
-  const LayoutConstrained({super.key});
+  const LayoutConstrained({super.key, required this.layout});
+
+  final NewTarotLayout layout;
+
+  Widget _buildFromPosition(PositionRepresentation pos, int index) {
+    return AlignPositioned.expand(
+      key: ComputedsManager.slotKeys.value[index],
+      alignment: Alignment.topLeft,
+      dx: pos.dx,
+      dy: pos.dy,
+      moveByChildWidth: pos.moveByChildWidth,
+      moveByChildHeight: pos.moveByChildHeight,
+      moveByContainerWidth: pos.moveByContainerWidth,
+      moveByContainerHeight: pos.moveByContainerHeight,
+
+      moveVerticallyByChildWidth: pos.moveVerticallyByChildWidth,
+      moveHorizontallyByChildHeight: pos.moveHorizontallyByChildHeight,
+      moveVerticallyByContainerWidth: pos.moveVerticallyByContainerWidth,
+      moveHorizontallyByContainerHeight: pos.moveHorizontallyByContainerHeight,
+      childWidth: pos.childWidth,
+      childHeight: pos.childHeight,
+      minChildWidth: pos.minChildWidth,
+      minChildHeight: pos.minChildHeight,
+      maxChildWidth: pos.maxChildWidth,
+      maxChildHeight: pos.maxChildHeight,
+      childWidthRatio: pos.childWidthRatio,
+      childHeightRatio: pos.childHeightRatio,
+      minChildWidthRatio: pos.minChildWidthRatio,
+      minChildHeightRatio: pos.minChildHeightRatio,
+      maxChildWidthRatio: pos.maxChildWidthRatio,
+      maxChildHeightRatio: pos.maxChildHeightRatio,
+      rotateDegrees: pos.rotateDegrees,
+      // Matrix4Transform? matrix4Transform, // TODO: write a converter
+      wins: pos.wins ?? Wins.min,
+      touch: pos.touch ?? Touch.inside,
+      child: PositionSlotWidget(
+        slotName: pos.name,
+        slotIndex: pos.positionIndex ?? index,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    // TODO: sort by z-index first, so that lower z-indexes are earlier in the
+    // list
+    final layoutOrder = layout.positions.sortedBy((pos) => pos.zIndex ?? 0);
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Stack(
           children: [
             LayoutBackground(parentSize: constraints),
-            AlignPositioned.expand(
-              alignment: Alignment.centerLeft,
-              moveByContainerWidth: 0.25,
-              moveByChildWidth: -0.5,
-              child: PositionSlotWidget(slotName: "Slot 0", slotIndex: 0),
-            ),
-            AlignPositioned.expand(
-              alignment: Alignment.centerLeft,
-              moveByContainerWidth: 0.5,
-              moveByChildWidth: -0.5,
-              child: PositionSlotWidget(slotName: "Slot 1", slotIndex: 1),
-            ),
-            AlignPositioned.expand(
-              alignment: Alignment.centerLeft,
-              moveByContainerWidth: 0.75,
-              moveByChildWidth: -0.5,
-              child: PositionSlotWidget(slotName: "Slot 2", slotIndex: 2),
-            ),
+            for (var (int index, PositionRepresentation pos)
+                in layoutOrder.indexed)
+              _buildFromPosition(pos, index),
           ],
         );
       },

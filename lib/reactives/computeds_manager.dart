@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tarot_again/ui_layer/card_widget/position_slot_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
-class ComputedsManager {
+class ComputedsManager with Logging {
   static final Computed<String> deckString = computed(
     () =>
         "decks/${SignalsManager.deckType.value.name}/${SignalsManager.deckName.value.name}",
@@ -44,26 +44,47 @@ class ComputedsManager {
 
   static final Computed<IList<GlobalKey<PositionSlotWidgetState>>>
   slotKeys = computed(
-    () => switch (SignalsManager.tarotLayout.value) {
-      NullLayout _ => const IList<GlobalKey<PositionSlotWidgetState>>.empty(),
-      HorizontalLinear hl =>
-        hl.slotNames
-            .map(
-              (slotName) =>
-                  GlobalKey<PositionSlotWidgetState>(debugLabel: slotName),
-            )
-            .toIList(),
-      SimpleGrid sg =>
-        sg.numCards.range
-            .map(
-              (index) =>
-                  GlobalKey<PositionSlotWidgetState>(debugLabel: "slot $index"),
-            )
-            .toIList(),
-      StackLayout _ => const IList<GlobalKey<PositionSlotWidgetState>>.empty(),
-      ComplexLayout _ =>
-        const IList<GlobalKey<PositionSlotWidgetState>>.empty(),
-    },
+    () =>
+        (switch (SignalsManager.tarotLayout.value) {
+          NullLayout _ =>
+            const IList<GlobalKey<PositionSlotWidgetState>>.empty().also((it) {
+              Logging.staticVerbose("slotKeys for NullLayout: $it");
+            }),
+          HorizontalLinear hl =>
+            hl.slotNames
+                .map(
+                  (slotName) =>
+                      GlobalKey<PositionSlotWidgetState>(debugLabel: slotName),
+                )
+                .toIList()
+                .also((it) {
+                  Logging.staticVerbose("slotKeys for HorizontalLinear: $it");
+                }),
+          SimpleGrid sg =>
+            sg.numCards.range
+                .map(
+                  (index) => GlobalKey<PositionSlotWidgetState>(
+                    debugLabel: "slot $index",
+                  ),
+                )
+                .toIList()
+                .also((it) {
+                  Logging.staticVerbose("slotKeys for SimpleGrid: $it");
+                }),
+          NewTarotLayout nt =>
+            nt.positions
+                .map(
+                  (position) => GlobalKey<PositionSlotWidgetState>(
+                    debugLabel: position.name,
+                  ),
+                )
+                .toIList()
+                .also((it) {
+                  Logging.staticVerbose("slotKeys for NewTarotLayout: $it");
+                }),
+        }).also((it) {
+          Logging.staticVerbose("  slotKeys calculated, is now $it");
+        }),
   );
 
   static final Computed<Iterable<String>> tarotLayoutAssetPaths = computed(
