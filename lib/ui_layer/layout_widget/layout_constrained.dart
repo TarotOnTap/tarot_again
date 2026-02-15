@@ -26,7 +26,6 @@ class LayoutConstrained extends StatelessWidget with Logging {
 
   Widget _buildFromPosition(PositionRepresentation pos, int index) {
     return AlignPositioned.expand(
-      key: ComputedsManager.slotKeys.value[index],
       alignment: Alignment.topLeft,
       dx: pos.dx,
       dy: pos.dy,
@@ -56,6 +55,7 @@ class LayoutConstrained extends StatelessWidget with Logging {
       wins: pos.wins ?? Wins.min,
       touch: pos.touch ?? Touch.inside,
       child: PositionSlotWidget(
+        key: ComputedsManager.slotKeys.value[index],
         slotName: pos.name,
         slotIndex: pos.positionIndex ?? index,
       ),
