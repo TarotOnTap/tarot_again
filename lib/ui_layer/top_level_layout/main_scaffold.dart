@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 
 import 'main_navigation_rail.dart';
+import 'top_menu_bar.dart';
 
 class MainScaffold extends StatelessWidget {
   final Widget child;
@@ -15,11 +16,18 @@ class MainScaffold extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SafeArea(
-        child: Row(
+        child: Column(
           children: [
-            MainNavigationRail(),
-            const VerticalDivider(thickness: 1, width: 1),
-            Expanded(child: child),
+            TopMenuBar(),
+            Expanded(
+              child: Row(
+                children: [
+                  MainNavigationRail(),
+                  const VerticalDivider(thickness: 1, width: 1),
+                  Expanded(child: child),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -1,4 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:tarot_again/ui_layer/settings_ui/settings_ui.dart';
+import 'package:tarot_again/util/flutter_util.dart';
+// import 'package:tarot_again/ui_layer/ui_layer.dart';
+import 'package:tarot_again/util/util.dart';
 
 class MainNavigationRail extends StatefulWidget {
   const MainNavigationRail({super.key});
@@ -7,12 +11,86 @@ class MainNavigationRail extends StatefulWidget {
   State<MainNavigationRail> createState() => _MainNavigationRailState();
 }
 
-class _MainNavigationRailState extends State<MainNavigationRail> {
+class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
   int _selectedIndex = 0;
   NavigationRailLabelType labelType = NavigationRailLabelType.all;
   bool showLeading = false;
   bool showTrailing = false;
   double groupAlignment = -1.0;
+
+  Future<void> _appSettingsDialog(BuildContext context) async =>
+      await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          debug("_appSettingsDialog; returning AlertDialog");
+          return AlertDialog(content: SettingsUi_Widget());
+        },
+      );
+
+  Widget _buildTarotLayoutChoiceChip(
+    BuildContext context, {
+    required Signal<TarotLayout> signal,
+    required String key,
+  }) => Watch(
+    (BuildContext context) => ChoiceChip(
+      label: Text(key),
+      selected: signal.value.displayName == key,
+      onSelected: (bool selected) {
+        if (selected) {
+          signal.value = sl<LayoutManager>().getLayoutByDisplayName(key);
+        }
+      },
+    ),
+  );
+
+  Future<void> _tarotLayoutsDialogBuilder(BuildContext context) => showDialog(
+    context: context,
+    builder: (BuildContext context) => Watch(
+      (BuildContext context) => AlertDialog(
+        title: Text(
+          "Select a Tarot Layout",
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        actions: ComputedsManager.layoutDisplayNames.value
+            .map(
+              (e) =>
+                  _buildTarotLayoutChoiceChip(
+                    context,
+                    signal: SignalsManager.tarotLayout,
+                    key: e,
+                  ).also((chip) {
+                    verbose("  chip widget created, key is $e");
+                  }),
+            )
+            .toList(),
+      ),
+    ),
+  );
+
+  Future<void> _randomSourceDialogBuilder(BuildContext context) => showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: Text(
+        "Select the source of randomness",
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+      actions: List<Widget>.generate(RandomGenerators.values.length, (
+        int index,
+      ) {
+        return Watch(
+          (BuildContext context) => ChoiceChip(
+            label: Text(RandomGenerators.values[index].displayName),
+            selected:
+                SignalsManager.currentRandomGenerator.value.index == index,
+            onSelected: (bool selected) {
+              SignalsManager.currentRandomGenerator.value =
+                  RandomGenerators.values[index];
+            },
+          ),
+        );
+      }).toList(),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +120,17 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
               icon: const Icon(Icons.more_horiz_rounded),
             )
           : const SizedBox(),
-      destinations: const <NavigationRailDestination>[
+      destinations: <NavigationRailDestination>[
         NavigationRailDestination(
-          icon: Icon(Icons.favorite_border),
+          icon: IconButton(
+            icon: Icon(Icons.favorite),
+            onPressed: () {
+              debug("Navigation rail destination 0 (settings) onPressed.");
+              _appSettingsDialog(context);
+            },
+          ),
           selectedIcon: Icon(Icons.favorite),
-          label: Text('First'),
+          label: Text('Settings'),
         ),
         NavigationRailDestination(
           icon: Badge(child: Icon(Icons.bookmark_border)),
@@ -54,88 +138,57 @@ class _MainNavigationRailState extends State<MainNavigationRail> {
           label: Text('Second'),
         ),
         NavigationRailDestination(
-          icon: Badge(label: Text('4'), child: Icon(Icons.star_border)),
-          selectedIcon: Badge(label: Text('4'), child: Icon(Icons.star)),
-          label: Text('Third'),
+          icon: IconButton(
+            onPressed: () {
+              _tarotLayoutsDialogBuilder(context);
+            },
+            icon: Badge(
+              label: Watch(
+                (BuildContext context) =>
+                    Text(SignalsManager.tarotLayout.value.displayName),
+              ),
+              child: Icon(LucideIcons.layout_dashboard),
+            ),
+            selectedIcon: Badge(
+              label: Watch(
+                (BuildContext context) =>
+                    Text(SignalsManager.tarotLayout.value.displayName),
+              ),
+              child: Icon(LucideIcons.layout_dashboard),
+            ),
+          ),
+          label: Text('Layouts'),
+        ),
+        NavigationRailDestination(
+          icon: IconButton(
+            onPressed: () {
+              _randomSourceDialogBuilder(context);
+            },
+            icon: Badge(
+              label: Watch(
+                (BuildContext context) => Text(
+                  SignalsManager.currentRandomGenerator.value.displayName,
+                ),
+              ),
+              child: Icon(LucideIcons.dices),
+            ),
+          ),
+          selectedIcon: IconButton(
+            onPressed: () {
+              _randomSourceDialogBuilder(context);
+            },
+            icon: Badge(
+              label: Watch(
+                (BuildContext context) => Text(
+                  SignalsManager.currentRandomGenerator.value.displayName,
+                ),
+              ),
+              child: Icon(LucideIcons.dices),
+            ),
+          ),
+          label: Text("Randomness"),
         ),
       ],
-      //         ),
-      //         const VerticalDivider(thickness: 1, width: 1),
-      //         // This is the main content.
-      //         Expanded(
-      //           child: Column(
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             children: <Widget>[
-      //               Text('selectedIndex: $_selectedIndex'),
-      //               const SizedBox(height: 20),
-      //               Text('Label type: ${labelType.name}'),
-      //               const SizedBox(height: 10),
-      //               SegmentedButton<NavigationRailLabelType>(
-      //                 segments: const <ButtonSegment<NavigationRailLabelType>>[
-      //                   ButtonSegment<NavigationRailLabelType>(
-      //                     value: NavigationRailLabelType.none,
-      //                     label: Text('None'),
-      //                   ),
-      //                   ButtonSegment<NavigationRailLabelType>(
-      //                     value: NavigationRailLabelType.selected,
-      //                     label: Text('Selected'),
-      //                   ),
-      //                   ButtonSegment<NavigationRailLabelType>(
-      //                     value: NavigationRailLabelType.all,
-      //                     label: Text('All'),
-      //                   ),
-      //                 ],
-      //                 selected: <NavigationRailLabelType>{labelType},
-      //                 onSelectionChanged:
-      //                     (Set<NavigationRailLabelType> newSelection) {
-      //                       setState(() {
-      //                         labelType = newSelection.first;
-      //                       });
-      //                     },
-      //               ),
-      //               const SizedBox(height: 20),
-      //               Text('Group alignment: $groupAlignment'),
-      //               const SizedBox(height: 10),
-      //               SegmentedButton<double>(
-      //                 segments: const <ButtonSegment<double>>[
-      //                   ButtonSegment<double>(value: -1.0, label: Text('Top')),
-      //                   ButtonSegment<double>(value: 0.0, label: Text('Center')),
-      //                   ButtonSegment<double>(value: 1.0, label: Text('Bottom')),
-      //                 ],
-      //                 selected: <double>{groupAlignment},
-      //                 onSelectionChanged: (Set<double> newSelection) {
-      //                   setState(() {
-      //                     groupAlignment = newSelection.first;
-      //                   });
-      //                 },
-      //               ),
-      //               const SizedBox(height: 20),
-      //               SwitchListTile(
-      //                 title: Text(showLeading ? 'Hide Leading' : 'Show Leading'),
-      //                 value: showLeading,
-      //                 onChanged: (bool value) {
-      //                   setState(() {
-      //                     showLeading = value;
-      //                   });
-      //                 },
-      //               ),
-      //               SwitchListTile(
-      //                 title: Text(
-      //                   showTrailing ? 'Hide Trailing' : 'Show Trailing',
-      //                 ),
-      //                 value: showTrailing,
-      //                 onChanged: (bool value) {
-      //                   setState(() {
-      //                     showTrailing = value;
-      //                   });
-      //                 },
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
     );
   }
 }

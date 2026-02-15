@@ -88,9 +88,8 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
     () => slotState = slotState.copyWith(showingFace: ShowingFaceEnum.front),
   );
 
-  void setFaceDown(ShowingFaceEnum showingFace) => setState(
-    () => slotState = slotState.copyWith(showingFace: ShowingFaceEnum.back),
-  );
+  void setFaceDown(ShowingFaceEnum showingFace) =>
+      setState(() => slotState = slotState.copyWith(showingFace: .back));
 
   void flipFaceUp() => setState(
     () => slotState = slotState.copyWith(

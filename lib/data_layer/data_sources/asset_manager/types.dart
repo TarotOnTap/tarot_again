@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 
 // part 'types.freezed.dart'; // leave this here
+// part 'types.g.dart';
 
-@immutable
 class AssetGenImage {
   const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 

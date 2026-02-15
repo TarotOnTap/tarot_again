@@ -4,13 +4,13 @@ import 'package:tarot_again/util/util.dart';
 /// where a session is the total set of choices about a particular reading session -
 /// what deck is used, whether reversals are allowed, what layout is chosen,
 /// what cards are dealt into that layout, etc.
-class SessionManager {
+class SessionManager with Logging {
   SessionManager() {
-    log("SessionManager.SessionManager");
+    verbose("SessionManager.SessionManager()");
   }
 
   void _emptySlots() {
-    log("SessionManager._emptySlots");
+    verbose("SessionManager()._emptySlots");
 
     for (var key in ComputedsManager.slotKeys.value) {
       key.currentState?.setCard(TarotDeckCards.noneCard);
@@ -19,12 +19,10 @@ class SessionManager {
 
   Future<void> dealCards() async {
     // requires that slots have already been laid out
-    log("SessionManager.dealCards");
+    verbose("SessionManager().dealCards");
 
     if (SignalsManager.tarotLayout.value is! NullLayout) {
-      Logging.staticVerbose(
-        "  tarotLayout.value is ${SignalsManager.tarotLayout.value}",
-      );
+      verbose("  tarotLayout.value is ${SignalsManager.tarotLayout.value}");
 
       if (SignalsManager.tarotLayout.value is SimpleGrid) {
         await StandardDeckProvider.unShuffleDeck();
@@ -39,16 +37,24 @@ class SessionManager {
       // shuffled.
 
       if (SignalsManager.shuffledDeck.value.isNotEmpty) {
-        Logging.staticVerbose("  shuffledDeck.isNotEmpty");
+        verbose("  shuffledDeck.isNotEmpty");
 
+        final checkSlots = ComputedsManager.slotKeys.value.toList();
+        verbose("  checkSlots is ${checkSlots.length} items long");
+        verbose("  checkSlots is\n$checkSlots");
+
+        verbose("  setting cards to keys:");
         for (var (index, key) in ComputedsManager.slotKeys.value.indexed) {
+          verbose("    key is '${key.currentState}'");
+          verbose("    index is $index");
+          verbose("    card is ${SignalsManager.shuffledDeck.value[index]}");
           key.currentState?.setCard(SignalsManager.shuffledDeck.value[index]);
         }
       }
     }
   }
 
-  void changeDeckName(StandardTarotDecksEnum newName) =>
+  void changeDeckName(StandardTarotDecks newName) =>
       SignalsManager.deckName.value = newName;
 
   void changeDeckType(DeckTypesEnum newType) =>

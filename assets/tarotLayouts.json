@@ -1,22 +1,78 @@
 {
-  "allCards": {
-    "displayName": "All Cards in a grid",
-    "layoutType": "SimpleGrid",
-    "numCards": 78,
-    "mdLayoutDescription": "# All Cards in a grid\n\nThis is for testing and demonstration purposes, not a real layout."
-  },
-  "pastPresentFuture": {
-    "displayName": "Past, Present, Future",
-    "layoutType": "HorizontalLinear",
-    "horizontalAlign": "center",
-    "verticalAlign": "center",
-    "alignOnCard": 1,
-    "numCards": 3,
-    "slotNames": [
-      "Past",
-      "Present",
-      "Future"
-    ],
-    "mdLayoutDescription": "# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or a situation of interest.\n\n[Wikipedia](https://en.wikipedia.org/)."
-  }
+  "layouts": [
+    {
+      "name": "allCards",
+      "displayName": "All Cards",
+      "layoutType": "SimpleGrid",
+      "numCards": 78,
+      "mdLayoutDescription": "# All Cards in a grid\n\nThis is for testing and demonstration purposes, not a real layout."
+    },
+    {
+      "name": "pastPresentFuture",
+      "displayName": "Past, Present, Future",
+      "layoutType": "HorizontalLinear",
+      "numCards": 3,
+      "horizontalAlign": "center",
+      "verticalAlign": "center",
+      "alignOnCard": 1,
+      "slotNames": [
+        "Past",
+        "Present",
+        "Future"
+      ],
+      "mdLayoutDescription": "# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or a situation of interest.\n\n[Wikipedia](https://en.wikipedia.org/)."
+    },
+    {
+      "name": "Four-by",
+      "displayName": "Four-by",
+      "layoutType": "NewTarotLayout",
+      "mdLayoutDescription": "# Example 1\n\n* a four-card grid",
+      "positions": [
+        {
+          "name": "Top-left",
+          "alignment": "Alignment.centerLeft",
+          "moveByChildWidth": -0.5,
+          "moveByChildHeight": -0.5,
+          "moveByContainerWidth": 0.25,
+          "moveByContainerHeight": 0.25,
+          "wins": "Wins.min",
+          "touch": "Touch.inside",
+          "popUpDescription": "Top-left card"
+        },
+        {
+          "name": "Top-right",
+          "alignment": "Alignment.centerLeft",
+          "moveByChildWidth": -0.5,
+          "moveByChildHeight": -0.5,
+          "moveByContainerWidth": 0.75,
+          "moveByContainerHeight": 0.25,
+          "wins": "Wins.min",
+          "touch": "Touch.inside",
+          "popUpDescription": "Top-right card"
+        },
+        {
+          "name": "Bottom-left",
+          "alignment": "Alignment.centerLeft",
+          "moveByChildWidth": -0.5,
+          "moveByChildHeight": -0.5,
+          "moveByContainerWidth": 0.25,
+          "moveByContainerHeight": 0.75,
+          "wins": "Wins.min",
+          "touch": "Touch.inside",
+          "popUpDescription": "Bottom-left card"
+        },
+        {
+          "name": "Bottom-right",
+          "alignment": "Alignment.centerLeft",
+          "moveByChildWidth": -0.5,
+          "moveByChildHeight": -0.5,
+          "moveByContainerWidth": 0.75,
+          "moveByContainerHeight": 0.75,
+          "wins": "Wins.min",
+          "touch": "Touch.inside",
+          "popUpDescription": "Bottom-right card"
+        }
+      ]
+    }
+  ]
 }

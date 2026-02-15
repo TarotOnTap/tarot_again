@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:tarot_again/util/util.dart';
 
 /// Layouts are assets that describe how many cards are needed, and where to
@@ -9,9 +13,25 @@ import 'package:tarot_again/util/util.dart';
 
 typedef LayoutAssetCache = IMap<String, TarotLayout>;
 
-class LayoutManager {
+class LayoutManager with Logging {
   LayoutManager() {
-    log("LayoutManager.LayoutManager");
+    verbose("LayoutManager.LayoutManager");
+  }
+
+  Future<void> generateLayoutsFile(String? fileName) async {
+    if (fileName != null) {
+      final layoutString = generateLayouts();
+      verbose(" generated layout: layout string is\n$layoutString");
+
+      File outputFile = File(fileName);
+      try {
+        await outputFile.writeAsString(layoutString);
+      } catch (e, _) {
+        error(
+          "  error writing to File object for  file $fileName, error is $e",
+        );
+      }
+    }
   }
 
   TarotLayout getLayoutByLayoutName(String name) =>
@@ -29,5 +49,80 @@ class LayoutManager {
 
   Future<String> loadCurrentLayoutDescription() async {
     return Future.value("#Description#");
+  }
+
+  /// Generate layouts is a utility function that is going to generate a few sample
+  /// layouts using the NewTarotLayout class, and then write them to a json String.
+  String generateLayouts() {
+    LayoutList layouts = LayoutList(
+      layouts: <TarotLayout>[
+        TarotLayout.simpleGrid(
+          displayName: "All Cards",
+          name: "allCards",
+          numCards: 78,
+          layoutType: "SimpleGrid",
+          mdLayoutDescription:
+              "# All Cards in a grid\n\nThis is for testing and demonstration purposes, not a real layout.",
+        ),
+        TarotLayout.horizontalLinear(
+          name: "pastPresentFuture",
+          displayName: "Past, Present, Future",
+          layoutType: "HorizontalGrid",
+          numCards: 3,
+          horizontalAlign: "center",
+          verticalAlign: "center",
+          alignOnCard: 1,
+          slotNames: ["Past", "Present", "Future"],
+          mdLayoutDescription:
+              "# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or a situation of interest.\n\n[Wikipedia](https://en.wikipedia.org/).",
+        ),
+        NewTarotLayout(
+          name: "Four-by",
+          displayName: "Four-by",
+          layoutType: "NewTarotLayout",
+          mdLayoutDescription: "# Example 1\n* a four-card grid",
+          positions: [
+            PositionRepresentation(
+              name: "Top-left",
+              alignment: Alignment.centerLeft,
+              moveByContainerWidth: 0.25,
+              moveByContainerHeight: 0.25,
+              moveByChildWidth: -0.5,
+              moveByChildHeight: -0.5,
+              popUpDescription: "Top-left card",
+            ),
+            PositionRepresentation(
+              name: "Top-right",
+              alignment: Alignment.centerLeft,
+              moveByContainerWidth: 0.75,
+              moveByContainerHeight: 0.25,
+              moveByChildWidth: -0.5,
+              moveByChildHeight: -0.5,
+              popUpDescription: "Top-right card",
+            ),
+            PositionRepresentation(
+              name: "Bottom-left",
+              alignment: Alignment.centerLeft,
+              moveByContainerWidth: 0.25,
+              moveByChildWidth: -0.5,
+              moveByContainerHeight: 0.75,
+              moveByChildHeight: -0.5,
+              popUpDescription: "Bottom-left card",
+            ),
+            PositionRepresentation(
+              name: "Bottom-right",
+              alignment: Alignment.centerLeft,
+              moveByContainerWidth: 0.75,
+              moveByChildWidth: -0.5,
+              moveByContainerHeight: 0.75,
+              moveByChildHeight: -0.5,
+              popUpDescription: "Bottom-right card",
+            ),
+          ].lock,
+        ),
+      ].lock,
+    );
+
+    return JsonEncoder.withIndent('  ').convert(layouts.toJson());
   }
 }

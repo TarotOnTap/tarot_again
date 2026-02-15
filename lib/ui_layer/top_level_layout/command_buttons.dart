@@ -1,4 +1,3 @@
-import 'package:choice/choice.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/util/util.dart';
@@ -65,7 +64,7 @@ class CommandButtons extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    final LayoutManager lm = sl<LayoutManager>();
+    // final LayoutManager lm = sl<LayoutManager>();
     final SessionManager sm = sl<SessionManager>();
 
     return Column(
@@ -87,67 +86,6 @@ class CommandButtons extends StatelessWidget with Logging {
         ElevatedButton(
           onPressed: () => sm.freshSpread(),
           child: Text("Lay out fresh cards"),
-        ),
-
-        Gap(30),
-        Watch((context) {
-          final tL = SignalsManager.tarotLayout.value;
-          verbose("  tarotLayout.value is $tL");
-
-          final lDN = ComputedsManager.layoutDisplayNames.value;
-          verbose("  layoutDisplayNames.value is $lDN");
-
-          return PromptedChoice<String>.single(
-            title: "Select a layout",
-            clearable: true,
-            value: tL.displayName,
-            // this changes after setNewLayout is called
-            onChanged: (String? value) {
-              if (value != null) {
-                verbose("  onChanged: value is $value");
-                lm.setLayoutByDisplayName(value);
-              }
-            },
-            itemCount: lDN.length,
-            itemBuilder: (state, i) {
-              return ChoiceChip(
-                selected: state.selected(lDN[i]),
-                onSelected: state.onSelected(lDN[i]),
-                label: Text(lDN[i]),
-              );
-            },
-            listBuilder: ChoiceList.createWrapped(
-              spacing: 10,
-              runSpacing: 10,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-            ),
-          );
-        }, debugLabel: "Layout choice"),
-        Gap(5),
-        PromptedChoice<String>.single(
-          title: "Select a source of randomness",
-          clearable: true,
-          value: sl<AsyncRandoms>().currentGenerator.displayName,
-          onChanged: (String? value) {
-            if (value != null) {
-              sl<AsyncRandoms>().setRandomSource(value);
-            }
-          },
-          itemCount: RandomGenerators.values.length,
-          itemBuilder: (state, index) => ChoiceChip(
-            selected: state.selected(
-              sl<AsyncRandoms>().randomGeneratorNames[index],
-            ),
-            onSelected: state.onSelected(
-              sl<AsyncRandoms>().randomGeneratorNames[index],
-            ),
-            label: Text(sl<AsyncRandoms>().randomGeneratorNames[index]),
-          ),
-          listBuilder: ChoiceList.createWrapped(
-            spacing: 10,
-            runSpacing: 10,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-          ),
         ),
       ],
     );

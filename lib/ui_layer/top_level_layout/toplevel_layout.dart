@@ -1,7 +1,11 @@
+import 'package:tarot_again/util/flutter_util.dart';
+
 import '../sidebar_layout/sidebar_layout.dart';
 import '../ui_layer.dart';
 import 'cards_stage_layout.dart';
 import 'main_scaffold.dart';
+
+// class TarotSuite extends FlameGame() {}
 
 class TopLevelLayout extends StatelessWidget {
   const TopLevelLayout({super.key});
@@ -11,8 +15,8 @@ class TopLevelLayout extends StatelessWidget {
     return MainScaffold(
       child: Row(
         children: <Widget>[
-          Expanded(flex: 1, child: CommandButtons()),
-          Expanded(flex: 2, child: CardsStageLayout()),
+          Flexible(child: CommandButtons()),
+          Expanded(flex: 3, child: CardsStageLayout()),
           Expanded(flex: 1, child: SidebarLayout()),
         ],
       ),
