@@ -4,7 +4,6 @@ import 'package:tarot_again/util/util.dart';
 
 import 'grid_layout_widget.dart';
 import 'layout_constrained.dart';
-import 'linear_layout_widget.dart';
 
 class LayoutWidget extends StatelessWidget with Logging {
   @Preview(name: 'LayoutWidget')
@@ -14,7 +13,7 @@ class LayoutWidget extends StatelessWidget with Logging {
   Widget build(BuildContext context) {
     return Watch(
       (context) => switch (SignalsManager.tarotLayout.value) {
-        HorizontalLinear hl => LinearLayoutWidget(layoutDetails: hl),
+        // HorizontalLinear hl => LinearLayoutWidget(layoutDetails: hl),
         SimpleGrid sg => GridLayoutWidget(layoutDetails: sg),
         NullLayout _ => Placeholder(child: Text("No layout selected")),
         // StackLayout _ => Placeholder(child: Text("Stack Layout")),
