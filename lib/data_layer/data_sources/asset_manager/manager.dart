@@ -69,19 +69,6 @@ class AssetManager with Logging implements PostInit {
     verbose("  layoutsJson is $layoutsJson");
 
     if (layoutsJson.isNotEmpty) {
-      // KEEP the comments below, they document the former effort to safely retrieve
-      // our asset. Dart documentation tells that errors derived from Error are not meant
-      // to be caught; they represent a programming error.
-      // try {
-      //   // try to load our asset file from the fixed location given
-      //   layoutsJson = await rootBundle.loadString("assets/tarotLayouts.json");
-      // } catch (e, _) {
-      //   // if that fails, log an error
-      //   log("fetchLayouts raised error $e");
-      //
-      //   return retVal; // return an empty map
-      // }
-
       verbose("  trying repairJson");
       final decodedData = repairJson(
         layoutsJson,
@@ -89,8 +76,6 @@ class AssetManager with Logging implements PostInit {
         skipDecodeAttempt: true,
       );
       verbose("  repairJson returned $decodedData");
-      // const encoder = JsonEncoder.withIndent('  ');
-      // verbose(encoder.convert(decodedData));
 
       final LayoutList? allLayouts;
 
@@ -108,70 +93,6 @@ class AssetManager with Logging implements PostInit {
       }
     }
 
-    return retVal;
-
-    //   try {
-    //     verbose("  trying jsonDecode:");
-    //
-    //     final decoded = jsonDecode(decodedData);
-    //     verbose("  jsonDecode returned $decoded");
-    //
-    //     try {
-    //       verbose("  trying LayoutList.fromJson on decoded");
-    //
-    //       final allLayouts = LayoutList.fromJson(decoded);
-    //       verbose(
-    //         '  Success! allLayouts has ${allLayouts.layouts.length} entries.',
-    //       );
-    //     } catch (e, _) {
-    //       error("  Failure! Error decoding layout list: $e");
-    //       // error("  layout list json is $decoded");
-    //     }
-    //
-    //     // TODO: I've verified that jsonDecode works for my current layout
-    //     // json input. The returned item is a list? or an iterable, so:
-    //     // convert that to an IList, and then map down it to create layouts.
-    //     // the code below no longer works, because it's expecting an IMap rather than
-    //     // an IList; fix that up and we should be good to go.
-    //
-    //     for (var item in decoded) {
-    //       verbose("  item is $item");
-    //
-    //       if (item["layoutType"] == "NewTarotLayout") {
-    //         final schema = JsonSchema.create(NewTarotLayout.jsonSchema);
-    //         verbose(" json schema is $schema");
-    //
-    //         final validation = schema.validate(
-    //           item,
-    //           parseJson: true,
-    //           validateFormats: true,
-    //         );
-    //         verbose(" validation is $validation");
-    //       }
-    //
-    //       try {
-    //         final TarotLayout layout = TarotLayout.fromJson(item);
-    //         verbose("  layout is $layout");
-    //         retVal = retVal.add(layout.name, layout);
-    //         verbose("  item added to retVal");
-    //       } catch (e, _) {
-    //         error("  error decoding layout: $e");
-    //         error("  layout json is $item");
-    //       }
-    //     }
-    //     // retVal = IList<IMap<String, dynamic>>(decoded)
-    //     //     .map<IMap<String, TarotLayout>>(
-    //     //       (key, value) => MapEntry<String, TarotLayout>(
-    //     //         key,
-    //     //         TarotLayout.fromJson(value),
-    //     //       ),
-    //     //     );
-    //   } catch (e, _) {
-    //     verbose("error decoding json: $e");
-    //   }
-    // }
-
-    // and return a map that uses the same keys as our json file input, but has TarotLayout objects as values
     return retVal;
   }
 

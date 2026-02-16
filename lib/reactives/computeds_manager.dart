@@ -50,16 +50,16 @@ class ComputedsManager with Logging {
             const IList<GlobalKey<PositionSlotWidgetState>>.empty().also((it) {
               Logging.staticVerbose("slotKeys for NullLayout: $it");
             }),
-          HorizontalLinear hl =>
-            hl.slotNames
-                .map(
-                  (slotName) =>
-                      GlobalKey<PositionSlotWidgetState>(debugLabel: slotName),
-                )
-                .toIList()
-                .also((it) {
-                  Logging.staticVerbose("slotKeys for HorizontalLinear: $it");
-                }),
+          // HorizontalLinear hl =>
+          //   hl.slotNames
+          //       .map(
+          //         (slotName) =>
+          //             GlobalKey<PositionSlotWidgetState>(debugLabel: slotName),
+          //       )
+          //       .toIList()
+          //       .also((it) {
+          //         Logging.staticVerbose("slotKeys for HorizontalLinear: $it");
+          //       }),
           SimpleGrid sg =>
             sg.numCards.range
                 .map(

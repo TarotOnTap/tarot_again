@@ -9,7 +9,7 @@
 # packages, and plugins designed to encourage good coding practices.
 include:
   - package:flutter_lints/flutter.yaml
-  - package:bloc_lint/recommended.yaml
+#  - package:bloc_lint/recommended.yaml
 
 analyzer:
   errors:

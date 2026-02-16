@@ -64,15 +64,41 @@ class LayoutManager with Logging {
           mdLayoutDescription:
               "# All Cards in a grid\n\nThis is for testing and demonstration purposes, not a real layout.",
         ),
-        TarotLayout.horizontalLinear(
+        NewTarotLayout(
           name: "pastPresentFuture",
           displayName: "Past, Present, Future",
-          layoutType: "HorizontalGrid",
-          numCards: 3,
-          horizontalAlign: "center",
-          verticalAlign: "center",
-          alignOnCard: 1,
-          slotNames: ["Past", "Present", "Future"],
+          layoutType: "NewTarotLayout",
+          // numCards: 3,
+          // horizontalAlign: "center",
+          // verticalAlign: "center",
+          // alignOnCard: 1,
+          // slotNames: ["Past", "Present", "Future"],
+          positions: [
+            PositionRepresentation(
+              name: "Past",
+              alignment: Alignment.centerLeft,
+              moveByContainerWidth: 0.25,
+              moveByChildWidth: -0.5,
+              popUpDescription:
+                  "representing a past - event, situation, relationship, that is relevant to your question",
+            ),
+            PositionRepresentation(
+              name: "Present",
+              alignment: Alignment.centerLeft,
+              moveByContainerWidth: 0.25,
+              moveByChildWidth: -0.5,
+              popUpDescription:
+                  "representing the present - event, situation, relationship, that is relevant to your question",
+            ),
+            PositionRepresentation(
+              name: "Future",
+              alignment: Alignment.centerLeft,
+              moveByContainerWidth: 0.75,
+              moveByChildWidth: -0.5,
+              popUpDescription:
+                  "representing a possible future - event, situation, relationship, that is relevant to your question",
+            ),
+          ].lock,
           mdLayoutDescription:
               "# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or a situation of interest.\n\n[Wikipedia](https://en.wikipedia.org/).",
         ),
