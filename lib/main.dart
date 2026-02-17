@@ -8,7 +8,7 @@ import 'package:toastification/toastification.dart';
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'util/app_settings.dart';
 import 'util/flutter_util.dart';
-import 'util/hive_settings.dart';
+import 'util/hive_cache.dart';
 import 'util/register_singletons.dart';
 import 'util/util.dart';
 
@@ -39,6 +39,9 @@ void main(List<String> args) async {
           ..initFlutter("tarot_again")
           ..registerAdapters();
 
+        // Settings is the place to store user preferences that can be
+        // changed; e.g. whether tarot cards should be shown with reversals
+        // or without.  I've set it up to use Hive as the storage provider.
         await Settings.init(
           cacheProvider: HiveCache(),
         ); // default settings provider, per platform
@@ -56,9 +59,6 @@ void main(List<String> args) async {
           return ErrorWidget(details.exception);
         };
 
-        // TODO: init sqlite db, using device's per-user storage. Make sure to include migration!
-        // await _initFirebase();
-        // runApp(GameWidget(game: TarotGame()));
         runApp(TarotAgainApp());
       },
       (Object error, StackTrace stack) {
