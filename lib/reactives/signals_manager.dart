@@ -1,5 +1,7 @@
+import 'package:injectable/injectable.dart';
 import 'package:tarot_again/util/util.dart';
 
+@injectable
 class SignalsManager {
   static final Signal<Iterable<String>> allAssetPaths =
       signal<Iterable<String>>([], debugLabel: "allAssetPaths");

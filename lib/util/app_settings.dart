@@ -21,6 +21,7 @@ typedef InitialSettingsType<T> = ({String key, String label, T initialValue});
 final List<InitialSettingsType> settings = <InitialSettingsType>[
   (key: 'reversalsAllowed', label: "Reversals Allowed", initialValue: true),
   (key: 'currentDeck', label: "Current Deck", initialValue: 'RWS'),
+  (key: 'layoutJsonHash', label: "Layout Json Hash", initialValue: ''),
 ];
 
 Future<Unit> firstRunSettings() async {

@@ -36,7 +36,7 @@ void main(List<String> args) async {
         // directory, and then the sub-directory provided as the subDir
         // argument to initFlutter.
         Hive
-          ..initFlutter("tarot_again")
+          ..initFlutter()
           ..registerAdapters();
 
         // Settings is the place to store user preferences that can be
@@ -51,7 +51,8 @@ void main(List<String> args) async {
         // for any settingsBackedSignals, defaults have been set up during
         // firstRunSettings() and the registered signals will pick up whatever
         // value has been stored in Settings.
-        await registerSingletons();
+        configureServices();
+        // await registerSingletons();
 
         ErrorWidget.builder = (FlutterErrorDetails details) {
           // If we're in debug mode, use the normal error widget which shows the error
