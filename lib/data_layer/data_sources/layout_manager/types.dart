@@ -17,18 +17,6 @@ sealed class TarotLayout with _$TarotLayout {
   /// These classes are only data and do not have any methods beyond toJson / fromJson
   const TarotLayout._();
 
-  // const factory TarotLayout.horizontalLinear({
-  //   required String name,
-  //   required String displayName,
-  //   required String layoutType,
-  //   required int numCards,
-  //   required String horizontalAlign,
-  //   required String verticalAlign,
-  //   required int alignOnCard,
-  //   required Iterable<String> slotNames,
-  //   required String mdLayoutDescription,
-  // }) = HorizontalLinear;
-
   /// internal *only* for testing purposes. do not write this layout to Json
   const factory TarotLayout.simpleGrid({
     required String name,
