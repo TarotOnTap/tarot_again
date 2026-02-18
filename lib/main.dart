@@ -30,7 +30,7 @@ void main(List<String> args) async {
         initializeLoggingService();
         Logging.staticVerbose("\n*******\nApp starting\n*******");
         // serviceLocatorConfig();
-        Logging.staticVerbose("main arguments are $args");
+        Logging.staticVerbose("core arguments are $args");
 
         // Hive.initFlutter puts all files into the application documents
         // directory, and then the sub-directory provided as the subDir

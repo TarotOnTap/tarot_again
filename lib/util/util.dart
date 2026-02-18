@@ -1,6 +1,3 @@
-import 'package:tarot_again/data_layer/data_layer.dart';
-import 'package:watch_it/watch_it.dart';
-
 export 'dart:async' hide AsyncError;
 export 'dart:developer';
 
@@ -15,6 +12,7 @@ export 'package:flutter_settings_screens/flutter_settings_screens.dart';
 export 'package:freezed_annotation/freezed_annotation.dart';
 export 'package:get_it/get_it.dart';
 export 'package:go_router/go_router.dart';
+export 'package:injectable/injectable.dart';
 export 'package:json_annotation/json_annotation.dart';
 export 'package:meta/meta.dart';
 export 'package:signals/signals_flutter.dart';
@@ -26,6 +24,6 @@ export 'package:watch_it/watch_it.dart';
 export 'logging.dart';
 export 'types.dart';
 
-void registerDependencies() {
-  sl.registerSingleton<AsyncRandoms>(AsyncRandoms());
-}
+// void registerDependencies() {
+//   sl.registerSingleton<AsyncRandoms>(AsyncRandoms());
+// }

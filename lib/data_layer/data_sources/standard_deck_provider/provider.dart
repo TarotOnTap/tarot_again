@@ -8,8 +8,9 @@ class StandardDeckProvider {
   ///  [shuffledDeck] holds the current, shuffled deck. Beware, its default
   ///  value is an empty IList.
   ///
+  // late final AsyncRandoms randoms;
 
-  StandardDeckProvider() {
+  StandardDeckProvider(AsyncRandoms randoms) {
     log("StandardDeckProvider.StandardDeckProvider");
   }
 
@@ -24,7 +25,7 @@ class StandardDeckProvider {
   /// and then sets the current deck to that. It also cancels the [currentShuffleQueue]
   /// to make sure we don't leak memory there.
   static Future<void> shuffleDeck() async => SignalsManager.shuffledDeck.value =
-      (await sl<AsyncRandoms>().shuffleIterable(
-        TarotDeckCards.values,
+      (await sl<AsyncRandoms>().shuffleIterable<TarotDeckCards>(
+        remaining: TarotDeckCards.values,
       )).toIList();
 }

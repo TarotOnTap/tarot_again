@@ -1,7 +1,6 @@
-import 'package:injectable/injectable.dart';
 import 'package:tarot_again/util/util.dart';
 
-@injectable
+@singleton
 class SignalsManager {
   static final Signal<Iterable<String>> allAssetPaths =
       signal<Iterable<String>>([], debugLabel: "allAssetPaths");
@@ -36,8 +35,8 @@ class SignalsManager {
         debugLabel: "currentGenerator",
       );
 
-  static final Signal<RandomsProvider> currentRandomProvider =
-      signal<RandomsProvider>(SecureRandom(), debugLabel: "currentProvider");
+  static final Signal<IRandomsProvider> currentRandomProvider =
+      signal<IRandomsProvider>(SecureRandom(), debugLabel: "currentProvider");
 
   // a signal that is persisted to SharedPreferences storage.  When this is true,
   // dealing out tarot cards will display cards as upright or reversed; setting

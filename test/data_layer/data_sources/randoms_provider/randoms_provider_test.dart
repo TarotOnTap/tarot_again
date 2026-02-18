@@ -1,6 +1,6 @@
 // this gets us GetIt/WatchIt packages
 
-import 'package:tarot_again/util/util.dart';
+import 'package:tarot_again/util/util.dart' hide test;
 import 'package:test/test.dart';
 
 Stream<int> getNRandomInts({
