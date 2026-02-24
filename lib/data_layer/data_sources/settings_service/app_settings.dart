@@ -1,6 +1,5 @@
 import 'package:fpdart/fpdart.dart';
-
-import './util.dart';
+import 'package:tarot_again/util/util.dart';
 
 export 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
@@ -21,6 +20,7 @@ typedef InitialSettingsType<T> = ({String key, String label, T initialValue});
 final List<InitialSettingsType> settings = <InitialSettingsType>[
   (key: 'reversalsAllowed', label: "Reversals Allowed", initialValue: true),
   (key: 'currentDeck', label: "Current Deck", initialValue: 'RWS'),
+  (key: 'layoutJsonHash', label: "Layout Json Hash", initialValue: ''),
 ];
 
 Future<Unit> firstRunSettings() async {

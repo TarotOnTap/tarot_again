@@ -17,18 +17,6 @@ sealed class TarotLayout with _$TarotLayout {
   /// These classes are only data and do not have any methods beyond toJson / fromJson
   const TarotLayout._();
 
-  // const factory TarotLayout.horizontalLinear({
-  //   required String name,
-  //   required String displayName,
-  //   required String layoutType,
-  //   required int numCards,
-  //   required String horizontalAlign,
-  //   required String verticalAlign,
-  //   required int alignOnCard,
-  //   required Iterable<String> slotNames,
-  //   required String mdLayoutDescription,
-  // }) = HorizontalLinear;
-
   /// internal *only* for testing purposes. do not write this layout to Json
   const factory TarotLayout.simpleGrid({
     required String name,
@@ -56,11 +44,43 @@ sealed class TarotLayout with _$TarotLayout {
     String? attribution,
     String? url,
     String? documentation,
-    required IList<PositionRepresentation> positions,
+    required List<PositionRepresentation> positions,
   }) = NewTarotLayout;
 
   factory TarotLayout.fromJson(Map<String, dynamic> json) =>
       _$TarotLayoutFromJson(json);
+}
+
+@freezed
+abstract class SimpleGrid extends TarotLayout with _$SimpleGrid {
+  const SimpleGrid._() : super._();
+
+  const factory SimpleGrid({
+    required String name,
+    required String displayName,
+    required String layoutType,
+    required int numCards,
+    required String mdLayoutDescription,
+  }) = _SimpleGrid;
+
+  factory SimpleGrid.fromJson(Map<String, dynamic> json) =>
+      _$SimpleGridFromJson(json);
+}
+
+@freezed
+abstract class NullLayout extends TarotLayout with _$NullLayout {
+  const NullLayout._() : super._();
+
+  const factory NullLayout({
+    @Default("nullLayout") String name,
+    @Default("Empty Layout") String displayName,
+    @Default("nullLayout") String layoutType,
+    @Default(0) int numCards,
+    @Default("# NULL LAYOUT") String mdLayoutDescription,
+  }) = _NullLayout;
+
+  factory NullLayout.fromJson(Map<String, dynamic> json) =>
+      _$NullLayoutFromJson(json);
 }
 
 @freezed
@@ -75,7 +95,7 @@ abstract class NewTarotLayout extends TarotLayout with _$NewTarotLayout {
     String? attribution,
     String? url,
     String? documentation,
-    required IList<PositionRepresentation> positions,
+    required List<PositionRepresentation> positions,
   }) = _NewTarotLayout;
 
   factory NewTarotLayout.fromJson(Map<String, dynamic> json) =>
@@ -88,7 +108,8 @@ abstract class NewTarotLayout extends TarotLayout with _$NewTarotLayout {
 abstract class LayoutList with _$LayoutList {
   const LayoutList._();
 
-  const factory LayoutList({required IList<TarotLayout> layouts}) = _LayoutList;
+  const factory LayoutList({required Iterable<TarotLayout> layouts}) =
+      _LayoutList;
 
   factory LayoutList.fromJson(Map<String, dynamic> json) =>
       _$LayoutListFromJson(json);

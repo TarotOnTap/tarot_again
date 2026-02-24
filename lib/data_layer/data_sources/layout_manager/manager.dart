@@ -13,6 +13,7 @@ import 'package:tarot_again/util/util.dart';
 
 typedef LayoutAssetCache = IMap<String, TarotLayout>;
 
+@singleton
 class LayoutManager with Logging {
   LayoutManager() {
     verbose("LayoutManager.LayoutManager");
@@ -98,7 +99,7 @@ class LayoutManager with Logging {
               popUpDescription:
                   "representing a possible future - event, situation, relationship, that is relevant to your question",
             ),
-          ].lock,
+          ],
           mdLayoutDescription:
               "# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or a situation of interest.\n\n[Wikipedia](https://en.wikipedia.org/).",
         ),
@@ -144,7 +145,7 @@ class LayoutManager with Logging {
               moveByChildHeight: -0.5,
               popUpDescription: "Bottom-right card",
             ),
-          ].lock,
+          ],
         ),
       ].lock,
     );

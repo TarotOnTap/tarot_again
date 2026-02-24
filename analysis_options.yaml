@@ -12,6 +12,9 @@ include:
 #  - package:bloc_lint/recommended.yaml
 
 analyzer:
+  enable-experiment:
+    - augmentations
+
   errors:
     invalid_annotation_target: ignore
 

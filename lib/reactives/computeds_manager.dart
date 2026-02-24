@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tarot_again/ui_layer/card_widget/position_slot_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
+@singleton
 class ComputedsManager with Logging {
+  // final SignalsManager signals;
+
   static final Computed<String> deckString = computed(
     () =>
         "decks/${SignalsManager.deckType.value.name}/${SignalsManager.deckName.value.name}",
@@ -106,7 +109,11 @@ class ComputedsManager with Logging {
     var _ = tarotLayoutAssetPaths.value;
   }
 
-  ComputedsManager() {
+  ComputedsManager({required this.signalsManager}) {
+    verbose('ComputedsManager.ComputedsManager()');
+    verbose('  calling ensureComputeds');
     ensureComputeds();
   }
+
+  final SignalsManager signalsManager;
 }

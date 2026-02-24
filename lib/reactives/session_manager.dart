@@ -4,10 +4,17 @@ import 'package:tarot_again/util/util.dart';
 /// where a session is the total set of choices about a particular reading session -
 /// what deck is used, whether reversals are allowed, what layout is chosen,
 /// what cards are dealt into that layout, etc.
+@singleton
 class SessionManager with Logging {
-  SessionManager() {
+  SessionManager({
+    required this.signalsManager,
+    required this.computedsManager,
+  }) {
     verbose("SessionManager.SessionManager()");
   }
+
+  final SignalsManager signalsManager;
+  final ComputedsManager computedsManager;
 
   void _emptySlots() {
     verbose("SessionManager()._emptySlots");

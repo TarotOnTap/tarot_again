@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:tarot_again/util/event_bus.dart';
 import 'package:tarot_again/util/util.dart';
 
 enum RandomGenerators {
@@ -10,10 +11,10 @@ enum RandomGenerators {
   const RandomGenerators({required this.displayName, required this.genCreator});
 
   final String displayName;
-  final RandomsProvider Function() genCreator;
+  final IRandomsProvider Function() genCreator;
 }
 
-abstract class RandomsProvider {
+abstract interface class IRandomsProvider {
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh});
 
   Future<double> getNextDouble();
@@ -21,7 +22,8 @@ abstract class RandomsProvider {
   Future<bool> getNextBool();
 }
 
-class AsyncRandoms with Logging {
+@singleton
+class AsyncRandoms with EventReceiverMixin, Logging {
   static IList<String> _randomGeneratorNames = const IList<String>.empty();
 
   // lazy loaded. Not really needed, unless we switch to a dynamically-loaded
@@ -40,6 +42,8 @@ class AsyncRandoms with Logging {
   AsyncRandoms() {
     verbose("AsyncRandoms.AsyncRandoms");
     setRandomSource(RandomGenerators.none.displayName);
+
+    // setHandler<ESetRandomSource>(ESetRandomSource(), )
   }
 
   void setRandomSource(String name) {
@@ -72,25 +76,21 @@ class AsyncRandoms with Logging {
   Future<bool> getNextBool() =>
       SignalsManager.currentRandomProvider.value.getNextBool();
 
-  Future<IList<E>> shuffleIterable<E>(
-    // The goal is to return a list of cards in shuffled order.
-    // upstream processing can handle cards popping out of the shuffle, etc.
-    // where it might be useful to use a stream, drawing one card at a time with
-    // the occasional exception.
-    Iterable<E> remaining,
-  ) async {
+  // The goal is to return a list of cards in shuffled order.
+  // upstream processing can handle cards popping out of the shuffle, etc.
+  // where it might be useful to use a stream, drawing one card at a time with
+  // the occasional exception.
+  Future<IList<E>> shuffleIterable<E>({required Iterable<E> remaining}) async {
     IList<E> copy = IList(remaining);
-    // Output<E> removedItem = Output<E>();
     IList<E> resultList = IList<E>.empty();
 
     if (copy.isNotEmpty) {
-      // taskChoice never fails
       int index = await getNextInt(rangeHigh: copy.length - 1);
 
       E item = copy[index];
       copy = copy.removeAt(index);
 
-      resultList = IList<E>([item]) + await shuffleIterable(copy);
+      resultList = IList<E>([item]) + await shuffleIterable<E>(remaining: copy);
     }
 
     return resultList;
@@ -120,7 +120,7 @@ class AsyncRandoms with Logging {
 
 /// class SecureRandom extends _AsyncRandomsImpl with Logging {
 /// use Random.secure() to create a "good enough" random number generator.
-class SecureRandom extends RandomsProvider with Logging {
+class SecureRandom extends IRandomsProvider with Logging {
   // Other classes implement random numbers using various publicly available
   // online RNGs based on natural events.
   // The only reason to make an async version of the Random class is to use as
