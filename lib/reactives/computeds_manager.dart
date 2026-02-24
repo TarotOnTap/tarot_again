@@ -109,7 +109,11 @@ class ComputedsManager with Logging {
     var _ = tarotLayoutAssetPaths.value;
   }
 
-  ComputedsManager(SignalsManager signals) {
+  ComputedsManager({required this.signalsManager}) {
+    verbose('ComputedsManager.ComputedsManager()');
+    verbose('  calling ensureComputeds');
     ensureComputeds();
   }
+
+  final SignalsManager signalsManager;
 }

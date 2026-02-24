@@ -1,6 +1,5 @@
 import 'package:fpdart/fpdart.dart';
-
-import './util.dart';
+import 'package:tarot_again/util/util.dart';
 
 export 'package:flutter_settings_screens/flutter_settings_screens.dart';
 

@@ -190,7 +190,7 @@ Talker _talkerInit() => TalkerFlutter.init(
 );
 
 void initializeLoggingService() {
-  if (!di.isRegistered<Talker>()) {
-    di.registerSingleton<Talker>(_talkerInit());
+  if (!sl.isRegistered<Talker>()) {
+    sl.registerSingleton<Talker>(_talkerInit());
   }
 }

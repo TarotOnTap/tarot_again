@@ -90,7 +90,7 @@ class SignalsManager {
     }
   }
 
-  SignalsManager() {
+  SignalsManager({required AppSettings appSettings}) {
     ensureSignals();
   }
 }

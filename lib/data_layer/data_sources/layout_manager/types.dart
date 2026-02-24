@@ -44,7 +44,7 @@ sealed class TarotLayout with _$TarotLayout {
     String? attribution,
     String? url,
     String? documentation,
-    required Iterable<PositionRepresentation> positions,
+    required List<PositionRepresentation> positions,
   }) = NewTarotLayout;
 
   factory TarotLayout.fromJson(Map<String, dynamic> json) =>
@@ -95,7 +95,7 @@ abstract class NewTarotLayout extends TarotLayout with _$NewTarotLayout {
     String? attribution,
     String? url,
     String? documentation,
-    required Iterable<PositionRepresentation> positions,
+    required List<PositionRepresentation> positions,
   }) = _NewTarotLayout;
 
   factory NewTarotLayout.fromJson(Map<String, dynamic> json) =>
