@@ -122,15 +122,15 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
           : const SizedBox(),
       destinations: <NavigationRailDestination>[
         NavigationRailDestination(
-          icon: IconButton(
-            icon: Icon(Icons.favorite),
-            onPressed: () {
-              debug("Navigation rail destination 0 (settings) onPressed.");
-              _appSettingsDialog(context);
+          icon: SimpleSettingsTile(
+            title: 'SimpleSettingsTile',
+            subtitle: 'A New Beginning',
+            child: SettingsUi_Widget(),
+            onTap: () {
+              verbose('SimpleSettingsTile onTap');
             },
-          ),
-          selectedIcon: Icon(Icons.favorite),
-          label: Text('Settings'),
+          ).getIconButton(context, Icon(LucideIcons.settings)),
+          label: Text('SettingsLabel'),
         ),
         NavigationRailDestination(
           icon: Badge(child: Icon(Icons.bookmark_border)),
