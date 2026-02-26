@@ -21,6 +21,7 @@ export 'package:tarot_again/reactives/reactives.dart';
 // export 'package:tarot_again/reactives/session_manager.dart';
 export 'package:watch_it/watch_it.dart';
 
+export 'flutter_settings_screen_ext.dart';
 export 'logging.dart';
 export 'types.dart';
 
