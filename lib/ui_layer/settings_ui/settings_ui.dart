@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tarot_again/util/util.dart';
 
-class SettingsUi_Widget extends StatelessWidget with Logging {
-  const SettingsUi_Widget({super.key});
+class SettingsUIWidget extends StatelessWidget with Logging {
+  const SettingsUIWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

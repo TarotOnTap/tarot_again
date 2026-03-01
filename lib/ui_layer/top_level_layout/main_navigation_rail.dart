@@ -1,6 +1,7 @@
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:tarot_again/ui_layer/settings_ui/settings_ui.dart';
-import 'package:tarot_again/util/flutter_util.dart';
+import 'package:tarot_again/util/flutter_util.dart';;
+
 // import 'package:tarot_again/ui_layer/ui_layer.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -23,7 +24,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
         context: context,
         builder: (BuildContext context) {
           debug("_appSettingsDialog; returning AlertDialog");
-          return AlertDialog(content: SettingsUi_Widget());
+          return AlertDialog(content: SettingsUIWidget());
         },
       );
 
@@ -125,7 +126,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
           icon: SimpleSettingsTile(
             title: 'SimpleSettingsTile',
             subtitle: 'A New Beginning',
-            child: SettingsUi_Widget(),
+            child: SettingsUIWidget(),
             onTap: () {
               verbose('SimpleSettingsTile onTap');
             },
