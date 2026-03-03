@@ -1,38 +1,5 @@
 import 'package:tarot_again/util/util.dart';
 
-// import 'package:tarot_again/util/util.dart';
-
-// part 'types.freezed.dart';
-// part 'types.g.dart';
-
-/// In order to make @freezed sealed classes look like enums, do as this class
-/// does.  First, declare an empty private constructor.
-/// Second, define your factory functions for each subtype.
-/// Third, get you fromJson in there - that's the whole point
-/// of this shenanigan, to be able to easily searialize these
-/// over-engineered enums.
-/// Fourth, for each of your subtypes, create a static const member that
-/// provides a single, unique instance of that subtype.
-/// To use, then, you can reference the enum-like value as
-/// StandardTarotDecks.rwsTarotDeck.
-/// Having done this, you've made a serializable enum that "just works" like
-/// any other freezed/json_serializable class *and* works like an enum.
-
-// @freezed
-// sealed class StandardTarotDecks with _$StandardTarotDecks {
-//   const StandardTarotDecks._();
-//
-//   const factory StandardTarotDecks.rws({required String displayName}) =
-//       RWSTaroDeck;
-//
-//   factory StandardTarotDecks.fromJson(Map<String, dynamic> json) =>
-//       _$StandardTarotDecksFromJson(json);
-//
-//   static const rwsTarotDeck = StandardTarotDecks.rws(
-//     displayName: "RWS Tarot Deck",
-//   );
-// }
-
 enum StandardTarotDecks {
   rws("RWS Tarot Deck");
 
@@ -40,25 +7,6 @@ enum StandardTarotDecks {
 
   final String displayName;
 }
-
-// @freezed
-// sealed class DeckTypesEnum with _$DeckTypesEnum {
-//   const DeckTypesEnum._();
-//
-//   const factory DeckTypesEnum.standardTarot({
-//     @Default("StandardTarot") String displayName,
-//   }) = StandardTarotDeckType;
-//
-//   const factory DeckTypesEnum.standardPlayingCards({
-//     @Default("Standard Playing Cards") String displayName,
-//   }) = StandardPlayingCardsDeckType;
-//
-//   factory DeckTypesEnum.fromJson(Map<String, dynamic> json) =>
-//       _$DeckTypesEnumFromJson(json);
-//
-//   static const standardTarotDeck = DeckTypesEnum.standardTarot();
-//   static const standardPlayingCardsDeck = DeckTypesEnum.standardPlayingCards();
-// }
 
 enum DeckTypesEnum {
   standardTarot("StandardTarot"),
@@ -69,23 +17,6 @@ enum DeckTypesEnum {
   final String displayName;
 }
 
-// @freezed
-// sealed class ShowingFaceEnum with _$ShowingFaceEnum {
-//   const ShowingFaceEnum._();
-//
-//   const factory ShowingFaceEnum.back({@Default("Back") String displayName}) =
-//       ShowingFaceEnumBack;
-//
-//   const factory ShowingFaceEnum.front({@Default("Front") String displayName}) =
-//       ShowingFaceEnumFront;
-//
-//   static const showingFaceBack = ShowingFaceEnum.back();
-//   static const showingFaceFront = ShowingFaceEnum.front();
-//
-//   factory ShowingFaceEnum.fromJson(Map<String, dynamic> json) =>
-//       _$ShowingFaceEnumFromJson(json);
-// }
-
 enum ShowingFaceEnum {
   back("Back"),
   front("Front");
@@ -94,24 +25,6 @@ enum ShowingFaceEnum {
 
   final String displayName;
 }
-
-// @freezed
-// sealed class ReversalEnum with _$ReversalEnum {
-//   const ReversalEnum._();
-//
-//   const factory ReversalEnum.upright({@Default("Upright") String displayName}) =
-//       ReversalEnumUpright;
-//
-//   const factory ReversalEnum.reversed({
-//     @Default("Reversed") String displayName,
-//   }) = ReversalEnumReversed;
-//
-//   factory ReversalEnum.fromJson(Map<String, dynamic> json) =>
-//       _$ReversalEnumFromJson(json);
-//
-//   static const reversalUpright = ReversalEnum.upright();
-//   static const reversalReversed = ReversalEnum.reversed();
-// }
 
 enum ReversalEnum {
   upright("Upright"),
@@ -142,7 +55,7 @@ class SettingsBackedSignal<T> extends FlutterSignal<T> {
   }) {
     effect(() async {
       // this effect persists whatever value this signal is assigned to the
-      // Settings backingStore.  NB - if the type T is note one of the
+      // Settings backingStore.  NB - if the type T is not one of the
       // types directly supported by the SharedParameter (int, double, bool,
       // String - then we'd need to add a conversion step in here based on
       // type T.

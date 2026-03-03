@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
-// import 'package:hivez/hivez.dart';
 
 /// A cache access provider class for shared preferences using Hive library
 class HiveCache extends CacheProvider {
