@@ -1,10 +1,96 @@
 import 'package:align_positioned/align_positioned.dart';
 import 'package:flutter/material.dart' show Alignment;
-// import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:hivez_flutter/hivez_flutter.dart';
-import 'package:tarot_again/data_layer/data_sources/data_sources.dart'; // keep this here
-// import 'package:tarot_again/data_layer/data_sources/randoms_provider/types.dart';
-import 'package:tarot_again/reactives/types.dart';
+import 'package:tarot_again/util/util.dart';
+
+part 'hive_adapters.g.dart';
+
+class IListAdapter extends TypeAdapter<IList> {
+  @override
+  final typeId = 100;
+
+  @override
+  IList read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return IList();
+  }
+
+  @override
+  void write(BinaryWriter writer, IList obj) {
+    writer.writeByte(0);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IListAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class NewTarotLayoutAdapter extends TypeAdapter<NewTarotLayout> {
+  @override
+  final typeId = 101;
+
+  @override
+  NewTarotLayout read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return NewTarotLayout(
+      name: fields[0] as String,
+      displayName: fields[1] as String,
+      layoutType: fields[2] as String,
+      positions:
+          ((fields[4] as List<PositionRepresentation>)
+                  .cast<PositionRepresentation>())
+              as IList<PositionRepresentation>,
+      mdLayoutDescription: fields[3] as String?,
+      attribution: fields[5] as String?,
+      url: fields[6] as String?,
+      documentation: fields[7] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, NewTarotLayout obj) {
+    writer
+      ..writeByte(8)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.displayName)
+      ..writeByte(2)
+      ..write(obj.layoutType)
+      ..writeByte(3)
+      ..write(obj.mdLayoutDescription)
+      ..writeByte(4)
+      ..write(obj.positions)
+      ..writeByte(5)
+      ..write(obj.attribution)
+      ..writeByte(6)
+      ..write(obj.url)
+      ..writeByte(7)
+      ..write(obj.documentation);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NewTarotLayoutAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
 
 @GenerateAdapters([
   AdapterSpec<Wins>(),
@@ -20,10 +106,15 @@ import 'package:tarot_again/reactives/types.dart';
   AdapterSpec<Alignment>(),
   AdapterSpec<PositionRepresentation>(),
   AdapterSpec<SimpleGrid>(),
-  AdapterSpec<NewTarotLayout>(),
-  // AdapterSpec<List<PositionRepresentation>
-  // >(),
+  // AdapterSpec<NewTarotLayout>(),
+  AdapterSpec<AssetStorageRep>(),
+  // AdapterSpec<IList<T>>(),
+  // AdapterSpec<Iterable<PositionRepresentation>>(),
+  // AdapterSpec<TarotLayout>(),
+  // AdapterSpec<LayoutList>(),
+  // AdapterSpec<PositionRepresentations>
+  // (),
   // AdapterSpec<Map<String, PositionRepresentation>>(),
   // AdapterSpec<MappedListIterable<String, PositionRepresentation>>(),
 ])
-part 'hive_adapters.g.dart';
+class HiveAdapters {}

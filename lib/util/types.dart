@@ -1,5 +1,11 @@
 import 'util.dart';
 
+// TYPEDEFS
+
+typedef PositionRepresentations = IList<PositionRepresentation>;
+
+// EXTENSIONS
+
 /// extension [RangeGen] on [int]
 /// very simple extension, with one method.
 extension RangeGen on int {

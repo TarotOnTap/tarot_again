@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import 'main_navigation_rail.dart';
 import 'top_menu_bar.dart';
 
+@immutable
 class MainScaffold extends StatelessWidget {
   final Widget child;
 

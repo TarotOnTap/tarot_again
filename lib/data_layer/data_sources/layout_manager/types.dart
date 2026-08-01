@@ -32,19 +32,18 @@ sealed class TarotLayout with _$TarotLayout {
     @Default("Empty Layout") String displayName,
     @Default("nullLayout") String layoutType,
     @Default(0) int numCards,
-    @Default("# NULL LAYOUT") String mdLayoutDescription,
+    @Default("") String mdLayoutDescription,
   }) = NullLayout;
 
   const factory TarotLayout.newTarotLayout({
     required String name,
     required String displayName,
     required String layoutType,
-    // required int numCards,
+    required PositionRepresentations positions,
     String? mdLayoutDescription,
     String? attribution,
     String? url,
     String? documentation,
-    required List<PositionRepresentation> positions,
   }) = NewTarotLayout;
 
   factory TarotLayout.fromJson(Map<String, dynamic> json) =>
@@ -76,7 +75,7 @@ abstract class NullLayout extends TarotLayout with _$NullLayout {
     @Default("Empty Layout") String displayName,
     @Default("nullLayout") String layoutType,
     @Default(0) int numCards,
-    @Default("# NULL LAYOUT") String mdLayoutDescription,
+    @Default("") String mdLayoutDescription,
   }) = _NullLayout;
 
   factory NullLayout.fromJson(Map<String, dynamic> json) =>
@@ -91,11 +90,11 @@ abstract class NewTarotLayout extends TarotLayout with _$NewTarotLayout {
     required String name,
     required String displayName,
     required String layoutType,
+    required PositionRepresentations positions,
     String? mdLayoutDescription,
     String? attribution,
     String? url,
     String? documentation,
-    required List<PositionRepresentation> positions,
   }) = _NewTarotLayout;
 
   factory NewTarotLayout.fromJson(Map<String, dynamic> json) =>

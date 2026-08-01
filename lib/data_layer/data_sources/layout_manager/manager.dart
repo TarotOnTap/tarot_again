@@ -62,53 +62,43 @@ class LayoutManager with Logging {
           name: "allCards",
           numCards: 78,
           layoutType: "SimpleGrid",
-          mdLayoutDescription:
-              "# All Cards in a grid\n\nThis is for testing and demonstration purposes, not a real layout.",
+          mdLayoutDescription: "# All Cards in a grid\n\nThis is for testing and demonstration purposes, not a real layout.",
         ),
         NewTarotLayout(
           name: "pastPresentFuture",
           displayName: "Past, Present, Future",
           layoutType: "NewTarotLayout",
-          // numCards: 3,
-          // horizontalAlign: "center",
-          // verticalAlign: "center",
-          // alignOnCard: 1,
-          // slotNames: ["Past", "Present", "Future"],
-          positions: [
+          positions: IList<PositionRepresentation>([
             PositionRepresentation(
               name: "Past",
               alignment: Alignment.centerLeft,
               moveByContainerWidth: 0.25,
               moveByChildWidth: -0.5,
-              popUpDescription:
-                  "representing a past - event, situation, relationship, that is relevant to your question",
+              popUpDescription: "representing a past - event, situation, relationship, that is relevant to your question",
             ),
             PositionRepresentation(
               name: "Present",
               alignment: Alignment.centerLeft,
               moveByContainerWidth: 0.25,
               moveByChildWidth: -0.5,
-              popUpDescription:
-                  "representing the present - event, situation, relationship, that is relevant to your question",
+              popUpDescription: "representing the present - event, situation, relationship, that is relevant to your question",
             ),
             PositionRepresentation(
               name: "Future",
               alignment: Alignment.centerLeft,
               moveByContainerWidth: 0.75,
               moveByChildWidth: -0.5,
-              popUpDescription:
-                  "representing a possible future - event, situation, relationship, that is relevant to your question",
+              popUpDescription: "representing a possible future - event, situation, relationship, that is relevant to your question",
             ),
-          ],
-          mdLayoutDescription:
-              "# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or a situation of interest.\n\n[Wikipedia](https://en.wikipedia.org/).",
+          ]),
+          mdLayoutDescription: "# Past, Present, Future\n\nThe **Past, Present, Future** layout is a way to ask the cards about how the past, present, and future affect the subject of the question - the subject could be a person, a place, an event, or a situation of interest.\n\n[Wikipedia](https://en.wikipedia.org/).",
         ),
         NewTarotLayout(
           name: "Four-by",
           displayName: "Four-by",
           layoutType: "NewTarotLayout",
           mdLayoutDescription: "# Example 1\n* a four-card grid",
-          positions: [
+          positions: IList<PositionRepresentation>([
             PositionRepresentation(
               name: "Top-left",
               alignment: Alignment.centerLeft,
@@ -145,7 +135,7 @@ class LayoutManager with Logging {
               moveByChildHeight: -0.5,
               popUpDescription: "Bottom-right card",
             ),
-          ],
+          ]),
         ),
       ].lock,
     );

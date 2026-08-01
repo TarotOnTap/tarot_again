@@ -18,13 +18,8 @@ export 'package:meta/meta.dart';
 export 'package:signals/signals_flutter.dart';
 export 'package:tarot_again/data_layer/data_layer.dart';
 export 'package:tarot_again/reactives/reactives.dart';
-// export 'package:tarot_again/reactives/session_manager.dart';
 export 'package:watch_it/watch_it.dart';
 
 export 'flutter_settings_screen_ext.dart';
 export 'logging.dart';
 export 'types.dart';
-
-// void registerDependencies() {
-//   sl.registerSingleton<AsyncRandoms>(AsyncRandoms());
-// }

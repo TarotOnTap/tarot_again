@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.0
+  sdk: ^3.13.0-282.3.beta
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -43,7 +43,7 @@ dependencies:
   freezed_annotation: ^3.0.0
   gap: ^3.0.1
   # json_annotation: ^4.9.0
-  json_annotation: ^4.11.0
+  json_annotation: ^4.12.0
   markd: ^7.2.3+1
   talker: ^4.7.1
   talker_flutter: ^4.7.1
@@ -81,6 +81,7 @@ dependencies:
   injectable: ^2.7.1+4
   hivez: ^1.2.2
   platform: ^3.1.6
+  package_info_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:

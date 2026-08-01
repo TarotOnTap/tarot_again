@@ -5,8 +5,7 @@ import '../ui_layer.dart';
 import 'cards_stage_layout.dart';
 import 'main_scaffold.dart';
 
-// class TarotSuite extends FlameGame() {}
-
+@immutable
 class TopLevelLayout extends StatelessWidget {
   const TopLevelLayout({super.key});
 

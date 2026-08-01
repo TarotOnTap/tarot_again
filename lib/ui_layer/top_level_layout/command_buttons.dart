@@ -21,7 +21,7 @@ class CommandButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => callback(),
+      onPressed: callback,
       child: Text(buttonLabel, style: textStyle),
     );
   }
@@ -87,7 +87,7 @@ class CommandButtons extends StatelessWidget with Logging {
           child: Text("Deal cards"),
         ),
         ElevatedButton(
-          onPressed: () => sm.freshSpread(),
+          onPressed: sm.freshSpread,
           child: Text("Lay out fresh cards"),
         ),
       ],

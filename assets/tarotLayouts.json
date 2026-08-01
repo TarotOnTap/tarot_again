@@ -5,13 +5,13 @@
       "displayName": "All Cards",
       "layoutType": "SimpleGrid",
       "numCards": 78,
-      "mdLayoutDescription": "# All Cards in a grid\n\nThis is for testing and demonstration purposes, not a real layout."
+      "mdLayoutDescription": "layouts/tarotLayouts/allCards/layoutDescription.md"
     },
     {
-      "name": "Four-by",
+      "name": "fourBy",
       "displayName": "Four-by",
       "layoutType": "NewTarotLayout",
-      "mdLayoutDescription": "# Example 1\n\n* a four-card grid",
+      "mdLayoutDescription": "layouts/tarotLayouts/fourBy/layoutDescription.md",
       "positions": [
         {
           "name": "Top-left",
@@ -56,6 +56,44 @@
           "wins": "Wins.min",
           "touch": "Touch.inside",
           "popUpDescription": "Bottom-right card"
+        }
+      ]
+    },
+    {
+      "name": "pastPresentFuture",
+      "displayName": "Past, Present, Future",
+      "layoutType": "NewTarotLayout",
+      "mdLayoutDescription": "layouts/tarotLayouts/pastPresentFuture/layoutDescription.md",
+      "positions": [
+        {
+          "name": "Past",
+          "alignment": "Alignment.centerLeft",
+          "moveByChildWidth": -0.5,
+          "moveByChildHeight": -0.5,
+          "moveByContainerWidth": 0.25,
+          "wins": "Wins.min",
+          "touch": "Touch.inside",
+          "popUpDescription": "Describes an event or object that represents your past"
+        },
+        {
+          "name": "Present",
+          "alignment": "Alignment.centerLeft",
+          "moveByChildWidth": -0.5,
+          "moveByChildHeight": -0.5,
+          "moveByContainerWidth": 0.5,
+          "wins": "Wins.min",
+          "touch": "Touch.inside",
+          "popUpDescription": "Describes an event or object that represents your present"
+        },
+        {
+          "name": "Future",
+          "alignment": "Alignment.centerLeft",
+          "moveByChildWidth": -0.5,
+          "moveByChildHeight": -0.5,
+          "moveByContainerWidth": 0.75,
+          "wins": "Wins.min",
+          "touch": "Touch.inside",
+          "popUpDescription": "Describes an event or object that represents your future"
         }
       ]
     }
