@@ -96,17 +96,17 @@ mixin Logging {
 
   void debug(Object msg) => sl<Talker>().debug("$this:$msg");
 
-  BufferedLog bufferedDebug(Object msg, {autoFlush = false}) =>
+  BufferedLog bDebug(Object msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.debug, autoFlush: autoFlush);
 
-  static void staticDebug(Object msg) => sl<Talker>().debug("static: $msg");
+  static void sDebug(Object msg) => sl<Talker>().debug("static: $msg");
 
   void error(Object msg) => sl<Talker>().error("$this:$msg");
 
-  BufferedLog bufferedError(Object msg, {autoFlush = false}) =>
+  BufferedLog bError(Object msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.error, autoFlush: autoFlush);
 
-  static void staticError(Object msg) => sl<Talker>().debug("static: $msg");
+  static void sError(Object msg) => sl<Talker>().debug("static: $msg");
 
   /* static */
   T verbose<T>(Object msg, {T Function()? runIt, Object? afterMessage}) {
@@ -146,18 +146,18 @@ mixin Logging {
     return tmp;
   }
 
-  BufferedLog bufferedVerbose(Object msg, {bool autoFlush = false}) =>
+  BufferedLog bVerbose(Object msg, {bool autoFlush = false}) =>
       BufferedLog(LoggingLevels.verbose, autoFlush: autoFlush);
 
-  static void staticVerbose(Object msg) => sl<Talker>().verbose("static: $msg");
+  static void sVerbose(Object msg) => sl<Talker>().verbose("static: $msg");
 
   /* static */
   void warning(Object msg) => sl<Talker>().warning("$this:$msg");
 
-  BufferedLog bufferedWarning(Object msg, {autoFlush = false}) =>
+  BufferedLog bWarning(Object msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.warning, autoFlush: autoFlush);
 
-  static void staticWarning(Object msg) => sl<Talker>().warning("static: $msg");
+  static void sWarning(Object msg) => sl<Talker>().warning("static: $msg");
 }
 
 class GoodLog extends TalkerLog {
@@ -183,7 +183,7 @@ class GoodLog extends TalkerLog {
 Talker _talkerInit() => TalkerFlutter.init(
   settings: TalkerSettings(
     colors: {
-      TalkerLogType.verbose.key: AnsiPen()..yellow(),
+      TalkerKey.verbose: AnsiPen()..yellow(),
       GoodLog.getKey: GoodLog.getPen,
     },
   ),

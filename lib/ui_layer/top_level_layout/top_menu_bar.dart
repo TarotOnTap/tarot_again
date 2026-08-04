@@ -6,10 +6,11 @@ import 'package:tarot_again/util/util.dart';
 Future<void> saveGeneratedLayout() async {
   final directory = await getDownloadsDirectory();
 
-  String? outputFile = await FilePicker.platform.saveFile(
+  String? outputFile = await FilePicker.saveFile(
     initialDirectory: directory?.path,
     dialogTitle: 'Please select an output file:',
     fileName: '',
+    bytes: Uint8List(0),
   );
 
   if (outputFile != null) {
@@ -51,9 +52,8 @@ class TopMenuBar extends StatelessWidget {
                   ),
                   MenuItemButton(
                     onPressed: () {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(const SnackBar(content: Text('Quit!')));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(content: Text('Quit!')));
                     },
                     child: const MenuAcceleratorLabel('&Quit'),
                   ),

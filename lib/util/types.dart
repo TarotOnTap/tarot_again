@@ -77,3 +77,7 @@ abstract interface class Jsonable {
     throw UnimplementedError();
   }
 }
+
+mixin AddGetIt {
+  final getIt = GetIt.instance;
+}

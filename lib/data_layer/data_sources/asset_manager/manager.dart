@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hashlib/hashlib.dart';
-import 'package:hivez_flutter/hivez_flutter.dart';
 import 'package:json_repair_flutter/json_repair_flutter.dart';
 import 'package:tarot_again/util/util.dart';
 
@@ -37,44 +36,31 @@ class AssetManager with Logging {
   final AppSettings appSettings;
   final HiveService hiveService;
 
-  late final Box<String, AssetStorageRep> stringAssetsBox;
-
-  /// [createBoxes] is called during the service [create] function, below. It
-  /// makes sure that the boxes we use to strong string assets and their file
-  /// hashes are set up and ready to use.
-  Future<void> createBoxes() async {
-    /// This function gets called during the service [create] function, below.
-    ///
-    stringAssetsBox = await hiveService.ensureBox<AssetStorageRep>(
-      "stringAssetsBox",
-    );
-  }
-
   @FactoryMethod(preResolve: true)
   static Future<AssetManager> create(
     HiveService hiveService,
     AppSettings appSettings,
   ) async {
-    Logging.staticVerbose('AssetManager.create');
-    Logging.staticVerbose('  HiveService is $hiveService');
-    Logging.staticVerbose('  AppSettings is $appSettings');
+    Logging.sVerbose('AssetManager.create');
+    Logging.sVerbose('  HiveService is $hiveService');
+    Logging.sVerbose('  AppSettings is $appSettings');
     AssetManager retVal = AssetManager(appSettings, hiveService);
 
-    await retVal.createBoxes();
+    // await retVal.createBoxes();
 
-    Logging.staticVerbose('  awaiting getAllAssetPaths');
+    Logging.sVerbose('  awaiting getAllAssetPaths');
     final assetPaths = await getAllAssetPaths();
 
-    Logging.staticVerbose('  awaiting fetchLayouts');
+    Logging.sVerbose('  awaiting fetchLayouts');
     final layoutsByName = await retVal.fetchLayouts();
 
     // initialize all of our fixed assets, here, in one go
-    Logging.staticVerbose('  batching for SignalsManager');
+    Logging.sVerbose('  batching for SignalsManager');
     batch(() {
       SignalsManager.allAssetPaths.value = assetPaths;
       SignalsManager.tarotLayoutsByName.value = layoutsByName;
     });
-    Logging.staticVerbose('  finished AssetManager.create()');
+    Logging.sVerbose('  finished AssetManager.create()');
     return retVal;
   }
 

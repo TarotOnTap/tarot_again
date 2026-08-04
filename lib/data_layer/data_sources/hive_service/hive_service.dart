@@ -5,17 +5,23 @@ import 'package:tarot_again/util/util.dart';
 class HiveService with Logging {
   final int junior = 150;
 
+  late final Box<String, AssetStorageRep> assetStorageBox;
+
   HiveService() {
     verbose('HiveService()');
   }
 
+  Future<void> initializeBoxes() async {
+    assetStorageBox = await ensureBox<AssetStorageRep>("assetStorageRepBox");
+  }
+
   @FactoryMethod(preResolve: true)
   static Future<HiveService> create() async {
-    Logging.staticVerbose('HiveService.create()');
+    Logging.sVerbose('HiveService.create()');
     HiveService retVal = HiveService();
-    Logging.staticVerbose('  finished. Returning HiveService()');
-    // await Hive.initFlutter();
-    // Hive.registerAdapters();
+    Logging.sVerbose('  initializing boxes.');
+
+    await retVal.initializeBoxes();
 
     return retVal;
   }

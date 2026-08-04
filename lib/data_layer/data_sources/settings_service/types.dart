@@ -14,10 +14,10 @@ class AppSettings with Logging {
   /// initialized before we can run.
   @FactoryMethod(preResolve: true)
   static Future<AppSettings> create(HiveService hive) async {
-    Logging.staticVerbose("AppSettings.create()");
+    Logging.sVerbose("AppSettings.create()");
 
     final appSettings = AppSettings();
-    Logging.staticVerbose("  awaiting Settings.init");
+    Logging.sVerbose("  awaiting Settings.init");
     await Settings.init(cacheProvider: HiveCache());
     await firstRunSettings();
     return appSettings;

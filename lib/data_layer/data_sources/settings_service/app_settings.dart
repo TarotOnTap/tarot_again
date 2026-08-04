@@ -24,7 +24,7 @@ final List<InitialSettingsType> settings = <InitialSettingsType>[
 ];
 
 Future<Unit> firstRunSettings() async {
-  Logging.staticVerbose("firstRunSettings");
+  Logging.sVerbose("firstRunSettings");
 
   for (var setting in settings) {
     if (!(Settings.containsKey(setting.key) ?? false)) {
