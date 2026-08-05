@@ -6,6 +6,7 @@ class HiveService with Logging {
   final int junior = 150;
 
   late final Box<String, AssetStorageRep> assetStorageBox;
+  late final Box<Object, Object?> preferences;
 
   HiveService() {
     verbose('HiveService()');
@@ -13,6 +14,7 @@ class HiveService with Logging {
 
   Future<void> initializeBoxes() async {
     assetStorageBox = await ensureBox<AssetStorageRep>("assetStorageRepBox");
+    preferences = await ensureBox<Object?>('preferences');
   }
 
   @FactoryMethod(preResolve: true)
@@ -27,7 +29,7 @@ class HiveService with Logging {
   }
 
   Future<Box<String, T>> ensureBox<T>(String boxName) async {
-    final Box<String, T> existingBox = Box<String, T>(boxName);
+    final Box<String, T> existingBox = Box<String, T>(boxName, logger: hDebug);
     await existingBox.ensureInitialized();
 
     return existingBox;

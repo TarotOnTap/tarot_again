@@ -39,7 +39,7 @@ sealed class TarotLayout with _$TarotLayout {
     required String name,
     required String displayName,
     required String layoutType,
-    required PositionRepresentations positions,
+    required IList<PositionRepresentation> positions,
     String? mdLayoutDescription,
     String? attribution,
     String? url,

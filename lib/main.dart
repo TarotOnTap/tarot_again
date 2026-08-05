@@ -62,7 +62,7 @@ Future<void> initServices({required String appName}) async {
     ..initFlutter(appName)
     ..registerAdapters();
   Hive.registerAdapter<IList>(IListAdapter());
-  Hive.registerAdapter<NewTarotLayout>(NewTarotLayoutAdapter());
+  // Hive.registerAdapter<NewTarotLayout>(NewTarotLayoutAdapter());
 
   await configureServices();
 }

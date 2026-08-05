@@ -96,6 +96,8 @@ mixin Logging {
 
   void debug(Object msg) => sl<Talker>().debug("$this:$msg");
 
+  void hDebug(String msg) => sl<Talker>().debug("hiviz debug: $this:$msg");
+
   BufferedLog bDebug(Object msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.debug, autoFlush: autoFlush);
 

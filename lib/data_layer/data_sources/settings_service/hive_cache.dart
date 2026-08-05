@@ -1,100 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
+import 'package:tarot_again/util/util.dart';
 
 /// A cache access provider class for shared preferences using Hive library
-class HiveCache extends CacheProvider {
+@singleton
+class HiveCache extends CacheProvider with Logging {
   Box? _preferences;
   final String keyName = 'app_preferences';
 
-  @override
-  Future<void> init() async {
+  HiveCache(this.hiveService) {
     WidgetsFlutterBinding.ensureInitialized();
-    // if (!kIsWeb) {
-    //   // final defaultDirectory = await getApplicationDocumentsDirectory();
-    //   // Hive.init(defaultDirectory.path);
-    // }
-    if (Hive.isBoxOpen(keyName)) {
-      _preferences = Hive.box(keyName);
-    } else {
-      _preferences = await Hive.openBox(keyName);
-    }
   }
+
+  final HiveService hiveService;
+
+  /// this init function is required by the CacheProvider interface, but we
+  /// don't need to do anything here. [hiveService.preferences] holds our
+  /// database.
+  @override
+  Future<void> init() async {}
 
   Set get keys => getKeys();
 
   @override
   bool? getBool(String key, {bool? defaultValue}) {
-    return _preferences?.get(key);
+    return hiveService.preferences.get(key);
   }
 
   @override
   double? getDouble(String key, {double? defaultValue}) {
-    return _preferences?.get(key);
+    return hiveService.preferences?.get(key);
   }
 
   @override
   int? getInt(String key, {int? defaultValue}) {
-    return _preferences?.get(key);
+    return hiveService.preferences?.get(key);
   }
 
   @override
   String? getString(String key, {String? defaultValue}) {
-    return _preferences?.get(key);
+    return hiveService.preferences?.get(key);
   }
 
   @override
   Future<void> setBool(String key, bool? value) async {
-    await _preferences?.put(key, value);
+    await hiveService.preferences?.put(key, value);
   }
 
   @override
   Future<void> setDouble(String key, double? value) async {
-    await _preferences?.put(key, value);
+    await hiveService.preferences?.put(key, value);
   }
 
   @override
   Future<void> setInt(String key, int? value) async {
-    await _preferences?.put(key, value);
+    await hiveService.preferences?.put(key, value);
   }
 
   @override
   Future<void> setString(String key, String? value) async {
-    await _preferences?.put(key, value);
+    await hiveService.preferences?.put(key, value);
   }
 
   @override
   Future<void> setObject<T>(String key, T? value) async {
-    await _preferences?.put(key, value);
+    await hiveService.preferences?.put(key, value);
   }
 
   @override
   bool containsKey(String key) {
-    return _preferences?.containsKey(key) ?? false;
+    return hiveService.preferences?.containsKey(key) ?? false;
   }
 
   @override
   Set getKeys() {
-    return _preferences?.keys.toSet() ?? {};
+    return hiveService.preferences?.keys.toSet() ?? {};
   }
 
   @override
   Future<void> remove(String key) async {
     if (containsKey(key)) {
-      await _preferences?.delete(key);
+      await hiveService.preferences?.delete(key);
     }
   }
 
   @override
   Future<void> removeAll() async {
     final keys = getKeys();
-    await _preferences?.deleteAll(keys);
+    await hiveService.preferences.deleteAll(keys.map((e) => e.toString()));
   }
 
   @override
   T? getValue<T>(String key, {T? defaultValue}) {
-    var value = _preferences?.get(key);
-    if (value is T) {
+    var value = hiveService.preferences.get(key);
+    if (value != null) {
       return value;
     }
     return defaultValue;

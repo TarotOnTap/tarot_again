@@ -5,7 +5,7 @@ import 'hive_cache.dart';
 
 @singleton
 class AppSettings with Logging {
-  AppSettings() {
+  AppSettings({required this.hiveService}) {
     verbose('AppSettings().');
   }
 
@@ -13,15 +13,17 @@ class AppSettings with Logging {
   /// We only need the Hive instance here because we depend on Hive being
   /// initialized before we can run.
   @FactoryMethod(preResolve: true)
-  static Future<AppSettings> create(HiveService hive) async {
+  static Future<AppSettings> create(HiveService hiveService) async {
     Logging.sVerbose("AppSettings.create()");
 
-    final appSettings = AppSettings();
+    final appSettings = AppSettings(hiveService: hiveService);
     Logging.sVerbose("  awaiting Settings.init");
-    await Settings.init(cacheProvider: HiveCache());
+    await Settings.init(cacheProvider: HiveCache(hiveService));
     await firstRunSettings();
     return appSettings;
   }
+
+  final HiveService hiveService;
 
   bool get isInitialized => Settings.isInitialized;
 

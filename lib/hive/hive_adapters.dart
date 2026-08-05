@@ -5,22 +5,26 @@ import 'package:tarot_again/util/util.dart';
 
 part 'hive_adapters.g.dart';
 
-class IListAdapter extends TypeAdapter<IList> {
+class IListAdapter<T extends TypeAdapter> extends TypeAdapter<IList<T>> {
   @override
   final typeId = 100;
 
   @override
-  IList read(BinaryReader reader) {
+  IList<T> read(BinaryReader reader) {
     final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
+    final IMap<int, T> fields = IMap<int, T>({
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return IList();
+    });
+    return fields.toValueIList();
   }
 
   @override
-  void write(BinaryWriter writer, IList obj) {
-    writer.writeByte(0);
+  void write(BinaryWriter writer, IList list) {
+    writer.writeUint32(list.length);
+
+    for (var i = 0; i < list.length; i++) {
+      writer.write(list[i]);
+    }
   }
 
   @override
@@ -34,63 +38,63 @@ class IListAdapter extends TypeAdapter<IList> {
           typeId == other.typeId;
 }
 
-class NewTarotLayoutAdapter extends TypeAdapter<NewTarotLayout> {
-  @override
-  final typeId = 101;
-
-  @override
-  NewTarotLayout read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return NewTarotLayout(
-      name: fields[0] as String,
-      displayName: fields[1] as String,
-      layoutType: fields[2] as String,
-      positions:
-          ((fields[4] as List<PositionRepresentation>)
-                  .cast<PositionRepresentation>())
-              as IList<PositionRepresentation>,
-      mdLayoutDescription: fields[3] as String?,
-      attribution: fields[5] as String?,
-      url: fields[6] as String?,
-      documentation: fields[7] as String?,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, NewTarotLayout obj) {
-    writer
-      ..writeByte(8)
-      ..writeByte(0)
-      ..write(obj.name)
-      ..writeByte(1)
-      ..write(obj.displayName)
-      ..writeByte(2)
-      ..write(obj.layoutType)
-      ..writeByte(3)
-      ..write(obj.mdLayoutDescription)
-      ..writeByte(4)
-      ..write(obj.positions)
-      ..writeByte(5)
-      ..write(obj.attribution)
-      ..writeByte(6)
-      ..write(obj.url)
-      ..writeByte(7)
-      ..write(obj.documentation);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is NewTarotLayoutAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
+// class NewTarotLayoutAdapter extends TypeAdapter<NewTarotLayout> {
+//   @override
+//   final typeId = 101;
+//
+//   @override
+//   NewTarotLayout read(BinaryReader reader) {
+//     final numOfFields = reader.readByte();
+//     final fields = <int, dynamic>{
+//       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+//     };
+//     return NewTarotLayout(
+//       name: fields[0] as String,
+//       displayName: fields[1] as String,
+//       layoutType: fields[2] as String,
+//       positions:
+//           ((fields[4] as IList<PositionRepresentation>)
+//                   .cast<PositionRepresentation>())
+//               as IList<PositionRepresentation>,
+//       mdLayoutDescription: fields[3] as String?,
+//       attribution: fields[5] as String?,
+//       url: fields[6] as String?,
+//       documentation: fields[7] as String?,
+//     );
+//   }
+//
+//   @override
+//   void write(BinaryWriter writer, NewTarotLayout obj) {
+//     writer
+//       ..writeByte(8)
+//       ..writeByte(0)
+//       ..write(obj.name)
+//       ..writeByte(1)
+//       ..write(obj.displayName)
+//       ..writeByte(2)
+//       ..write(obj.layoutType)
+//       ..writeByte(3)
+//       ..write(obj.mdLayoutDescription)
+//       ..writeByte(4)
+//       ..write(obj.positions)
+//       ..writeByte(5)
+//       ..write(obj.attribution)
+//       ..writeByte(6)
+//       ..write(obj.url)
+//       ..writeByte(7)
+//       ..write(obj.documentation);
+//   }
+//
+//   @override
+//   int get hashCode => typeId.hashCode;
+//
+//   @override
+//   bool operator ==(Object other) =>
+//       identical(this, other) ||
+//       other is NewTarotLayoutAdapter &&
+//           runtimeType == other.runtimeType &&
+//           typeId == other.typeId;
+// }
 
 @GenerateAdapters([
   AdapterSpec<Wins>(),
@@ -106,7 +110,7 @@ class NewTarotLayoutAdapter extends TypeAdapter<NewTarotLayout> {
   AdapterSpec<Alignment>(),
   AdapterSpec<PositionRepresentation>(),
   AdapterSpec<SimpleGrid>(),
-  // AdapterSpec<NewTarotLayout>(),
+  AdapterSpec<NewTarotLayout>(),
   AdapterSpec<AssetStorageRep>(),
   // AdapterSpec<IList<T>>(),
   // AdapterSpec<Iterable<PositionRepresentation>>(),
