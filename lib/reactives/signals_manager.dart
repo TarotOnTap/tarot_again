@@ -1,5 +1,7 @@
 import 'package:tarot_again/util/util.dart';
 
+import 'hivez_persisted_signal.dart';
+
 @singleton
 class SignalsManager {
   static final Signal<Iterable<String>> allAssetPaths =
@@ -10,16 +12,14 @@ class SignalsManager {
     debugLabel: "allCardsFaceUp",
   );
 
-  static final Signal<String> cardBackStyle = signal<String>(
-    "",
-    debugLabel: "cardBackStyle",
+  static final HivezPersistedSignal<String> cardBackStyle = hivezPersistedSignal<String>(
+    "cardBackStyle", options: SignalOptions(name: "cardBackStyle")
   );
 
-  static final SettingsBackedSignal<StandardTarotDecks> deckName =
-      settingsBackedSignal<StandardTarotDecks>(
-        StandardTarotDecks.rws,
-        debugLabel: "deckName",
-        settingsKey: "deckName",
+  static final HivezPersistedSignal<StandardTarotDecks> deckName =
+      hivezPersistedSignal<StandardTarotDecks>(
+        "deckName"
+        StandardTarotDecks.rws, options: SignalOptions(name: "deckName")
       );
 
   static final SettingsBackedSignal<DeckTypesEnum> deckType =
