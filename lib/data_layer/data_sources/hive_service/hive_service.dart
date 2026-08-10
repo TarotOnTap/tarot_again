@@ -33,7 +33,14 @@ class HiveService with Logging {
     /// this should happen if we're testing
     Logging.sVerbose('  making sure HiveService is registered in GetIt');
     if (!sl.isRegistered<HiveService>()) {
+      Logging.sVerbose(
+        '  HiveService is not registered in GetIt; registering hiveService',
+      );
       sl.registerSingleton<HiveService>(retVal);
+
+      Logging.sVerbose(
+        '  HiveService registered in GetIt: ${sl.isRegistered<HiveService>()}',
+      );
     }
 
     return retVal;

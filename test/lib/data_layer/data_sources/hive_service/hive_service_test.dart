@@ -41,50 +41,59 @@ void main() async {
   Logging.sVerbose('manually registering IListAdapter');
   Hive.registerAdapter<IList>(IListAdapter());
 
-  Logging.sVerbose('checking to make sure Hive is alive');
-  final testBox = await Hive.openBox<int>("testBox");
-  Logging.sVerbose('testBox is $testBox');
+  test('Testing to make sure Hive is alive', () async {
+    final testBox = await Hive.openBox<int>("testBox");
+    Logging.sVerbose('testBox is $testBox');
 
-  Logging.sVerbose('writing data');
-  for (var i in [
-    ('a', 8),
-    ('b', 6),
-    ('c', 7),
-    ('D', 5),
-    ('E', 3),
-    ('F', 0),
-    ('G', 9),
-  ]) {
-    await testBox.put(i.$1, i.$2);
-  }
-  Logging.sVerbose('closing box.');
-  await testBox.close();
+    Logging.sVerbose('writing data');
+    for (var i in [
+      ('a', 8),
+      ('b', 6),
+      ('c', 7),
+      ('D', 5),
+      ('E', 3),
+      ('F', 0),
+      ('G', 9),
+    ]) {
+      await testBox.put(i.$1, i.$2);
+    }
+    Logging.sVerbose('closing box.');
+    await testBox.close();
 
-  Logging.sVerbose('reopening box into a new variable');
-  final testBox2 = await Hive.openBox<int>("testBox");
-  Logging.sVerbose('keys are: ${testBox2.keys}');
-  Logging.sVerbose('values are: ${testBox2.values}');
+    Logging.sVerbose('reopening box into a new variable');
+    final testBox2 = await Hive.openBox<int>("testBox");
+    Logging.sVerbose('keys are: ${testBox2.keys}');
+    Logging.sVerbose('values are: ${testBox2.values}');
 
-  int? resultData;
-  Logging.sVerbose('reading data');
-  for (var index in ['a', 'b', 'c', 'D', 'E', 'F', 'G', 'Q']) {
-    resultData = await testBox2.get(index);
-    Logging.sVerbose('  $index is $resultData');
-  }
-  Logging.sVerbose('closing box.');
-  await testBox2.close();
+    int? resultData;
+    Logging.sVerbose('reading data');
+    for (var index in ['a', 'b', 'c', 'D', 'E', 'F', 'G', 'Q']) {
+      resultData = await testBox2.get(index);
+      Logging.sVerbose('  $index is $resultData');
+    }
+    Logging.sVerbose('closing box.');
+    await testBox2.close();
+  });
 
   group("Testing hive_service", () {
     setUp(() async {
-      // WidgetsFlutterBinding.ensureInitialized();
-      Logging.sVerbose('  WidgetsFlutterBinding.ensureInitialized() ran.');
-
-      Logging.sVerbose("\n*******\nApp starting\n*******");
+      Logging.sVerbose("\nGroup 'Testing hive_service setUp()");
       Logging.sVerbose('appName is $appName');
 
       HiveService s = await HiveService.create();
+      // HiveService.create() is self-registering
 
-      sl.registerSingleton<HiveService>(s);
+      return Future<void>.value();
+    });
+
+    tearDown(() async {
+      Logging.sVerbose("\nGroup 'Testing hive_service tearDown()");
+
+      await sl.unregister<HiveService>();
+
+      Logging.sVerbose(
+        '  sl.isRegistered<HiveService> return ${sl.isRegistered<HiveService>()}',
+      );
     });
 
     test('HiveService service registered in GetIt', () {
