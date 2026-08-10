@@ -29,12 +29,12 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
 
   Widget _buildTarotLayoutChoiceChip(
     BuildContext context, {
-    required Signal<TarotLayout> signal,
+    required HivezPersistedSignal<TarotLayout> signal,
     required String key,
   }) => Watch(
     (BuildContext context) => ChoiceChip(
       label: Text(key),
-      selected: signal.value.displayName == key,
+      selected: signal.value!.displayName == key,
       onSelected: (bool selected) {
         if (selected) {
           signal.value = sl<LayoutManager>().getLayoutByDisplayName(key);
@@ -81,7 +81,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
           (BuildContext context) => ChoiceChip(
             label: Text(RandomGenerators.values[index].displayName),
             selected:
-                SignalsManager.currentRandomGenerator.value.index == index,
+                SignalsManager.currentRandomGenerator.value!.index == index,
             onSelected: (bool selected) {
               SignalsManager.currentRandomGenerator.value =
                   RandomGenerators.values[index];
@@ -145,14 +145,14 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             icon: Badge(
               label: Watch(
                 (BuildContext context) =>
-                    Text(SignalsManager.tarotLayout.value.displayName),
+                    Text(SignalsManager.tarotLayout.value!.displayName),
               ),
               child: Icon(LucideIcons.layout_dashboard),
             ),
             selectedIcon: Badge(
               label: Watch(
                 (BuildContext context) =>
-                    Text(SignalsManager.tarotLayout.value.displayName),
+                    Text(SignalsManager.tarotLayout.value!.displayName),
               ),
               child: Icon(LucideIcons.layout_dashboard),
             ),
@@ -167,7 +167,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             icon: Badge(
               label: Watch(
                 (BuildContext context) => Text(
-                  SignalsManager.currentRandomGenerator.value.displayName,
+                  SignalsManager.currentRandomGenerator.value!.displayName,
                 ),
               ),
               child: Icon(LucideIcons.dices),
@@ -180,7 +180,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             icon: Badge(
               label: Watch(
                 (BuildContext context) => Text(
-                  SignalsManager.currentRandomGenerator.value.displayName,
+                  SignalsManager.currentRandomGenerator.value!.displayName,
                 ),
               ),
               child: Icon(LucideIcons.dices),

@@ -21,7 +21,6 @@ class HivezPersistedSignal<T> extends Signal<T?> {
     this.key,
     super.value, {
     Box? storageBox,
-    T? initialValue,
     super.options,
   }) {
     hiveBox = storageBox ?? sl<HiveService>().preferences;
@@ -44,16 +43,15 @@ class HivezPersistedSignal<T> extends Signal<T?> {
   /// The [SignalOptions] [options] parameter is sent, unmodified, to the [Signal] constructor.
   factory HivezPersistedSignal({
     required Object key,
-    T? startingValue,
+
     Box<Object, T?>? storageBox,
     T? initialValue,
-    SignalOptions<T?>? options,
+    SignalOptions<T>? options,
   }) {
     final HivezPersistedSignal<T> hps2 = HivezPersistedSignal<T>._(
       key,
-      startingValue,
+      initialValue,
       storageBox: storageBox,
-      initialValue: initialValue,
       options: options,
     );
 
@@ -96,3 +94,16 @@ class HivezPersistedSignal<T> extends Signal<T?> {
     });
   }
 }
+
+HivezPersistedSignal<T> hivezPersistedSignal<T>({
+  required Object key,
+  T? startingValue,
+  Box<Object, T?>? storageBox,
+  T? initialValue,
+  SignalOptions<T>? options,
+}) => HivezPersistedSignal<T>(
+  key: key,
+  storageBox: storageBox,
+  initialValue: initialValue,
+  options: options,
+);

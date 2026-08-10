@@ -51,10 +51,6 @@ types:
         index: 0
       reversed:
         index: 1
-  AppSettings:
-    typeId: 6
-    nextIndex: 0
-    fields: {}
   HiveService:
     typeId: 7
     nextIndex: 2
@@ -75,8 +71,6 @@ types:
     typeId: 9
     nextIndex: 3
     fields:
-      appSettings:
-        index: 0
       hiveService:
         index: 1
   Alignment:
@@ -179,23 +173,3 @@ types:
         index: 3
       userOverride:
         index: 4
-  NewTarotLayout:
-    typeId: 15
-    nextIndex: 8
-    fields:
-      name:
-        index: 0
-      displayName:
-        index: 1
-      layoutType:
-        index: 2
-      mdLayoutDescription:
-        index: 3
-      positions:
-        index: 4
-      attribution:
-        index: 5
-      url:
-        index: 6
-      documentation:
-        index: 7

@@ -29,22 +29,22 @@ typedef JsonMap = IMap<String, dynamic>;
 
 @singleton
 class AssetManager with Logging {
-  AssetManager(this.appSettings, this.hiveService) {
+  AssetManager(this.hiveService) {
     verbose("AssetManager.AssetManager()");
   }
 
-  final AppSettings appSettings;
+  // final AppSettings appSettings;
   final HiveService hiveService;
 
   @FactoryMethod(preResolve: true)
   static Future<AssetManager> create(
     HiveService hiveService,
-    AppSettings appSettings,
+    // AppSettings appSettings,
   ) async {
     Logging.sVerbose('AssetManager.create');
     Logging.sVerbose('  HiveService is $hiveService');
-    Logging.sVerbose('  AppSettings is $appSettings');
-    AssetManager retVal = AssetManager(appSettings, hiveService);
+    // Logging.sVerbose('  AppSettings is $appSettings');
+    AssetManager retVal = AssetManager(hiveService);
 
     // await retVal.createBoxes();
 

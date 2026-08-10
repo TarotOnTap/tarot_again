@@ -116,8 +116,8 @@ class CardWidget extends StatelessWidget {
     return Watch(
       (context) => RotatedBox(
         quarterTurns:
-            SignalsManager.reversalsAllowed.value &&
-                slotState.reversal == ReversalEnum.reversed
+            SignalsManager.reversalsAllowed.value ??
+                true && slotState.reversal == ReversalEnum.reversed
             ? 2
             : 0,
         child: Container(

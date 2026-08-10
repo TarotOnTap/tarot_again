@@ -17,6 +17,8 @@ Stream<int> getNRandomInts({
 void main() async {
   initializeLoggingService();
 
+  sl.registerSingleton<AsyncRandoms>(AsyncRandoms());
+
   // initializeDataLayer();
 
   AsyncRandoms randoms = sl<AsyncRandoms>();
@@ -39,18 +41,15 @@ void main() async {
       expect(testResult, true);
     });
 
-    test(
-      "test that random number ranges produce numbers less than their upper limit",
-      () async {
-        final Stream<int> randomStream = getNRandomInts(
-          source: randoms,
-          count: 1000,
-          rangeHigh: 357,
-        );
+    test("test that random number ranges produce numbers less than their upper limit", () async {
+      final Stream<int> randomStream = getNRandomInts(
+        source: randoms,
+        count: 1000,
+        rangeHigh: 357,
+      );
 
-        bool testResult = await randomStream.every((int elem) => elem < 357);
-      },
-    );
+      bool testResult = await randomStream.every((int elem) => elem < 357);
+    });
     test(
       "test that random numbers over a range stay within their limits",
       () async {

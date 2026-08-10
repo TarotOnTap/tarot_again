@@ -8,47 +8,47 @@ class ComputedsManager with Logging {
 
   static final Computed<String> deckString = computed(
     () =>
-        "decks/${SignalsManager.deckType.value.name}/${SignalsManager.deckName.value.name}",
-    debugLabel: "deckString",
+        "decks/${SignalsManager.deckType.value!.name}/${SignalsManager.deckName.value!.name}",
+    options: ComputedOptions(name: "deckString"),
   );
 
   static final Computed<Iterable<String>> layoutAssetPaths = computed(
     () => SignalsManager.allAssetPaths.value.where(
       (path) => path.contains("assets/layouts"),
     ),
-    debugLabel: "layoutAssetPaths",
+    options: ComputedOptions(name: "layoutAssetPaths"),
   );
 
   static final Computed<IList<String>> layoutDisplayNames = computed(
     () => SignalsManager.tarotLayoutsByName.value.values
         .map((TarotLayout l) => l.displayName)
         .toIList(),
-    debugLabel: "layoutDisplayNames",
+    options: ComputedOptions(name: "layoutDisplayNames"),
   );
 
   static final Computed<IList<String>> layoutNames = computed(
     () => SignalsManager.tarotLayoutsByName.value.keys.toIList(),
-    debugLabel: "layoutNames",
+    options: ComputedOptions(name: "layoutNames"),
   );
 
   static final Computed<LayoutAssetCache> layoutsByDisplayName = computed(
     () => SignalsManager.tarotLayoutsByName.value.map(
       (key, value) => MapEntry<String, TarotLayout>(value.displayName, value),
     ),
-    debugLabel: "layoutsByDisplayName",
+    options: ComputedOptions(name: "layoutsByDisplayName"),
   );
 
   static final Computed<Iterable<String>> deckAssetPaths = computed(
     () => SignalsManager.allAssetPaths.value.where(
-      (path) => path.contains("decks/${SignalsManager.deckType.value.name}"),
+      (path) => path.contains("decks/${SignalsManager.deckType.value!.name}"),
     ),
-    debugLabel: "deckAssetPaths",
+    options: ComputedOptions(name: "deckAssetPaths"),
   );
 
   static final Computed<IList<GlobalKey<PositionSlotWidgetState>>> slotKeys =
       computed(
         () =>
-            (switch (SignalsManager.tarotLayout.value) {
+            (switch (SignalsManager.tarotLayout.value!) {
               NullLayout _ =>
                 const IList<GlobalKey<PositionSlotWidgetState>>.empty().also((
                   it,
@@ -96,8 +96,7 @@ class ComputedsManager with Logging {
     () => SignalsManager.allAssetPaths.value.where(
       (path) => path.contains("assets/layouts"),
     ),
-
-    debugLabel: "layoutAssetPaths",
+    options: ComputedOptions(name: "tarotLayoutAssetPaths"),
   );
 
   void ensureComputeds() {

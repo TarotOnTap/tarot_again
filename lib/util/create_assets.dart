@@ -16,5 +16,5 @@ import 'package:path_provider/path_provider.dart';
 Future<String> locateDatabase() async {
   Directory appSupportDirectory = await getApplicationSupportDirectory();
 
-  return "${appSupportDirectory.path}/assets.sqlite";
+  return appSupportDirectory.path;
 }

@@ -13,17 +13,28 @@ class HiveService with Logging {
   }
 
   Future<void> initializeBoxes() async {
+    verbose('HiveService.initializeBoxes()');
+    verbose('  assetStorageRep');
     assetStorageBox = await ensureBox<AssetStorageRep>("assetStorageRepBox");
+
+    verbose('  preferences');
     preferences = await ensureBox<Object?>('preferences');
   }
 
   @FactoryMethod(preResolve: true)
   static Future<HiveService> create() async {
     Logging.sVerbose('HiveService.create()');
+    Logging.sVerbose('  calling HiveService()');
     HiveService retVal = HiveService();
-    Logging.sVerbose('  initializing boxes.');
 
+    Logging.sVerbose('  initializing boxes.');
     await retVal.initializeBoxes();
+
+    /// this should happen if we're testing
+    Logging.sVerbose('  making sure HiveService is registered in GetIt');
+    if (!sl.isRegistered<HiveService>()) {
+      sl.registerSingleton<HiveService>(retVal);
+    }
 
     return retVal;
   }
