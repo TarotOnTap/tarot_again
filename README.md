@@ -1,16 +1,9 @@
 # tarot_again
 
-A new Flutter project.
+A hobby project to create a cross-platform application for reading and exploring tarot, for fun and insights. It is very much a work in progress.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is written in [Dart](https://dart.dev/) and uses the [Flutter](https://flutter.dev) cross-platform framework for presentation.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project uses Android Studio as its IDE, so you'll need to set that up after getting Flutter installed.
