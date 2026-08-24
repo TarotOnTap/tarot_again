@@ -51,5 +51,4 @@ app.*.map.json
 # Build-runner generated files
 *.freezed.dart
 *.g.dart
-# Widget Preview related
-.widget_preview/
+lcov.info

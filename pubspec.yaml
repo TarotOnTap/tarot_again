@@ -1,5 +1,5 @@
 name: tarot_again
-description: "A new Flutter project."
+description: "Tarot Again"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -112,6 +112,10 @@ dev_dependencies:
   injectable_generator: ^3.0.2
   patrol: ^4.8.0
 
+patrol:
+  app_name: Tarot Again
+  android:
+    package_name: com.example.tarot_again
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -186,3 +190,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+

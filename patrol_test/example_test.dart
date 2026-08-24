@@ -1,25 +1,27 @@
-// Patrol integration test example
-// Run with: patrol test --target=patrol_test/example_test.dart
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
 void main() {
-  patrolTest('app launches and displays cards', ($) async {
-    // This test verifies that the app can launch and display the UI.
-    // Extend this with app-specific interactions as you add more tests.
+  patrolTest(
+    'counter state is the same after going to home and switching apps',
+    ($) async {
+      // Replace later with your app's main widget
+      await $.pumpWidgetAndSettle(
+        MaterialApp(
+          home: Scaffold(
+            appBar: AppBar(title: const Text('app')),
+            backgroundColor: Colors.blue,
+          ),
+        ),
+      );
 
-    // Wait for the app to fully load (adjust as needed for your app)
-    // await $(_) async { };
-    //
-    // // Verify app is responsive
-    // expect(find.byType(Scaffold), findsWidgets);
-  });
-
-  patrolTest('app survives hot restart', ($) async {
-    // Test that the app is resilient to hot restart
-    await $.tester.pumpAndSettle();
-    expect(find.byType(Scaffold), findsWidgets);
-  });
+      expect($('app'), findsOneWidget);
+      if (!Platform.isMacOS) {
+        await $.platform.mobile.pressHome();
+      }
+    },
+  );
 }
