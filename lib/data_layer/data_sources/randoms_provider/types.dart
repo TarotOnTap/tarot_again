@@ -130,7 +130,7 @@ class SecureRandom extends IRandomsProvider with Logging {
 
   @override
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) async =>
-      secureRandom.nextInt(rangeHigh - rangeLow + 1) + rangeLow;
+      secureRandom.nextInt(rangeHigh - rangeLow) + rangeLow;
 
   @override
   Future<double> getNextDouble() async => secureRandom.nextDouble();

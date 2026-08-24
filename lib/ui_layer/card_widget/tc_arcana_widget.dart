@@ -10,14 +10,8 @@ class PlaintextArcanaWidget extends StatelessWidget with Logging {
   PlaintextArcanaWidget({super.key, required this.card, required this.names});
 
   @override
-  Widget build(BuildContext context) => Watch((context) {
-    // watch is only watching for changes in our theme, here
+  Widget build(BuildContext context) {
     final theme = TextTheme.of(context);
-
-    // final List<Widget> names = [
-    //   for (var item in card.displayName.split(" "))
-    //     Text(item, style: theme.titleSmall),
-    // ];
 
     final List<Widget> columnChildren = [];
 
@@ -44,7 +38,7 @@ class PlaintextArcanaWidget extends StatelessWidget with Logging {
       mainAxisAlignment: MainAxisAlignment.start,
       children: columnChildren,
     );
-  }, debugLabel: "PlaintextMajorArcanaWidget");
+  }
 }
 
 class TCArcanaWidget extends StatelessWidget with Logging {

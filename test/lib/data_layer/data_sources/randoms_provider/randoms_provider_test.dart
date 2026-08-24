@@ -50,8 +50,7 @@ void main() async {
     expect(randoms, isA<AsyncRandoms>());
   });
 
-  group("AsyncRandom getNextInt using default range-low of zero, and"
-      "with various ranges", () {
+  group("AsyncRandom getNextInt using default range-low of zero, and with various ranges", () {
     test("test that random number ranges start at 0 by default", () async {
       final Stream<int> randomStream = getNRandomInts(
         source: randoms,
@@ -59,7 +58,17 @@ void main() async {
         rangeHigh: 500,
       );
 
-      bool testResult = await randomStream.every((int elem) => elem >= 0);
+      bool testResult = true;
+
+      await for (int elem in randomStream) {
+        if (elem < 0) {
+          Logging.sVerbose('found a negative random number: $elem');
+          testResult = false;
+          break;
+        }
+      }
+
+      // bool testResult = await randomStream.every((int elem) => elem >= 0);
 
       expect(testResult, true);
     });
@@ -71,7 +80,19 @@ void main() async {
         rangeHigh: 357,
       );
 
-      bool testResult = await randomStream.every((int elem) => elem < 357);
+      bool testResult = true;
+
+      await for (int elem in randomStream) {
+        if (elem >= 357) {
+          Logging.sVerbose(
+            'found a random number greater than upper limit of 357: $elem',
+          );
+          testResult = false;
+          break;
+        }
+      }
+
+      // bool testResult = await randomStream.every((int elem) => elem < 357);
       expect(testResult, true);
     });
     test(
@@ -84,9 +105,21 @@ void main() async {
           rangeHigh: 922,
         );
 
-        bool testResult = await randomStream.every(
-          (int elem) => elem >= -852 && elem < 922,
-        );
+        bool testResult = true;
+
+        await for (int elem in randomStream) {
+          if (elem < -852 || elem >= 922) {
+            Logging.sVerbose(
+              'found a random number out of range [-852, 922): $elem',
+            );
+            testResult = false;
+            break;
+          }
+        }
+
+        // bool testResult = await randomStream.every(
+        //   (int elem) => elem >= -852 && elem < 922,
+        // );
 
         expect(testResult, true);
       },

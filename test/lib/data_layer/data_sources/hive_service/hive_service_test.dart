@@ -63,19 +63,19 @@ void main() async {
   });
 
   group("Testing hive_service", () {
-    setUp(() async {
-      HiveService s = await HiveService.create();
-      sl.registerSingleton<HiveService>(s);
-      // HiveService.create() is self-registering
+    // setUp(() async {
+    //   HiveService s = await HiveService.create();
+    //   sl.registerSingleton<HiveService>(s);
+    //   // HiveService.create() is self-registering
+    //
+    //   return Future<void>.value();
+    // });
 
-      return Future<void>.value();
-    });
-
-    tearDown(() async {
-      Logging.sVerbose("\nGroup 'Testing hive_service tearDown()");
-
-      await sl.unregister<HiveService>();
-    });
+    // tearDown(() async {
+    //   Logging.sVerbose("\nGroup 'Testing hive_service tearDown()");
+    //
+    //   await sl.unregister<HiveService>();
+    // });
 
     test('HiveService service registered in GetIt', () {
       expect(sl.isRegistered<HiveService>(), true);
