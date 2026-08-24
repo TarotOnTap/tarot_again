@@ -69,9 +69,11 @@ class TCArcanaWidget extends StatelessWidget with Logging {
 
     returnWidget = switch (slotState.assets.image) {
       Some<AssetGenImage>(value: final asset) => asset.image(
-        errorBuilder:
-            (BuildContext context, Object error, StackTrace? stacktrace) =>
-                returnWidget,
+        errorBuilder: (
+          BuildContext context,
+          Object error,
+          StackTrace? stacktrace,
+        ) => returnWidget,
       ),
       None() => PlaintextArcanaWidget(card: slotState.deckCard, names: names),
     };

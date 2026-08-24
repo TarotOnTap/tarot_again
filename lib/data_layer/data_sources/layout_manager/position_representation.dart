@@ -50,10 +50,14 @@ class AlignmentEnumConverter implements JsonConverter<Alignment, String> {
     }
   }
 
-  Alignment? _parseString(String json) {
-    if (json.startsWith("Alignment.")) {
-      json = json.replaceAll("Alignment.", ""); // convert it just
+  Alignment? _parseString(String jsonInput) {
+    String json;
+
+    if (jsonInput.startsWith("Alignment.")) {
+      json = jsonInput.replaceAll("Alignment.", ""); // convert it just
       // to the short form, which is handled next
+    } else {
+      json = jsonInput;
     }
 
     return switch (json) {

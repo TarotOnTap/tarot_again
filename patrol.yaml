@@ -1,0 +1,31 @@
+# Patrol configuration file
+# For more information, see https://patrol.dev/docs/configuration
+
+# Android-specific configuration
+android:
+  # Detects and uses native Android test framework features automatically
+  nativeTestRunner: true
+
+# iOS-specific configuration
+ios:
+  # Detects and uses native iOS test framework features automatically
+  nativeTestRunner: true
+
+# Web-specific configuration (if testing web platform)
+web:
+  # Browser to use for web tests (chrome, firefox, safari)
+  browser: chrome
+  # Uncomment to use headless mode
+  # headless: true
+
+# Timeout configuration (in milliseconds)
+testTimeout: 60000
+
+# App restart policy between tests
+restartAppBetweenTests: true
+
+# Collect screenshots on test failure
+takeScreenshots: true
+
+# Configure test logging
+verbose: false

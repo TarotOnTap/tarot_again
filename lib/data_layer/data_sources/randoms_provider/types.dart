@@ -62,20 +62,20 @@ class AsyncRandoms with EventReceiverMixin, Logging {
     SignalsManager.currentRandomProvider.value = SignalsManager
         .currentRandomGenerator
         .value
-        ?.genCreator();
+        .genCreator();
   }
 
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>
-      SignalsManager.currentRandomProvider.value!.getNextInt(
-        rangeLow: rangeLow = 0,
+      SignalsManager.currentRandomProvider.value.getNextInt(
+        rangeLow: rangeLow,
         rangeHigh: rangeHigh,
       );
 
   Future<double> getNextDouble() =>
-      SignalsManager.currentRandomProvider.value!.getNextDouble();
+      SignalsManager.currentRandomProvider.value.getNextDouble();
 
   Future<bool> getNextBool() =>
-      SignalsManager.currentRandomProvider.value!.getNextBool();
+      SignalsManager.currentRandomProvider.value.getNextBool();
 
   // The goal is to return a list of cards in shuffled order.
   // upstream processing can handle cards popping out of the shuffle, etc.

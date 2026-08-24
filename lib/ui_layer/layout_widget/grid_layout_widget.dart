@@ -13,7 +13,7 @@ class GridLayoutWidget extends StatelessWidget with Logging {
   Widget build(BuildContext context) => Watch(
     (context) => LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final int numCards = switch (SignalsManager.tarotLayout.value!) {
+        final int numCards = switch (SignalsManager.tarotLayout.value) {
           // HorizontalLinear(:final numCards) => numCards,
           SimpleGrid(:final numCards) => numCards,
           NullLayout() => 0,

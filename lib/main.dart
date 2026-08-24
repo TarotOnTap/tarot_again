@@ -1,13 +1,10 @@
 // import 'package:flutter/material.dart';
-import 'package:hivez_flutter/hivez_flutter.dart';
 import 'package:platform/platform.dart';
 import 'package:toastification/toastification.dart';
 
-import 'hive/hive_adapters.dart';
-import 'hive/hive_registrar.g.dart';
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'util/flutter_util.dart';
-import 'util/register_singletons.dart';
+import 'util/services.dart';
 import 'util/util.dart';
 
 void main(List<String> args) async {
@@ -23,22 +20,6 @@ void main(List<String> args) async {
 
   await initServices(appName: appName);
 
-  // initializeLoggingService();
-  //
-  // WidgetsFlutterBinding.ensureInitialized();
-  // Logging.sVerbose('  WidgetsFlutterBinding.ensureInitialized() ran.');
-  //
-  // Logging.sVerbose("\n*******\nApp starting\n*******");
-  // Logging.sVerbose('appName is $appName');
-  //
-  // Hive
-  //   ..initFlutter(appName)
-  //   ..registerAdapters();
-  // Hive.registerAdapter<IList>(IListAdapter());
-  // Hive.registerAdapter<NewTarotLayout>(NewTarotLayoutAdapter());
-  //
-  // await configureServices();
-
   ErrorWidget.builder = (FlutterErrorDetails details) {
     // If we're in debug mode, use the normal error widget which shows the error
     // message:
@@ -46,25 +27,6 @@ void main(List<String> args) async {
   };
 
   runApp(TarotAgainApp());
-}
-
-Future<void> initServices({required String appName}) async {
-  // get the logging service up and running, so we can use it!
-  initializeLoggingService();
-
-  // WidgetsFlutterBinding.ensureInitialized();
-  Logging.sVerbose('  WidgetsFlutterBinding.ensureInitialized() ran.');
-
-  Logging.sVerbose("\n*******\nApp starting\n*******");
-  Logging.sVerbose('appName is $appName');
-
-  Hive
-    ..initFlutter(appName)
-    ..registerAdapters();
-  Hive.registerAdapter<IList>(IListAdapter());
-  // Hive.registerAdapter<NewTarotLayout>(NewTarotLayoutAdapter());
-
-  await configureServices();
 }
 
 @immutable

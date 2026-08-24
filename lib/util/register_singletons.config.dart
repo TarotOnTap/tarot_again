@@ -18,7 +18,6 @@ import '../data_layer/data_sources/layout_manager/manager.dart' as _i831;
 import '../data_layer/data_sources/randoms_provider/types.dart' as _i913;
 import '../reactives/computeds_manager.dart' as _i334;
 import '../reactives/effects_manager.dart' as _i477;
-import '../reactives/hives_signal_key_value_store.dart' as _i529;
 import '../reactives/session_manager.dart' as _i950;
 import '../reactives/signals_manager.dart' as _i271;
 import 'event_bus.dart' as _i909;
@@ -38,14 +37,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i831.LayoutManager>(() => _i831.LayoutManager());
     gh.singleton<_i913.AsyncRandoms>(() => _i913.AsyncRandoms());
-    gh.singleton<_i271.SignalsManager>(() => _i271.SignalsManager());
     gh.singleton<_i909.EventBus>(() => eventBusModule.eventBus);
     await gh.singletonAsync<_i82.AssetManager>(
       () => _i82.AssetManager.create(gh<_i23.HiveService>()),
       preResolve: true,
     );
-    gh.singleton<_i529.HivezPersistedPreferencesStore>(
-      () => _i529.HivezPersistedPreferencesStore(gh<_i23.HiveService>()),
+    gh.singleton<_i271.SignalsManager>(
+      () => _i271.SignalsManager(gh<_i23.HiveService>()),
     );
     gh.singleton<_i334.ComputedsManager>(
       () => _i334.ComputedsManager(signalsManager: gh<_i23.SignalsManager>()),

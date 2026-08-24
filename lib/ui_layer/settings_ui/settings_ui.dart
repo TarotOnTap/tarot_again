@@ -6,19 +6,23 @@ class SettingsUIWidget extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsScreen(
-      title: "Settings",
-      children: [
-        SwitchSettingsTile(
-          // leading: Icon(Icons.developer_mode),
-          settingKey: 'reversalsAllowed',
-          title: 'Allow reversals',
-          onChange: (value) {
-            SignalsManager.reversalsAllowed.value = value;
-            debug('reversalsAllow: $value');
-          },
-        ),
-      ],
+    return Container(
+      alignment: Alignment.center,
+      child: Text("Settings screen"),
     );
+    //   SettingsScreen(
+    //   title: "Settings",
+    //   children: [
+    //     SwitchSettingsTile(
+    //       // leading: Icon(Icons.developer_mode),
+    //       settingKey: 'reversalsAllowed',
+    //       title: 'Allow reversals',
+    //       onChange: (value) {
+    //         SignalsManager.reversalsAllowed.value = value;
+    //         debug('reversalsAllow: $value');
+    //       },
+    //     ),
+    //   ],
+    // );
   }
 }

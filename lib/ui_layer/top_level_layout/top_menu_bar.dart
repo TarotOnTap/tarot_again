@@ -6,7 +6,7 @@ import 'package:tarot_again/util/util.dart';
 Future<void> saveGeneratedLayout() async {
   final directory = await getDownloadsDirectory();
 
-  String? outputFile = await FilePicker.saveFile(
+  Uri? outputFile = await FilePicker.saveFile(
     initialDirectory: directory?.path,
     dialogTitle: 'Please select an output file:',
     fileName: '',
@@ -14,7 +14,7 @@ Future<void> saveGeneratedLayout() async {
   );
 
   if (outputFile != null) {
-    await sl<LayoutManager>().generateLayoutsFile(outputFile);
+    await sl<LayoutManager>().generateLayoutsFile(outputFile.toFilePath());
   }
 }
 

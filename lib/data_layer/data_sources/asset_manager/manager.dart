@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hashlib/hashlib.dart';
@@ -30,7 +28,7 @@ typedef JsonMap = IMap<String, dynamic>;
 @singleton
 class AssetManager with Logging {
   AssetManager(this.hiveService) {
-    verbose("AssetManager.AssetManager()");
+    // verbose("AssetManager.AssetManager()");
   }
 
   // final AppSettings appSettings;
@@ -41,37 +39,37 @@ class AssetManager with Logging {
     HiveService hiveService,
     // AppSettings appSettings,
   ) async {
-    Logging.sVerbose('AssetManager.create');
-    Logging.sVerbose('  HiveService is $hiveService');
+    // Logging.sVerbose('AssetManager.create');
+    // Logging.sVerbose('  HiveService is $hiveService');
     // Logging.sVerbose('  AppSettings is $appSettings');
     AssetManager retVal = AssetManager(hiveService);
 
     // await retVal.createBoxes();
 
-    Logging.sVerbose('  awaiting getAllAssetPaths');
+    // Logging.sVerbose('  awaiting getAllAssetPaths');
     final assetPaths = await getAllAssetPaths();
 
-    Logging.sVerbose('  awaiting fetchLayouts');
+    // Logging.sVerbose('  awaiting fetchLayouts');
     final layoutsByName = await retVal.fetchLayouts();
 
     // initialize all of our fixed assets, here, in one go
-    Logging.sVerbose('  batching for SignalsManager');
+    // Logging.sVerbose('  batching for SignalsManager');
     batch(() {
       SignalsManager.allAssetPaths.value = assetPaths;
       SignalsManager.tarotLayoutsByName.value = layoutsByName;
     });
-    Logging.sVerbose('  finished AssetManager.create()');
+    // Logging.sVerbose('  finished AssetManager.create()');
     return retVal;
   }
 
   static Future<Iterable<String>> getAllAssetPaths() async {
-    log("AssetManager.getAllAssetPaths");
+    // log("AssetManager.getAllAssetPaths");
     AssetManifest? assetManifest;
     var assetPaths = <String>[];
 
     try {
       assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-      log("  assetManifest is $assetManifest");
+      // log("  assetManifest is $assetManifest");
       assetPaths = assetManifest.listAssets();
     } catch (e, s) {
       log("  loadFromAssetBundle raised error $e");
@@ -81,20 +79,20 @@ class AssetManager with Logging {
     return assetPaths;
   }
 
-  TaskEither<FlutterError, String> _loadTarotLayoutsJson() =>
-      TaskEither<FlutterError, String>.tryCatch(() async {
-        return await rootBundle.loadString("assets/tarotLayouts.json");
-      }, (e, s) => e as FlutterError);
-
-  Either<FormatException, JsonMap> _parseTarotLayoutsJson(String json) =>
-      Either<FormatException, JsonMap>.tryCatch(
-        () => IMap<String, dynamic>(jsonDecode(json)),
-        (e, s) => e as FormatException,
-      );
+  // TaskEither<FlutterError, String> _loadTarotLayoutsJson() =>
+  //     TaskEither<FlutterError, String>.tryCatch(() async {
+  //       return await rootBundle.loadString("assets/tarotLayouts.json");
+  //     }, (e, s) => e as FlutterError);
+  //
+  // Either<FormatException, JsonMap> _parseTarotLayoutsJson(String json) =>
+  //     Either<FormatException, JsonMap>.tryCatch(
+  //       () => IMap<String, dynamic>(jsonDecode(json)),
+  //       (e, s) => e as FormatException,
+  //     );
 
   /// [loadStringAsset] accepts two parameters - an asset path, and a
   /// key in the Settings Hive store for storing the hash of the asset.
-  /// It returns a Future<Either<Object, String>>. The return value is a Future
+  /// It returns a Future< Either< Object, String>>. The return value is a Future
   /// because assets are loaded asynchronously. The left branch of the either will
   /// be any exception raised during this process; the right branch is simply the
   /// string value of the asset, whether it's loaded from Hive or from the assets
@@ -110,13 +108,13 @@ class AssetManager with Logging {
       String assetHash = sha3_512sum(assetAsString);
 
       // on a first run, this value will be null and that's fine.
-      String? storedHash = Settings.getValue<String>(assetKeyName);
+      // String? storedHash = Settings.getValue<String>(assetKeyName);
 
-      if (storedHash != assetHash) {
-        Settings.setValue(assetKeyName, assetHash);
-        retVal = Right(assetAsString);
-      }
-    } catch (e, _) {
+      // if (storedHash != assetHash) {
+      //   Settings.setValue(assetKeyName, assetHash);
+      //   retVal = Right(assetAsString);
+      // }
+    } catch (e) {
       retVal = Left(e);
     }
 
@@ -128,7 +126,7 @@ class AssetManager with Logging {
     /// tarotLayouts available, captured as a single object where each key represents a different pascalCase layout name
     /// and the contents of each key are a json-encoded TarotLayout.  This is simple to read and the function
     /// requires no inputs to achieve its results.
-    verbose("LayoutProvider.fetchLayouts");
+    // verbose("LayoutProvider.fetchLayouts");
 
     // adding new functionality:
     // what I want to do is check to see if the version of tarotLayouts.json on
@@ -138,68 +136,66 @@ class AssetManager with Logging {
     //   convert the layout json file to objects, as usual
     //   save the objects to hive and set the hash stored in Settings to the new
     //   hash.
-    verbose("  getting hash of layouts file");
+    // verbose("  getting hash of layouts file");
 
     IMap<String, TarotLayout> retVal = const IMap<String, TarotLayout>.empty();
 
-    final existingLayoutsBox = await hiveService.ensureBox('tarotLayoutsBox');
+    // final existingLayoutsBox = await hiveService.ensureBox(
+    //   'tarotLayoutsBox',
+    //   options: BoxConfig('tarotLayouts'),
+    // );
 
     String layoutsJson = await rootBundle.loadString(
       "assets/tarotLayouts.json",
     );
 
-    verbose("  layoutsJson is $layoutsJson");
+    // verbose("  layoutsJson is $layoutsJson");
     final layoutJsonHash = sha3_512sum(layoutsJson);
-    verbose("  layoutJsonHash is $layoutJsonHash");
+    // verbose("  layoutJsonHash is $layoutJsonHash");
 
-    final oldHash = Settings.getValue<String>("tarotLayoutsHash");
-    verbose("  oldHash is $oldHash");
+    final oldHash = SignalsManager.tarotLayoutsHash.value;
+    // verbose("  oldHash is $oldHash");
 
     if (oldHash != layoutJsonHash) {
       if (layoutsJson.isNotEmpty) {
-        verbose("  trying repairJson");
+        // verbose("  trying repairJson");
         final decodedData = repairJson(
           layoutsJson,
           logging: true,
           skipDecodeAttempt: true,
         );
-        verbose("  repairJson returned $decodedData");
+        // verbose("  repairJson returned $decodedData");
 
         final LayoutList? allLayouts;
 
-        verbose("  trying LayoutList.fromJson()");
+        // verbose("  trying LayoutList.fromJson()");
         try {
           allLayouts = LayoutList.fromJson(decodedData['data']);
-          verbose("  success! allLayouts is $allLayouts");
-          verbose("  converting to map");
+          // verbose("  success! allLayouts is $allLayouts");
+          // verbose("  converting to map");
 
           for (var item in allLayouts.layouts) {
             retVal = retVal.add(item.name, item);
           }
 
-          verbose('  retVal has keys: ${retVal.keys}');
+          // verbose('  retVal has keys: ${retVal.keys}');
 
-          final bock = retVal.unlock;
-          verbose(' retVal.unlock has runtime type ${bock.runtimeType}');
+          // final bock = retVal.unlock;
+          // verbose(' retVal.unlock has runtime type ${bock.runtimeType}');
 
-          await existingLayoutsBox.putAll(retVal.unlock);
-        } catch (e, _) {
+          SignalsManager.existingLayoutsBox.value = retVal.unlock;
+        } catch (e) {
           error("  Failure! LayoutList.fromJson raised error $e");
         }
       } else {
-        verbose("  importing existing layouts from hive box 'tarotLayouts");
-        verbose("  existingLayoutsBox is $existingLayoutsBox");
+        // verbose("  importing existing layouts from hive box 'tarotLayouts");
 
-        // a box is essentially a map, and this map is going to have the type
-        // Map<String, TarotLayout> - as that is the way it was created!
-        retVal =
-            ((await existingLayoutsBox.toMap()) as Map<String, TarotLayout>)
-                .lock;
+        retVal = SignalsManager.existingLayoutsBox.value
+            .cast<String, TarotLayout>()
+            .lock;
+        // verbose("  existingLayoutsBox is $retVal");
       }
     }
-
-    // close the box, deallocate the resources, etc. etc.
-    await existingLayoutsBox.closeBox();
 
     return retVal;
   }
@@ -237,7 +233,7 @@ class AssetManager with Logging {
       assetPath.split("/").let((it) => it[it.length - 2]);
 
   Future<TCModelAssets> loadAssetsForCard(TarotDeckCards card) async {
-    log("AssetProvider.loadAssetsForCard");
+    // log("AssetProvider.loadAssetsForCard");
 
     if (card == TarotDeckCards.noneCard) {
       return (

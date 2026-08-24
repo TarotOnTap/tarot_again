@@ -46,20 +46,20 @@ abstract class IHivezSignalsKeyValueStore {
   // static HivezSignalsKeyValueStore defaultStore = HivezKeyValueStore();
 }
 
-@singleton
-class HivezPersistedPreferencesStore extends IHivezSignalsKeyValueStore {
-  HivezPersistedPreferencesStore(this.hiveService);
-
-  final HiveService hiveService;
-
-  @override
-  Future<void> setItem<T>(Object key, T? value) =>
-      hiveService.preferences.put(key, value);
-
-  @override
-  Future<T?> getItem<T>(Object key) =>
-      hiveService.preferences.get(key) as Future<T?>;
-
-  @override
-  Future<void> removeItem(Object key) => hiveService.preferences.delete(key);
-}
+// @singleton
+// class HivezPersistedPreferencesStore extends IHivezSignalsKeyValueStore {
+//   HivezPersistedPreferencesStore(this.hiveService);
+//
+//   final HiveService hiveService;
+//
+//   @override
+//   Future<void> setItem<T>(Object key, T? value) =>
+//       hiveService.preferences.put(key, value);
+//
+//   @override
+//   Future<T?> getItem<T>(Object key) =>
+//       hiveService.preferences.get(key) as Future<T?>;
+//
+//   @override
+//   Future<void> removeItem(Object key) => hiveService.preferences.delete(key);
+// }

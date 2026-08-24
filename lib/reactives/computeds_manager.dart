@@ -8,7 +8,7 @@ class ComputedsManager with Logging {
 
   static final Computed<String> deckString = computed(
     () =>
-        "decks/${SignalsManager.deckType.value!.name}/${SignalsManager.deckName.value!.name}",
+        "decks/${SignalsManager.deckType.value.name}/${SignalsManager.deckName.value.name}",
     options: ComputedOptions(name: "deckString"),
   );
 
@@ -40,7 +40,7 @@ class ComputedsManager with Logging {
 
   static final Computed<Iterable<String>> deckAssetPaths = computed(
     () => SignalsManager.allAssetPaths.value.where(
-      (path) => path.contains("decks/${SignalsManager.deckType.value!.name}"),
+      (path) => path.contains("decks/${SignalsManager.deckType.value.name}"),
     ),
     options: ComputedOptions(name: "deckAssetPaths"),
   );
@@ -48,7 +48,7 @@ class ComputedsManager with Logging {
   static final Computed<IList<GlobalKey<PositionSlotWidgetState>>> slotKeys =
       computed(
         () =>
-            (switch (SignalsManager.tarotLayout.value!) {
+            (switch (SignalsManager.tarotLayout.value) {
               NullLayout _ =>
                 const IList<GlobalKey<PositionSlotWidgetState>>.empty().also((
                   it,

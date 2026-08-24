@@ -27,7 +27,7 @@ class LayoutManager with Logging {
       File outputFile = File(fileName);
       try {
         await outputFile.writeAsString(layoutString);
-      } catch (e, _) {
+      } catch (e) {
         error(
           "  error writing to File object for  file $fileName, error is $e",
         );

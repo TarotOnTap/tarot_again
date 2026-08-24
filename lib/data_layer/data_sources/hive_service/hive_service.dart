@@ -3,51 +3,40 @@ import 'package:tarot_again/util/util.dart';
 
 @singleton
 class HiveService with Logging {
-  final int junior = 150;
+  late final BoxInterface<String, AssetStorageRep> assetStorageBox;
 
-  late final Box<String, AssetStorageRep> assetStorageBox;
-  late final Box<Object, Object?> preferences;
+  late final BoxConfig baseOptions;
+
+  // late final Box<Object, Object?> preferences;
 
   HiveService() {
-    verbose('HiveService()');
+    baseOptions = BoxConfig("", logger: hDebug, path: ".hive");
   }
 
   Future<void> initializeBoxes() async {
-    verbose('HiveService.initializeBoxes()');
-    verbose('  assetStorageRep');
-    assetStorageBox = await ensureBox<AssetStorageRep>("assetStorageRepBox");
-
-    verbose('  preferences');
-    preferences = await ensureBox<Object?>('preferences');
+    assetStorageBox = await ensureBox<String, AssetStorageRep>(
+      "assetStorageRepBox",
+      options: baseOptions,
+    );
   }
 
   @FactoryMethod(preResolve: true)
   static Future<HiveService> create() async {
-    Logging.sVerbose('HiveService.create()');
-    Logging.sVerbose('  calling HiveService()');
-    HiveService retVal = HiveService();
+    HiveService newService = HiveService();
 
-    Logging.sVerbose('  initializing boxes.');
-    await retVal.initializeBoxes();
+    await newService.initializeBoxes();
 
-    /// this should happen if we're testing
-    Logging.sVerbose('  making sure HiveService is registered in GetIt');
-    if (!sl.isRegistered<HiveService>()) {
-      Logging.sVerbose(
-        '  HiveService is not registered in GetIt; registering hiveService',
-      );
-      sl.registerSingleton<HiveService>(retVal);
-
-      Logging.sVerbose(
-        '  HiveService registered in GetIt: ${sl.isRegistered<HiveService>()}',
-      );
-    }
-
-    return retVal;
+    return newService;
   }
 
-  Future<Box<String, T>> ensureBox<T>(String boxName) async {
-    final Box<String, T> existingBox = Box<String, T>(boxName, logger: hDebug);
+  Future<BoxInterface<K, V>> ensureBox<K, V>(
+    String boxName, {
+    required BoxConfig options,
+  }) async {
+    final BoxInterface<K, V> existingBox = options
+        .copyWith(name: boxName)
+        .createBox<K, V>();
+
     await existingBox.ensureInitialized();
 
     return existingBox;

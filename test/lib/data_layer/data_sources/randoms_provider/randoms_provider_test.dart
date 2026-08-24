@@ -1,7 +1,11 @@
 // this gets us GetIt/WatchIt packages
 
+import 'package:flutter_test/flutter_test.dart';
+import 'package:path_provider_android/path_provider_android.dart';
+import 'package:path_provider_windows/path_provider_windows.dart';
+import 'package:platform/platform.dart';
+import 'package:tarot_again/util/services.dart';
 import 'package:tarot_again/util/util.dart' hide test;
-import 'package:test/test.dart';
 
 Stream<int> getNRandomInts({
   required AsyncRandoms source,
@@ -9,15 +13,34 @@ Stream<int> getNRandomInts({
   int rangeLow = 0,
   required int rangeHigh,
 }) async* {
-  for (var i = rangeLow; i < rangeHigh; i++) {
+  for (var i = 0; i < count; i++) {
     yield await source.getNextInt(rangeHigh: rangeHigh, rangeLow: rangeLow);
   }
 }
 
 void main() async {
-  initializeLoggingService();
+  TestWidgetsFlutterBinding.ensureInitialized();
+  // get the logging service up and running, so we can use it!
+  // final String appName = "testing hive_service";
+  // initializeLoggingService();
 
-  sl.registerSingleton<AsyncRandoms>(AsyncRandoms());
+  final getIt = GetIt.instance;
+
+  final lp = LocalPlatform();
+
+  if (lp.isWindows) {
+    PathProviderWindows.registerWith();
+  } else if (lp.isAndroid) {
+    PathProviderAndroid.registerWith();
+  } else {
+    throw Exception(
+      "Please manually register a path provider for ${lp.operatingSystem}",
+    );
+  }
+
+  final appName = lp.executable.split('.')[0];
+
+  await initServices(appName: appName, test: true);
 
   // initializeDataLayer();
 
@@ -49,6 +72,7 @@ void main() async {
       );
 
       bool testResult = await randomStream.every((int elem) => elem < 357);
+      expect(testResult, true);
     });
     test(
       "test that random numbers over a range stay within their limits",
@@ -63,6 +87,8 @@ void main() async {
         bool testResult = await randomStream.every(
           (int elem) => elem >= -852 && elem < 922,
         );
+
+        expect(testResult, true);
       },
     );
   });

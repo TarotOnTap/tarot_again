@@ -106,27 +106,24 @@ class _CardColorBackState extends State<CardColorBack>
 }
 
 @immutable
-class CardWidget extends StatelessWidget {
+class CardWidget extends SignalWidget {
   final SlotState slotState;
 
   const CardWidget({super.key, required this.slotState});
 
   @override
   Widget build(BuildContext context) {
-    return Watch(
-      (context) => RotatedBox(
-        quarterTurns:
-            SignalsManager.reversalsAllowed.value ??
-                true && slotState.reversal == ReversalEnum.reversed
-            ? 2
-            : 0,
-        child: Container(
-          padding: const EdgeInsets.all(1.0),
-          alignment: Alignment.center,
-          child: TCArcanaWidget(slotState: slotState),
-        ),
+    return RotatedBox(
+      quarterTurns:
+          SignalsManager.reversalsAllowed.value &&
+              slotState.reversal == ReversalEnum.reversed
+          ? 2
+          : 0,
+      child: Container(
+        padding: const EdgeInsets.all(1.0),
+        alignment: Alignment.center,
+        child: TCArcanaWidget(slotState: slotState),
       ),
-      debugLabel: "CardWidget",
     );
   }
 }

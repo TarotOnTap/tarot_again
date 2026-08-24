@@ -1,6 +1,6 @@
 import 'package:tarot_again/util/util.dart';
 
-import 'hivez_persisted_signal.dart';
+// import 'hivez_persisted_signal.dart';
 
 @singleton
 class SignalsManager {
@@ -16,47 +16,38 @@ class SignalsManager {
   );
 
   static final cardBackStyle = hivezPersistedSignal<String>(
-    key: "cardBackStyle",
-    initialValue: "animated_solid_color",
-    options: SignalOptions(name: "cardBackStyle"),
+    "cardBackStyle",
+    "animated_solid_color",
   );
 
   static final deckName = hivezPersistedSignal<StandardTarotDecks>(
-    key: "deckName",
-    initialValue: StandardTarotDecks.rws,
-    options: SignalOptions(name: "deckName"),
+    "deckName",
+    StandardTarotDecks.rws,
   );
 
   static final HivezPersistedSignal<DeckTypesEnum> deckType =
       hivezPersistedSignal<DeckTypesEnum>(
-        key: deckType,
-        initialValue: DeckTypesEnum.standardTarot,
-        options: SignalOptions(name: "deckType"),
+        "deckType",
+        DeckTypesEnum.standardTarot,
       );
 
   static final HivezPersistedSignal<RandomGenerators> currentRandomGenerator =
       hivezPersistedSignal<RandomGenerators>(
-        key: "currentRandomGenerator",
-        initialValue: RandomGenerators.none,
-        options: SignalOptions(name: "currentRandomGenerator"),
+        "currentRandomGenerator",
+        RandomGenerators.none,
       );
 
   static final HivezPersistedSignal<IRandomsProvider> currentRandomProvider =
       hivezPersistedSignal<IRandomsProvider>(
-        key: "currentRandomsProvider",
-        initialValue: SecureRandom(),
-        options: SignalOptions(name: "currentProvider"),
+        "currentRandomsProvider",
+        SecureRandom(),
       );
 
   // When this is true,
   // dealing out tarot cards will display cards as upright or reversed; setting
   // it false will deal out upright cards only.
   static final HivezPersistedSignal<bool> reversalsAllowed =
-      hivezPersistedSignal<bool>(
-        key: "reversalsAllowed",
-        initialValue: true,
-        options: SignalOptions(name: "reversalsAllowed"),
-      );
+      hivezPersistedSignal<bool>("reversalsAllowed", true);
 
   static final Signal<IList<TarotDeckCards>> shuffledDeck =
       signal<IList<TarotDeckCards>>(
@@ -66,9 +57,8 @@ class SignalsManager {
 
   static final HivezPersistedSignal<TarotLayout> tarotLayout =
       hivezPersistedSignal<TarotLayout>(
-        key: "tarotLayout",
-        initialValue: TarotLayout.nullLayout(),
-        options: SignalOptions(name: "tarotLayout"),
+        "tarotLayout",
+        TarotLayout.nullLayout(),
       );
 
   static final Signal<IMap<String, TarotLayout>> tarotLayouts =
@@ -80,6 +70,15 @@ class SignalsManager {
       signal<IMap<String, TarotLayout>>(
         const IMap<String, TarotLayout>.empty(),
         options: SignalOptions(name: "tarotLayoutsByName"),
+      );
+
+  static final HivezPersistedSignal<String> tarotLayoutsHash =
+      hivezPersistedSignal<String>("tarotLayoutsHash", "");
+
+  static final HivezPersistedMapSignal<String, TarotLayout> existingLayoutsBox =
+      hivezPersistedMapSignal<String, TarotLayout>(
+        "existingLayoutsBox",
+        <String, TarotLayout>{},
       );
 
   static void ensureSignals() {
@@ -103,7 +102,9 @@ class SignalsManager {
     }
   }
 
-  SignalsManager() {
+  SignalsManager(this.hiveService) {
     ensureSignals();
   }
+
+  final HiveService hiveService;
 }
