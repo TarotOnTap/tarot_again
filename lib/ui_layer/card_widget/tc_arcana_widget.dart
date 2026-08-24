@@ -47,31 +47,33 @@ class TCArcanaWidget extends StatelessWidget with Logging {
   const TCArcanaWidget({super.key, required this.slotState});
 
   @override
-  Widget build(BuildContext context) => Watch((context) {
-    final card = slotState.deckCard;
+  Widget build(BuildContext context) => SignalBuilder(
+    builder: (context) {
+      final card = slotState.deckCard;
 
-    Iterable<String> names = switch (card.arcana) {
-      Arcana.major => card.displayName.split(" "),
-      Arcana.minor => [card.pips.name, "of", card.suit.name],
-      Arcana.none => [],
-    };
+      Iterable<String> names = switch (card.arcana) {
+        Arcana.major => card.displayName.split(" "),
+        Arcana.minor => [card.pips.name, "of", card.suit.name],
+        Arcana.none => [],
+      };
 
-    Widget returnWidget = PlaintextArcanaWidget(
-      card: slotState.deckCard,
-      names: names,
-    );
+      Widget returnWidget = PlaintextArcanaWidget(
+        card: slotState.deckCard,
+        names: names,
+      );
 
-    returnWidget = switch (slotState.assets.image) {
-      Some<AssetGenImage>(value: final asset) => asset.image(
-        errorBuilder: (
-          BuildContext context,
-          Object error,
-          StackTrace? stacktrace,
-        ) => returnWidget,
-      ),
-      None() => PlaintextArcanaWidget(card: slotState.deckCard, names: names),
-    };
+      returnWidget = switch (slotState.assets.image) {
+        Some<AssetGenImage>(value: final asset) => asset.image(
+          errorBuilder: (
+            BuildContext context,
+            Object error,
+            StackTrace? stacktrace,
+          ) => returnWidget,
+        ),
+        None() => PlaintextArcanaWidget(card: slotState.deckCard, names: names),
+      };
 
-    return returnWidget;
-  });
+      return returnWidget;
+    },
+  );
 }

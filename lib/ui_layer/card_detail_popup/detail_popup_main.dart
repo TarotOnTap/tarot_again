@@ -5,9 +5,23 @@ import 'package:tarot_again/util/util.dart';
 
 import '../card_widget/card_widget.dart';
 
+/// [DetailPopupMainWidget] is used when a card being displayed is double-tapped.
+/// It provides a floating window with the card's meanings displayed - upright
+/// and reversed. It will only work for [slotIndex]es that are in-range for the
+/// dealt cards. This possible problem was hightlighted by testing.
+/// It makes testing more complicated because all of the slots for a layout
+/// need to have been created; but, card metadata does not have to be loaeded first.
 @immutable
 class DetailPopupMainWidget extends SignalWidget {
-  const DetailPopupMainWidget({super.key, required this.slotIndex});
+  DetailPopupMainWidget({super.key, required this.slotIndex}) {
+    if (slotIndex < 0 || slotIndex > ComputedsManager.slotKeys.value.length) {
+      throw RangeError.index(
+        slotIndex,
+        ComputedsManager.slotKeys.value.length,
+        'slotIndex',
+      );
+    }
+  }
 
   final int slotIndex;
 
@@ -93,67 +107,10 @@ class DetailPopupMain<T> extends PopupRoute<T> {
     required this.slotIndex,
   });
 
-  // DetailPopupMain({super.key, required this.slotIndex}) {
-  //   log("DetailPopupMain");
-  // }
-
-  // String _meaning(String orientation, Option<String> meaning) =>
-  //     "## $orientation meaning ${meaning.fold(() => 'undefined', (it) => '\n\n$it')}";
-  //
-  // String _displayMd(PositionSlotWidgetState slotData) {
-  //   return "# ${slotData.slotState.deckCard.displayName}\n\n"
-  //       "${_meaning('Upright', slotData.slotState.assets.uprightMeaning)}\n\n"
-  //       "${_meaning('Reversed', slotData.slotState.assets.reversedMeaning)}";
-  // }
-
   @override
   Widget buildPage(
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) => DetailPopupMainWidget(slotIndex: slotIndex);
-  // {
-  //   return ComputedsManager.slotKeys.value[slotIndex].currentState.letWithElse(
-  //     (PositionSlotWidgetState it) => UnconstrainedBox(
-  //       child: SizedBox(
-  //         width: 800,
-  //         height: 600,
-  //         child: Card(
-  //           color: Colors.white,
-  //           child: Center(
-  //             child: Row(
-  //               children: [
-  //                 Expanded(
-  //                   child: Padding(
-  //                     padding: EdgeInsets.all(16.0),
-  //                     child: CardWidget(slotState: it.slotState),
-  //                   ),
-  //                 ),
-  //                 // Gap(20),
-  //                 Expanded(
-  //                   child: LayoutBuilder(
-  //                     builder:
-  //                         (
-  //                           BuildContext context,
-  //                           BoxConstraints viewportConstraints,
-  //                         ) => SingleChildScrollView(
-  //                           padding: EdgeInsetsGeometry.only(right: 10.0),
-  //                           child: ConstrainedBox(
-  //                             constraints: BoxConstraints(
-  //                               minHeight: viewportConstraints.maxHeight,
-  //                             ),
-  //                             child: GptMarkdown(_displayMd(it)),
-  //                           ),
-  //                         ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //     orElse: Placeholder(child: Text("Card data not found")),
-  //   );
-  // }
 }

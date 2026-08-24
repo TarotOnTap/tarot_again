@@ -35,7 +35,11 @@ void main() async {
   // final tempStoragePath = ""; // (await getTemporaryDirectory()).toString();
 
   test('Testing to make sure Hive is alive', () async {
-    final testBox = await Hive.openBox<int>("testBox");
+    final testBox = await sl<HiveService>().ensureBox<String, int>(
+      "testBox",
+      options: BoxConfig("testBox", path: ".hive"),
+    );
+    // final testBox = await Hive.openBox<int>("testBox");
 
     for (var i in [
       ('a', 8),
@@ -49,14 +53,15 @@ void main() async {
       await testBox.put(i.$1, i.$2);
     }
 
-    await testBox.close();
+    await testBox.closeBox();
 
+    // using the bare [Hive] interface to re-open the box.
     final testBox2 = await Hive.openBox<int>("testBox");
 
     List<int?> resultData = <int?>[];
 
     for (var index in ['a', 'b', 'c', 'D', 'E', 'F', 'G', 'Q']) {
-      resultData.add(await testBox2.get(index));
+      resultData.add(testBox2.get(index));
     }
     expect(resultData, [8, 6, 7, 5, 3, 0, 9, null]);
     await testBox2.close();

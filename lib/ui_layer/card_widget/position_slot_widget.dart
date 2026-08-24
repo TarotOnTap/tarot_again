@@ -20,15 +20,17 @@ class SelectSlotWidget extends StatelessWidget with Logging {
       return NoCardDealt();
     }
 
-    return Watch((context) {
-      if (SignalsManager.allCardsFaceUp.value ||
-          slotState.showingFace == ShowingFaceEnum.front) {
-        return CardWidget(slotState: slotState);
-      } else {
-        // verbose("  returning CardColorBack()");
-        return CardColorBack();
-      }
-    }, debugLabel: "SelectSlotWidget");
+    return SignalBuilder(
+      builder: (context) {
+        if (SignalsManager.allCardsFaceUp.value ||
+            slotState.showingFace == ShowingFaceEnum.front) {
+          return CardWidget(slotState: slotState);
+        } else {
+          // verbose("  returning CardColorBack()");
+          return CardColorBack();
+        }
+      },
+    );
   }
 }
 
@@ -135,9 +137,9 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
                   ),
                 ),
               },
-              onTap: () => Navigator.of(
-                context,
-              ).push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
+              onTap: () =>
+                  Navigator.of(context)
+                      .push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
               onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
               onSecondaryTap: () => toastification.show(
                 title: Text("onSecondaryTap handler"),

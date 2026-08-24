@@ -107,6 +107,7 @@ class ComputedsManager with Logging {
     var _ = layoutNames.value;
     var _ = layoutsByDisplayName.value;
     var _ = deckAssetPaths.value;
+    var _ = slotKeys.value;
     var _ = tarotLayoutAssetPaths.value;
   }
 

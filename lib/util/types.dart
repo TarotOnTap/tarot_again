@@ -52,13 +52,13 @@ abstract class ReactiveState {}
 // }
 
 class ImmutableSignal<T> extends Signal<T> with TrackedSignalMixin<T> {
-  ImmutableSignal(super.value, {super.debugLabel}) {
+  ImmutableSignal(super.value, {SignalOptions? options}) {
     effect(() => log("  previous value is $this.previousValue"));
   }
 }
 
-ImmutableSignal<T> immutableSignal<T>(T value, {String? debugLabel}) =>
-    ImmutableSignal<T>(value, debugLabel: debugLabel);
+ImmutableSignal<T> immutableSignal<T>(T value, {SignalOptions? options}) =>
+    ImmutableSignal<T>(value, options: options);
 
 /// a local interface that indicates that the class has the necessary equipment to
 /// convert itself to json, and to be revived from json.

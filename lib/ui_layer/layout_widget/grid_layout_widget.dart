@@ -10,8 +10,8 @@ class GridLayoutWidget extends StatelessWidget with Logging {
   const GridLayoutWidget({super.key, required this.layoutDetails});
 
   @override
-  Widget build(BuildContext context) => Watch(
-    (context) => LayoutBuilder(
+  Widget build(BuildContext context) => SignalBuilder(
+    builder: (context) => LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final int numCards = switch (SignalsManager.tarotLayout.value) {
           // HorizontalLinear(:final numCards) => numCards,
@@ -23,9 +23,6 @@ class GridLayoutWidget extends StatelessWidget with Logging {
         int numColumns = (constraints.maxWidth / 110.0).toInt();
 
         int numRows = numCards ~/ numColumns + 1;
-
-        verbose("GridLayoutWidget.builder");
-        verbose("  numColumns is $numColumns; numRows is $numRows");
 
         return SingleChildScrollView(
           child: LayoutGrid(

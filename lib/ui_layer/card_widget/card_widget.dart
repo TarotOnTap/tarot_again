@@ -68,6 +68,7 @@ class _CardColorBackState extends State<CardColorBack>
   void initState() {
     super.initState();
 
+    // note - *not* using our async randoms provider here
     final bias = Random.secure().nextInt(1000) - 500;
     final duration = Duration(milliseconds: 3000 + bias);
 
@@ -105,10 +106,17 @@ class _CardColorBackState extends State<CardColorBack>
   }
 }
 
+/// [CardWidget] does two things:
+///   it rotates the presentation of a card by 180 degrees if reversals are
+///   allowed *and* the card is reversed; and, it creates the [TCArcanaWidget]
+///   that then displays the card in the possibly-rotated space.
 @immutable
 class CardWidget extends SignalWidget {
   final SlotState slotState;
 
+  /// Creates a [CardWidget] with the provided key, if any, and retains the
+  /// [SlotState] for this card - but 0nly to pass it along to [TCArcanaWidget]
+  /// in the [build] method.
   const CardWidget({super.key, required this.slotState});
 
   @override

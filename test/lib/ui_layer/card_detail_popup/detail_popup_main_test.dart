@@ -32,23 +32,23 @@ void main() async {
   await initServices(appName: appName, test: true);
 
   group('DetailPopupMain', () {
-    setUpAll(() async {
-      try {
-        Logging.sVerbose(
-          "  setUpAll: checking that initServices initialized sl<HiveService>()",
-        );
-        final hiveService = sl<HiveService>();
-
-        Logging.sVerbose("  post-sl<HiveService>()");
-        Logging.sVerbose("  hiveService is $hiveService");
-        Logging.sVerbose(
-          "  hiveService.assetStorageBox is ${hiveService.assetStorageBox}",
-        );
-      } catch (e) {
-        Logging.sVerbose("  setUpAll: ERROR: $e");
-        rethrow;
-      }
-    });
+    // setUpAll(() async {
+    //   try {
+    //     Logging.sVerbose(
+    //       "  setUpAll: checking that initServices initialized sl<HiveService>()",
+    //     );
+    //     final hiveService = sl<HiveService>();
+    //
+    //     Logging.sVerbose("  post-sl<HiveService>()");
+    //     Logging.sVerbose("  hiveService is $hiveService");
+    //     Logging.sVerbose(
+    //       "  hiveService.assetStorageBox is ${hiveService.assetStorageBox}",
+    //     );
+    //   } catch (e) {
+    //     Logging.sVerbose("  setUpAll: ERROR: $e");
+    //     rethrow;
+    //   }
+    // });
 
     group('Route configuration', () {
       test('constructor stores slotIndex parameter', () {
