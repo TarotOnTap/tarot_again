@@ -38,6 +38,7 @@ test-results/
 .persistedStorage*/
 playwright-report/
 .widget_preview/
+test_output.txt
 
 # Symbolication related
 app.*.symbols

@@ -8,6 +8,7 @@ part 'position_representation.freezed.dart'; // j
 //
 part 'position_representation.g.dart';
 
+@immutable
 class AlignmentEnumConverter implements JsonConverter<Alignment, String> {
   const AlignmentEnumConverter();
 
@@ -83,18 +84,14 @@ class AlignmentEnumConverter implements JsonConverter<Alignment, String> {
   /// app will write this out.
   /// The other form, "centerLeft" is for hand-written layouts.
   @override
-  Alignment fromJson(String json) {
-    Alignment? retVal = _parseNumerics(json);
-
-    retVal ??= _parseString(json);
-
-    return retVal ?? Alignment.center;
-  }
+  Alignment fromJson(String json) =>
+      _parseNumerics(json) ?? _parseString(json) ?? Alignment.center;
 
   @override
   String toJson(Alignment object) => object.toString();
 }
 
+@immutable
 class WinsEnumConverter implements JsonConverter<Wins, String> {
   const WinsEnumConverter();
 

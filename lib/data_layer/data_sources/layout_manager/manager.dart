@@ -15,9 +15,9 @@ typedef LayoutAssetCache = IMap<String, TarotLayout>;
 
 @singleton
 class LayoutManager with Logging {
-  LayoutManager() {
-    verbose("LayoutManager.LayoutManager");
-  }
+  // LayoutManager() {
+  //   verbose("LayoutManager.LayoutManager");
+  // }
 
   Future<void> generateLayoutsFile(String? fileName) async {
     if (fileName != null) {

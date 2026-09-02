@@ -40,13 +40,6 @@ class AsyncRandoms with EventReceiverMixin, Logging {
     return _randomGeneratorNames;
   }
 
-  AsyncRandoms() {
-    verbose("AsyncRandoms.AsyncRandoms");
-    setRandomSource(RandomGenerators.none.displayName);
-
-    // setHandler<ESetRandomSource>(ESetRandomSource(), )
-  }
-
   void setRandomSource(String name) {
     // this *always* inserts a new random generator of the source type, even if it's
     // the same as the current source type.
