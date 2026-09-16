@@ -1,7 +1,5 @@
-// import 'package:align_positioned/align_positioned.dart';
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
-// import 'layout_widget/layout_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
 class SidebarLayout extends StatelessWidget {
@@ -9,7 +7,10 @@ class SidebarLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LayoutDescription();
+    return const Align(
+      alignment: Alignment.topCenter,
+      child: LayoutDescription(),
+    );
   }
 }
 
@@ -19,13 +20,26 @@ class LayoutDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SignalBuilder(
-      builder:
-          //TODO: wrap the markdown into a top-aligned layout so that its contents start at the top
-          // TODO: of its widget, rather than the center.
-          (context) => GptMarkdown(
-            SignalsManager.tarotLayout.value.mdLayoutDescription ?? "",
-            // style: Theme.of(context).textTheme,
+      builder: (context) {
+        String markDown = switch (ComputedsManager
+            .tarotLayoutDescription
+            .value) {
+          AsyncData(value: final data) => data.fold(
+            () => "# No Data",
+            (md) => md,
           ),
+          AsyncError(error: final error, stackTrace: _) => "# Error '$error'",
+          _ => "### data loading",
+        };
+
+        return Padding(
+          padding: EdgeInsets.all(5),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: GptMarkdown(markDown),
+          ),
+        );
+      },
     );
   }
 }

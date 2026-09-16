@@ -105,55 +105,59 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> {
       setState(() => slotState = slotState.copyWith(reversal: reversal));
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    width: 88,
-    height: 170,
-    child: Container(
-      foregroundDecoration: BoxDecoration(
-        border: Border.all(width: 1.0),
-        borderRadius: BorderRadius.all(Radius.circular(2.0)),
-      ),
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (BuildContext context, BoxConstraints constraints) {
+      // SizedBox(
+      // width: 88,
+      // height: 170,
+      return Container(
+        width: constraints.maxWidth,
+        height: constraints.maxHeight,
+        foregroundDecoration: BoxDecoration(
+          border: Border.all(width: 1.0),
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+        ),
 
-      child: Column(
-        children: <Widget>[
-          Text(widget.slotName),
+        child: Column(
+          children: <Widget>[
+            Text(widget.slotName),
 
-          Expanded(
-            child: GestureDetector(
-              onLongPress: () => switch (slotState.assets.description) {
-                Some<String>(value: final String description) =>
-                  toastification.show(
+            Expanded(
+              child: GestureDetector(
+                onLongPress: () => switch (slotState.assets.description) {
+                  Some<String>(value: final String description) =>
+                    toastification.show(
+                      title: Text("Description"),
+                      style: ToastificationStyle.flat,
+                      autoCloseDuration: const Duration(seconds: 10),
+                      description: RichText(text: TextSpan(text: description)),
+                    ),
+                  None() => toastification.show(
                     title: Text("Description"),
                     style: ToastificationStyle.flat,
                     autoCloseDuration: const Duration(seconds: 10),
-                    description: RichText(text: TextSpan(text: description)),
+                    description: RichText(
+                      text: const TextSpan(text: 'no description'),
+                    ),
                   ),
-                None() => toastification.show(
-                  title: Text("Description"),
+                },
+                onTap: () => Navigator.of(context)
+                    .push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
+                onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
+                onSecondaryTap: () => toastification.show(
+                  title: Text("onSecondaryTap handler"),
                   style: ToastificationStyle.flat,
-                  autoCloseDuration: const Duration(seconds: 10),
+                  autoCloseDuration: const Duration(seconds: 3),
                   description: RichText(
-                    text: const TextSpan(text: 'no description'),
+                    text: const TextSpan(text: 'received a secondary tap. '),
                   ),
                 ),
-              },
-              onTap: () =>
-                  Navigator.of(context)
-                      .push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
-              onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
-              onSecondaryTap: () => toastification.show(
-                title: Text("onSecondaryTap handler"),
-                style: ToastificationStyle.flat,
-                autoCloseDuration: const Duration(seconds: 3),
-                description: RichText(
-                  text: const TextSpan(text: 'received a secondary tap. '),
-                ),
+                child: SelectSlotWidget(slotState: slotState),
               ),
-              child: SelectSlotWidget(slotState: slotState),
             ),
-          ),
-        ],
-      ),
-    ),
+          ],
+        ),
+      );
+    },
   );
 }

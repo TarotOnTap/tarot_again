@@ -121,18 +121,17 @@ class AssetManager with Logging {
     return retVal;
   }
 
+  /// [fetchLayouts] loads a json file at assets/tarotLayouts.json that describes all of the different
+  /// tarotLayouts available, captured as a single object where each key represents a different pascalCase layout name
+  /// and the contents of each key are a json-encoded TarotLayout.  This is simple to read and the function
+  /// requires no inputs to achieve its results.
+  // verbose("LayoutProvider.fetchLayouts");
   Future<IMap<String, TarotLayout>> fetchLayouts() async {
-    /// This function loads a json file at assets/tarotLayouts.json that describes all of the different
-    /// tarotLayouts available, captured as a single object where each key represents a different pascalCase layout name
-    /// and the contents of each key are a json-encoded TarotLayout.  This is simple to read and the function
-    /// requires no inputs to achieve its results.
-    // verbose("LayoutProvider.fetchLayouts");
-
     // adding new functionality:
     // what I want to do is check to see if the version of tarotLayouts.json on
     // disk is *newer* than the json layouts stored in hive.
     // A way to do that, I think, is to compare hashes of the asset on disk with
-    // a hash stored in the Settings object; if they differ, then:
+    // a hash stored in [hive]; if they differ, then:
     //   convert the layout json file to objects, as usual
     //   save the objects to hive and set the hash stored in Settings to the new
     //   hash.
@@ -200,10 +199,12 @@ class AssetManager with Logging {
     return retVal;
   }
 
-  Future<Option<String>> loadMarkdownAsset(String assetPath) async =>
-      TaskOption<String>.tryCatch(
-        () async => await rootBundle.loadString(assetPath),
-      ).run();
+  Future<Option<String>> loadMarkdownAsset(String assetPath) async {
+    verbose("loadMarkdownAssets: assetPath is '$assetPath'");
+    return TaskOption<String>.tryCatch(
+      () async => await rootBundle.loadString("assets/$assetPath"),
+    ).run();
+  }
 
   Future<Option<String>> tryLoadMarkdownAsset(
     Iterable<String> assetPaths,

@@ -8,17 +8,13 @@ import 'util/services.dart';
 import 'util/util.dart';
 
 void main(List<String> args) async {
-  final lp = LocalPlatform();
-
-  final appName = lp.executable.split('.')[0];
-
-  // make sure the GetIt is initialized before we start putting things in it.
+  /// Initialize [GetIt] by acessing its singleton instance
   final getIt = GetIt.instance;
 
   // get the logging service up and running, so we can use it!
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initServices(appName: appName);
+  await InitServices.initServices();
 
   ErrorWidget.builder = (FlutterErrorDetails details) {
     // If we're in debug mode, use the normal error widget which shows the error
@@ -28,6 +24,8 @@ void main(List<String> args) async {
 
   runApp(TarotAgainApp());
 }
+
+class OuterApp with PubSpec {}
 
 @immutable
 class TarotAgainApp extends StatelessWidget {

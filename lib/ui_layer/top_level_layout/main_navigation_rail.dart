@@ -38,6 +38,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
       onSelected: (bool selected) {
         if (selected) {
           signal.value = sl<LayoutManager>().getLayoutByDisplayName(key);
+          Navigator.of(context).pop();
         }
       },
     ),
@@ -49,7 +50,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
       builder: (BuildContext context) => AlertDialog(
         title: Text(
           "Select a Tarot Layout",
-          style: Theme.of(context).textTheme.headlineSmall,
+          // style: Theme.of(context).textTheme.headlineSmall,
         ),
         actions: ComputedsManager.layoutDisplayNames.value
             .map(
@@ -85,6 +86,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             onSelected: (bool selected) {
               SignalsManager.currentRandomGenerator.value =
                   RandomGenerators.values[index];
+              Navigator.of(context).pop();
             },
           ),
         );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tarot_again/ui_layer/card_widget/position_slot_widget.dart';
 import 'package:tarot_again/util/util.dart';
+import 'package:fpdart/fpdart.dart';
 
 @singleton
 class ComputedsManager with Logging {
@@ -94,10 +95,21 @@ class ComputedsManager with Logging {
 
   static final Computed<Iterable<String>> tarotLayoutAssetPaths = computed(
     () => SignalsManager.allAssetPaths.value.where(
-      (path) => path.contains("assets/layouts"),
+      (path) => path.contains("assets/layouts/tarotLayouts"),
     ),
     options: ComputedOptions(name: "tarotLayoutAssetPaths"),
   );
+
+  static final FutureSignal<Option<String>> tarotLayoutDescription =
+      computedFrom([SignalsManager.tarotLayout], (args) async {
+        final TarotLayout layout = args[0];
+        final String location = layout.mdLayoutDescription ?? "";
+        final description = await sl<AssetManager>().loadMarkdownAsset(
+          location,
+        );
+
+        return description;
+      }, options: AsyncSignalOptions(name: "tarotLayoutDescription"));
 
   void ensureComputeds() {
     // var _ = cardSlots.value;
@@ -109,6 +121,7 @@ class ComputedsManager with Logging {
     var _ = deckAssetPaths.value;
     var _ = slotKeys.value;
     var _ = tarotLayoutAssetPaths.value;
+    var _ = tarotLayoutDescription.value;
   }
 
   ComputedsManager({required this.signalsManager}) {

@@ -1,3 +1,3 @@
-# Example 1
+# Four-By
 
 - a four-card grid

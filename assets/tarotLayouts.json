@@ -73,7 +73,9 @@
           "moveByContainerWidth": 0.25,
           "wins": "Wins.min",
           "touch": "Touch.inside",
-          "popUpDescription": "Describes an event or object that represents your past"
+          "popUpDescription": "Describes an event or object that represents your past situation",
+          "childWidthRatio": 0.3,
+          "childHeightRation": 0.3
         },
         {
           "name": "Present",
@@ -83,7 +85,9 @@
           "moveByContainerWidth": 0.5,
           "wins": "Wins.min",
           "touch": "Touch.inside",
-          "popUpDescription": "Describes an event or object that represents your present"
+          "popUpDescription": "Describes an event or object that represents your present situation",
+          "childWidthRatio": 0.3,
+          "childHeightRation": 0.3
         },
         {
           "name": "Future",
@@ -93,7 +97,9 @@
           "moveByContainerWidth": 0.75,
           "wins": "Wins.min",
           "touch": "Touch.inside",
-          "popUpDescription": "Describes an event or object that represents your future"
+          "popUpDescription": "Describes an event or object that represents your future situation",
+          "childWidthRatio": 0.3,
+          "childHeightRation": 0.3
         }
       ]
     }

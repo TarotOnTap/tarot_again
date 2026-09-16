@@ -78,6 +78,6 @@ abstract interface class Jsonable {
   }
 }
 
-mixin GetItMixin {
-  final getIt = GetIt.instance;
-}
+// mixin GetItMixin {
+//   final getIt = GetIt.instance;
+// }

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 0.2.0
 
 environment:
   sdk: ^3.14.0-95.1.beta
@@ -50,7 +50,7 @@ dependencies:
   toastification: ^3.0.2
   change_case: ^2.2.0
   align_positioned: ^5.0.1
-  dart_scope_functions: ^1.0.2
+  dart_scope_functions: ^2.0.0
   collection: ^1.19.1
   provider: ^6.1.4
   flutter_layout_grid: ^2.0.8
@@ -72,8 +72,7 @@ dependencies:
   flutter_it: ^2.1.1
   exception_templates: ^0.3.2
   hive_ce_flutter: ^2.3.4
-  flutter_constraintlayout: ^1.7.0-stable
-  file_picker: ^12.0.0-beta.7
+  flutter_constraintlayout: 1.7.0-stable
   json_schema: ^5.2.2
   json_repair_flutter: ^2.0.2
   hivez_flutter: ^1.2.2
@@ -90,7 +89,6 @@ dependencies:
   path_provider_windows: ^2.3.0
   path_provider_foundation: ^2.6.0
   path_provider_android: ^2.3.1
-  analyzer: ^12.1.0
 
 dev_dependencies:
   flutter_test:
@@ -103,16 +101,17 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   build_runner: ^2.7.0
+  # build_runner: ^2.16.1
   test: ^1.25.15
-  freezed: ^3.2.5
-  # freezed: ^4.0.0
-  # json_serializable: ^6.9.4
+  freezed: ^3.2.0
+    # json_serializable: ^6.9.4
   json_serializable: ^6.14.1
   # custom_lint: 0.8.1
   # freezed_lint: ^0.0.9
-  hive_ce_generator: ^1.10.0
-  injectable_generator: ^3.0.2
+  hive_ce_generator: ^1.11.0
+  injectable_generator: ^3.1.3
   patrol: ^4.8.0
+  pubspec_extract: ^2.2.0
 
 patrol:
   app_name: Tarot Again
@@ -161,6 +160,28 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+pubspec_extract:
+  class_name: Pubspec
+  source: pubspec.yaml
+  destination: lib/pubspec.dart
+  format: true
+  map_list: true
+  include-build-date: true
+  extract-name: true
+  extract-description: true
+  extract-version: true
+  extract-topics: true
+  extract-homepage: true
+  extract-issue-tracker: true
+  extract-publish-to: true
+  extract-funding: true
+  extract-screenshots: true
+  extract-false-secrets: true
+  extract-environment: true
+  extract-dependencies: true
+  extract-dependency-overrides: true
+  extract-ignored-advisories: true
+  extract-undocumented-keys: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

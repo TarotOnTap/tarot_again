@@ -14,7 +14,7 @@ class LayoutBackground extends StatelessWidget with Logging {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: parentSize,
-      child: Container(color: Colors.blue),
+      child: Container(color: Theme.of(context).focusColor),
     );
   }
 }
@@ -24,9 +24,12 @@ class LayoutConstrained extends StatelessWidget with Logging {
 
   final NewTarotLayout layout;
 
-  Widget _buildFromPosition(PositionRepresentation pos, int index) {
+  Widget _buildFromPosition({
+    required PositionRepresentation pos,
+    required int index,
+  }) {
     return AlignPositioned.expand(
-      alignment: Alignment.topLeft,
+      alignment: pos.alignment,
       dx: pos.dx,
       dy: pos.dy,
       moveByChildWidth: pos.moveByChildWidth,
@@ -64,8 +67,6 @@ class LayoutConstrained extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: sort by z-index first, so that lower z-indexes are earlier in the
-    // list
     final layoutOrder = layout.positions.sortedBy((pos) => pos.zIndex ?? 0);
 
     return LayoutBuilder(
@@ -75,7 +76,7 @@ class LayoutConstrained extends StatelessWidget with Logging {
             LayoutBackground(parentSize: constraints),
             for (var (int index, PositionRepresentation pos)
                 in layoutOrder.indexed)
-              _buildFromPosition(pos, index),
+              _buildFromPosition(pos: pos, index: index),
           ],
         );
       },
