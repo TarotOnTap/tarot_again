@@ -1,12 +1,13 @@
 export 'dart:async' hide AsyncError;
 export 'dart:developer';
 
-export 'package:async/async.dart';
+// export 'package:async/async.dart';
 export 'package:async_extension/async_extension.dart' hide AsyncError;
 export 'package:change_case/change_case.dart';
 export 'package:collection/collection.dart';
 export 'package:dart_scope_functions/dart_scope_functions.dart';
 export 'package:equatable/equatable.dart';
+export 'package:exception_templates/exception_templates.dart';
 export 'package:fast_immutable_collections/fast_immutable_collections.dart';
 export 'package:flutter/foundation.dart' hide binarySearch, mergeSort;
 // export 'package:flutter_settings_screens/flutter_settings_screens.dart';

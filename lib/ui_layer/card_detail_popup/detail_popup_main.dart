@@ -76,7 +76,7 @@ class DetailPopupMainWidget extends SignalWidget {
           ),
         ),
       ),
-      orElse: Placeholder(child: Text("Card data not found")),
+      orElse: () => Placeholder(child: Text("Card data not found")),
     );
   }
 }

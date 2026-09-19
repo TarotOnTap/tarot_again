@@ -2,37 +2,23 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hivez_flutter/hivez_flutter.dart';
-import 'package:path_provider_android/path_provider_android.dart';
-import 'package:path_provider_windows/path_provider_windows.dart';
-import 'package:platform/platform.dart';
+// import 'package:path_provider_android/path_provider_android.dart';
+// import 'package:path_provider_windows/path_provider_windows.dart';
+// import 'package:platform/platform.dart';
 import 'package:tarot_again/util/services.dart';
 import 'package:tarot_again/util/util.dart' hide test;
 
 void main() async {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  // get the logging service up and running, so we can use it!
-  // final String appName = "testing hive_service";
-  // initializeLoggingService();
+  await InitServices.initializeMain(test: true).run();
+  // TestWidgetsFlutterBinding.ensureInitialized();
+  // // get the logging service up and running, so we can use it!
+  // // final String appName = "testing hive_service";
+  // // initializeLoggingService();
 
-  final getIt = GetIt.instance;
+  // // ignore: unused_local_variable
+  // final getIt = GetIt.instance;
 
-  final lp = LocalPlatform();
-
-  if (lp.isWindows) {
-    PathProviderWindows.registerWith();
-  } else if (lp.isAndroid) {
-    PathProviderAndroid.registerWith();
-  } else {
-    throw Exception(
-      "Please manually register a path provider for ${lp.operatingSystem}",
-    );
-  }
-
-  final appName = lp.executable.split('.')[0];
-
-  await initServices(appName: appName, test: true);
-
-  // final tempStoragePath = ""; // (await getTemporaryDirectory()).toString();
+  // await InitServices.initServices(test: true);
 
   test('Testing to make sure Hive is alive', () async {
     final testBox = await sl<HiveService>().ensureBox<String, int>(

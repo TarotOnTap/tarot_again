@@ -18,7 +18,6 @@ import '../data_layer/data_sources/hive_service/hive_service.dart' as _i544;
 import '../data_layer/data_sources/layout_manager/manager.dart' as _i831;
 import '../data_layer/data_sources/randoms_provider/types.dart' as _i913;
 import '../reactives/computeds_manager.dart' as _i334;
-import '../reactives/effects_manager.dart' as _i477;
 import '../reactives/session_manager.dart' as _i950;
 import '../reactives/signals_manager.dart' as _i271;
 import 'event_bus.dart' as _i909;
@@ -48,12 +47,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i334.ComputedsManager>(
       () => _i334.ComputedsManager(signalsManager: gh<_i23.SignalsManager>()),
-    );
-    gh.singleton<_i477.EffectsManager>(
-      () => _i477.EffectsManager(
-        signalsManager: gh<_i23.SignalsManager>(),
-        computedsManager: gh<_i23.ComputedsManager>(),
-      ),
     );
     gh.singleton<_i950.SessionManager>(
       () => _i950.SessionManager(

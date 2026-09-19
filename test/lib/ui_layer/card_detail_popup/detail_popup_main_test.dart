@@ -1,35 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:path_provider_android/path_provider_android.dart';
-import 'package:path_provider_windows/path_provider_windows.dart';
-import 'package:platform/platform.dart';
+// import 'package:path_provider_android/path_provider_android.dart';
+// import 'package:path_provider_windows/path_provider_windows.dart';
+// import 'package:platform/platform.dart';
 import 'package:tarot_again/ui_layer/card_detail_popup/detail_popup_main.dart';
 import 'package:tarot_again/util/services.dart';
 import 'package:tarot_again/util/util.dart' hide test;
 
 void main() async {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  // get the logging service up and running, so we can use it!
-  // final String appName = "testing hive_service";
-  // initializeLoggingService();
+  await InitServices.initializeMain(test: true).run();
+  // TestWidgetsFlutterBinding.ensureInitialized();
+  // // get the logging service up and running, so we can use it!
+  // // final String appName = "testing hive_service";
+  // // initializeLoggingService();
 
-  final getIt = GetIt.instance;
+  // // ignore: unused_local_variable
+  // final getIt = GetIt.instance;
 
-  final lp = LocalPlatform();
+  // // get the logging service up and running, so we can use it!
+  // // WidgetsFlutterBinding.ensureInitialized();
 
-  if (lp.isWindows) {
-    PathProviderWindows.registerWith();
-  } else if (lp.isAndroid) {
-    PathProviderAndroid.registerWith();
-  } else {
-    throw Exception(
-      "Please manually register a path provider for ${lp.operatingSystem}",
-    );
-  }
-
-  final appName = lp.executable.split('.')[0];
-
-  await initServices(appName: appName, test: true);
+  // await InitServices.initServices();
 
   group('DetailPopupMain', () {
     // setUpAll(() async {

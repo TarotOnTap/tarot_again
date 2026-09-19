@@ -105,6 +105,8 @@ mixin Logging {
 
   void error(Object msg) => sl<Talker>().error("$this:$msg");
 
+  void hError(String msg) => sl<Talker>().error("hiviz debug: $this:$msg");
+
   BufferedLog bError(Object msg, {autoFlush = false}) =>
       BufferedLog(LoggingLevels.error, autoFlush: autoFlush);
 
@@ -191,8 +193,18 @@ Talker _talkerInit() => TalkerFlutter.init(
   ),
 );
 
-void initializeLoggingService() {
-  if (!sl.isRegistered<Talker>()) {
-    sl.registerSingleton<Talker>(_talkerInit());
-  }
+/// Initialize the logging service and register it with [GetIt]
+///
+/// returns an IO because of the side effect of calling [sl.registerSingleton]
+/// If doing so causes an error (say, because [GetIt] isn't initialized) then the application
+/// panics, and we don't want to catch that.
+/// TODO: try catching the [Error], re-initializing [GetIt], and then panicing if that doesn't work.
+IO<Unit> initializeLoggingService() {
+  return IO<Unit>(() {
+    if (!sl.isRegistered<Talker>()) {
+      sl.registerSingleton<Talker>(_talkerInit());
+    }
+
+    return unit;
+  });
 }

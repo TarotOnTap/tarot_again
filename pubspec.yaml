@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.2.0
 
 environment:
-  sdk: ^3.14.0-95.1.beta
+  sdk: ^3.13.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -62,7 +62,7 @@ dependencies:
   meta: ^1.16.0
   type_plus: ^2.1.1
   gpt_markdown: ^1.1.2
-  path_provider: ^2.1.5
+  path_provider: ^2.1.6
   sqlite3_flutter_libs: ^0.6.0+eol
   go_router: ^18.0.0
   floating_dialog: ^1.1.1+1
@@ -70,7 +70,7 @@ dependencies:
   flutter_settings_screens: ^0.3.4
   serialize_enum: ^0.1.4
   flutter_it: ^2.1.1
-  exception_templates: ^0.3.2
+  exception_templates: ^0.3.1
   hive_ce_flutter: ^2.3.4
   flutter_constraintlayout: 1.7.0-stable
   json_schema: ^5.2.2
@@ -85,10 +85,12 @@ dependencies:
   watch_it: ^2.4.2
   command_it: ^9.5.1
   listen_it: ^5.3.5
-  flutter_bloc: ^9.1.1
   path_provider_windows: ^2.3.0
   path_provider_foundation: ^2.6.0
   path_provider_android: ^2.3.1
+  file_picker: 13.1.0
+  rust: ^3.1.0
+  anyhow: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -100,11 +102,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  build_runner: ^2.7.0
-  # build_runner: ^2.16.1
+  # build_runner: ^2.7.0
+  build_runner: ^2.15.0
   test: ^1.25.15
   freezed: ^3.2.0
-    # json_serializable: ^6.9.4
   json_serializable: ^6.14.1
   # custom_lint: 0.8.1
   # freezed_lint: ^0.0.9
@@ -112,6 +113,8 @@ dev_dependencies:
   injectable_generator: ^3.1.3
   patrol: ^4.8.0
   pubspec_extract: ^2.2.0
+  lean_builder: ^1.2.2
+  flutter_gen_runner:
 
 patrol:
   app_name: Tarot Again
@@ -139,19 +142,10 @@ flutter:
     - assets/layouts/tarotLayouts/
     - assets/layouts/tarotLayouts/allCards/
     - assets/layouts/tarotLayouts/before_bed/
+    - assets/layouts/tarotLayouts/fourBy/
     - assets/layouts/tarotLayouts/pastPresentFuture/
     - assets/layouts/tarotLayouts/ppp/
     - assets/tiles/
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -183,34 +177,21 @@ pubspec_extract:
   extract-ignored-advisories: true
   extract-undocumented-keys: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+flutter_gen:
+  assets:
+    outputs:
+      directory_path_enabled: true
+  parse_metadata: true
+  output: lib/util/ # Optional (default: lib/gen/)
+  # line_length: 80 # Optional
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
+  # Optional
+  integrations:
+    image: true
+    flutter_svg: true
+    rive: true
+    lottie: true
 
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/to/asset-from-package
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
-
+  # colors:
+  #   inputs:
+  #    - assets/color/colors.xml

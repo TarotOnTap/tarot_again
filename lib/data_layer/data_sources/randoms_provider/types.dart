@@ -1,6 +1,8 @@
 import 'dart:math';
 
-import 'package:tarot_again/util/event_bus.dart';
+import 'package:async/async.dart';
+
+// import 'package:tarot_again/util/event_bus.dart';
 import 'package:tarot_again/util/util.dart';
 
 enum RandomGenerators {
@@ -29,7 +31,7 @@ abstract interface class IRandomsProvider {
   /// stream of random integers that corresponds to indexes on a shrinking list; each
   /// random number yielded will presumably be used to remove an item from a list, in which
   /// case the list's length will decrease by one for each random int provided. The last
-  /// int yielded will always be 0.
+  /// int yielded will always be 0, as the remaining list index will also be 0.
   Stream<int> getNextIntFromCountdown(int rangeHigh);
 
   /// [getNextDouble] returns a double in the range >= 0.0 and < 1.0 (according to the documentation for math.Random)
@@ -45,9 +47,7 @@ abstract interface class IRandomsProvider {
 /// used can be swapped between available options, but all calls for random numbers are made through the singleton
 /// instance of this class.
 @singleton
-class AsyncRandoms
-    with EventReceiverMixin, Logging
-    implements IRandomsProvider {
+class AsyncRandoms with Logging implements IRandomsProvider {
   static IList<String> _randomGeneratorNames = const IList<String>.empty();
 
   // lazy loaded. Not really needed, unless we switch to a dynamically-loaded
@@ -82,20 +82,24 @@ class AsyncRandoms
         .genCreator();
   }
 
+  @override
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) =>
       SignalsManager.currentRandomProvider.value.getNextInt(
         rangeLow: rangeLow,
         rangeHigh: rangeHigh,
       );
 
+  @override
   Stream<int> getNextIntFromCountdown(int rangeHigh) => SignalsManager
       .currentRandomProvider
       .value
       .getNextIntFromCountdown(rangeHigh);
 
+  @override
   Future<double> getNextDouble() =>
       SignalsManager.currentRandomProvider.value.getNextDouble();
 
+  @override
   Future<bool> getNextBool() =>
       SignalsManager.currentRandomProvider.value.getNextBool();
 
@@ -188,6 +192,7 @@ class SecureRandom extends IRandomsProvider with Logging {
   Future<int> getNextInt({int rangeLow = 0, required int rangeHigh}) async =>
       secureRandom.nextInt(rangeHigh - rangeLow) + rangeLow;
 
+  @override
   Stream<int> getNextIntFromCountdown(int rangeHigh) async* {
     int currentRange = rangeHigh; // covers the range [0..rangeHigh)
 

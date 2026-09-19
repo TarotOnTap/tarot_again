@@ -1,31 +1,31 @@
-// import 'package:flutter/material.dart';
-import 'package:platform/platform.dart';
+//// import 'package:flutter/material.dart';
+// import 'package:platform/platform.dart';
 import 'package:toastification/toastification.dart';
 
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'util/flutter_util.dart';
 import 'util/services.dart';
+
 import 'util/util.dart';
 
 void main(List<String> args) async {
   /// Initialize [GetIt] by acessing its singleton instance
-  final getIt = GetIt.instance;
+  // ignore: unused_local_variable
+  // final getIt = GetIt.instance;
 
-  // get the logging service up and running, so we can use it!
-  WidgetsFlutterBinding.ensureInitialized();
+  // // get the logging service up and running, so we can use it!
+  // WidgetsFlutterBinding.ensureInitialized();
 
-  await InitServices.initServices();
+  await InitServices.initializeMain().run();
 
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    // If we're in debug mode, use the normal error widget which shows the error
-    // message:
-    return ErrorWidget(details.exception);
-  };
+  // ErrorWidget.builder = (FlutterErrorDetails details) {
+  //   // If we're in debug mode, use the normal error widget which shows the error
+  //   // message:
+  //   return ErrorWidget(details.exception);
+  // };
 
   runApp(TarotAgainApp());
 }
-
-class OuterApp with PubSpec {}
 
 @immutable
 class TarotAgainApp extends StatelessWidget {

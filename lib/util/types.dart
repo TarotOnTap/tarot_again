@@ -1,8 +1,12 @@
 import 'util.dart';
 
+import 'package:fpdart/fpdart.dart' show Unit, unit;
+
 // TYPEDEFS
 
 typedef PositionRepresentations = IList<PositionRepresentation>;
+
+class TarotAgainException implements Exception {}
 
 // EXTENSIONS
 
@@ -35,7 +39,10 @@ Iterable<List<T>> zipIt<T>(Iterable<Iterable<T>> iterables) sync* {
   }
 }
 
-abstract class PostInit {
+Unit voidToUnit(void toConvert) => unit;
+Future<Unit> voidToFutureUnit(void toConvert) => Future<Unit>.value(unit);
+
+abstract interface class PostInit {
   // each singleton may have a function postInit that will be invoked after
   // the singleton is initialized. This allows all of the singletons to be
   // registered with get it and initialized, to avoid references to
