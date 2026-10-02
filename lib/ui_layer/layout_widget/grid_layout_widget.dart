@@ -13,8 +13,8 @@ class GridLayoutWidget extends StatelessWidget with Logging {
   Widget build(BuildContext context) => SignalBuilder(
     builder: (context) => LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final double cardWidth = constraints.maxWidth / 10.0;
-        final double cardHeight = constraints.maxHeight / 10.0;
+        SignalsManager.cardWidth.value = constraints.maxWidth / 10.0;
+        SignalsManager.cardHeight.value = constraints.maxHeight / 10.0;
 
         final int numCards = switch (SignalsManager.tarotLayout.value) {
           // HorizontalLinear(:final numCards) => numCards,
@@ -39,8 +39,6 @@ class GridLayoutWidget extends StatelessWidget with Logging {
                   (index) => GridPlacement(
                     child: Center(
                       child: PositionSlotWidget(
-                        width: cardWidth,
-                        height: cardHeight,
                         key: ComputedsManager.slotKeys.value[index],
                         slotIndex: index,
                         slotName: "slot $index",

@@ -20,6 +20,16 @@ class SignalsManager {
     "animated_solid_color",
   );
 
+  static final cardWidth = Signal<double>(
+    100.0,
+    options: SignalOptions(name: "cardWidth"),
+  );
+
+  static final cardHeight = Signal<double>(
+    150.0,
+    options: SignalOptions(name: "cardHeight"),
+  );
+
   static final deckName = hivezPersistedSignal<StandardTarotDecks>(
     "deckName",
     StandardTarotDecks.rws,

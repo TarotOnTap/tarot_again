@@ -38,8 +38,6 @@ class const PositionSlotWidget({
   super.key,
   required final String slotName,
   required final int slotIndex,
-  required final double width,
-  required final double height,
 }) extends StatefulWidget {
   // const PositionSlotWidget({
   //   super.key,
@@ -76,7 +74,7 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> with Logging {
       );
     } else {
       final assets = await sl<AssetManager>().loadAssetsForCard(card);
-      final reversed = await sl<RandomsManager>().nextBool();
+      final reversed = sl<RandomsManager>().nextBool();
       final ReversalEnum reversal = reversed == false
           ? ReversalEnum.upright
           : ReversalEnum.reversed;
@@ -110,55 +108,57 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> with Logging {
       setState(() => slotState = slotState.copyWith(reversal: reversal));
 
   @override
-  Widget build(BuildContext context) => Container(
-    width: widget.width,
-    height: widget.height,
-    foregroundDecoration: BoxDecoration(
-      border: Border.all(width: 1.0),
-      borderRadius: BorderRadius.all(Radius.circular(2.0)),
-    ),
-    child: SizedBox.expand(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(widget.slotName),
+  Widget build(BuildContext context) => SignalBuilder(
+    builder: (context) => SizedBox(
+      width: SignalsManager.cardWidth.value,
+      height: SignalsManager.cardHeight.value,
 
-          Flexible(
-            fit: FlexFit.loose,
-            child: GestureDetector(
-              onLongPress: () => switch (slotState.assets.description) {
-                Some<String>(value: final String description) =>
-                  toastification.show(
+      child: Container(
+        foregroundDecoration: BoxDecoration(
+          border: Border.all(width: 1.0),
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(widget.slotName),
+
+            Flexible(
+              fit: FlexFit.loose,
+              child: GestureDetector(
+                onLongPress: () => switch (slotState.assets.description) {
+                  Some<String>(value: final String description) =>
+                    toastification.show(
+                      title: Text("Description"),
+                      style: ToastificationStyle.flat,
+                      autoCloseDuration: const Duration(seconds: 10),
+                      description: RichText(text: TextSpan(text: description)),
+                    ),
+                  None() => toastification.show(
                     title: Text("Description"),
                     style: ToastificationStyle.flat,
                     autoCloseDuration: const Duration(seconds: 10),
-                    description: RichText(text: TextSpan(text: description)),
+                    description: RichText(
+                      text: const TextSpan(text: 'no description'),
+                    ),
                   ),
-                None() => toastification.show(
-                  title: Text("Description"),
+                },
+                onTap: () => Navigator.of(context)
+                    .push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
+                onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
+                onSecondaryTap: () => toastification.show(
+                  title: Text("onSecondaryTap handler"),
                   style: ToastificationStyle.flat,
-                  autoCloseDuration: const Duration(seconds: 10),
+                  autoCloseDuration: const Duration(seconds: 3),
                   description: RichText(
-                    text: const TextSpan(text: 'no description'),
+                    text: const TextSpan(text: 'received a secondary tap. '),
                   ),
                 ),
-              },
-              onTap: () =>
-                  Navigator.of(context)
-                      .push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
-              onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
-              onSecondaryTap: () => toastification.show(
-                title: Text("onSecondaryTap handler"),
-                style: ToastificationStyle.flat,
-                autoCloseDuration: const Duration(seconds: 3),
-                description: RichText(
-                  text: const TextSpan(text: 'received a secondary tap. '),
-                ),
+                child: SelectSlotWidget(slotState: slotState),
               ),
-              child: SelectSlotWidget(slotState: slotState),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );

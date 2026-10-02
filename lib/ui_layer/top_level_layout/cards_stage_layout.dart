@@ -14,6 +14,12 @@ class CardsStageLayout extends StatelessWidget with Logging {
       builder: (context, constraints) {
         verbose("CardStateLayout.build: constraints are $constraints");
 
+        SignalsManager.cardWidth.value = constraints.maxWidth / 6;
+        SignalsManager.cardHeight.value = SignalsManager.cardWidth.value * 1.6;
+        verbose(
+          "CardStateLayout.build: cardWidth is ${SignalsManager.cardWidth.value}, cardHeight is ${SignalsManager.cardHeight.value}",
+        );
+
         return SizedBox(
           width: constraints.maxWidth,
           height: constraints.maxHeight,
