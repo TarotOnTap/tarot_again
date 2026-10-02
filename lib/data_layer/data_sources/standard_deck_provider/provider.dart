@@ -10,7 +10,7 @@ class StandardDeckProvider {
   ///
   // late final AsyncRandoms randoms;
 
-  StandardDeckProvider(AsyncRandoms randoms) {
+  StandardDeckProvider(RandomsManager randoms) {
     log("StandardDeckProvider.StandardDeckProvider");
   }
 
@@ -25,7 +25,7 @@ class StandardDeckProvider {
   /// and then sets the current deck to that. It also cancels the [currentShuffleQueue]
   /// to make sure we don't leak memory there.
   static Future<void> shuffleDeck() async => SignalsManager.shuffledDeck.value =
-      (await sl<AsyncRandoms>().shuffleIterable<TarotDeckCards>(
+      (await sl<RandomsManager>().shuffleIterable<TarotDeckCards>(
         remaining: TarotDeckCards.values,
       )).toIList();
 }

@@ -61,10 +61,8 @@ class SignalsManager {
         TarotLayout.nullLayout(),
       );
 
-  static final Signal<IMap<String, TarotLayout>> tarotLayouts =
-      signal<IMap<String, TarotLayout>>(
-        const IMap<String, TarotLayout>.empty(),
-      );
+  static final Signal<IList<TarotLayout>> tarotLayouts =
+      signal<IList<TarotLayout>>(const IList<TarotLayout>.empty());
 
   static final Signal<IMap<String, TarotLayout>> tarotLayoutsByName =
       signal<IMap<String, TarotLayout>>(
@@ -80,6 +78,8 @@ class SignalsManager {
         "existingLayoutsBox",
         <String, TarotLayout>{},
       );
+
+  late final EffectCleanup allAssetPathsEffectDisposer;
 
   static void ensureSignals() {
     final toInitialize = <ReadonlySignal>[
@@ -103,6 +103,8 @@ class SignalsManager {
   }
 
   SignalsManager(this.hiveService) {
+    /// This effect is invoked when the allAssetPaths signal is changed, which happens
+
     ensureSignals();
   }
 

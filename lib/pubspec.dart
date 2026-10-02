@@ -3,7 +3,7 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, avoid_classes_with_only_static_members
 
 mixin Pubspec {
-  static final buildDate = DateTime.utc(2026, 9, 19, 0, 18, 10);
+  static final buildDate = DateTime.utc(2026, 9, 27, 22, 40, 53);
 
   static const name = 'tarot_again';
 
@@ -89,7 +89,7 @@ mixin Pubspec {
     'get_it': '^9.2.1',
     'watch_it': '^2.4.2',
     'command_it': '^9.5.1',
-    'listen_it': '^5.3.5',
+    'listen_it': '^6.0.0',
     'path_provider_windows': '^2.3.0',
     'path_provider_foundation': '^2.6.0',
     'path_provider_android': '^2.3.1',

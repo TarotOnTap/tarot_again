@@ -36,12 +36,8 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i831.LayoutManager>(() => _i831.LayoutManager());
-    gh.singleton<_i913.AsyncRandoms>(() => _i913.AsyncRandoms());
+    gh.singleton<_i913.RandomsManager>(() => _i913.RandomsManager());
     gh.singleton<_i909.EventBus>(() => eventBusModule.eventBus);
-    await gh.singletonAsync<_i82.AssetManager>(
-      () => _i82.AssetManager.create(gh<_i23.HiveService>()),
-      preResolve: true,
-    );
     gh.singleton<_i271.SignalsManager>(
       () => _i271.SignalsManager(gh<_i23.HiveService>()),
     );
@@ -53,6 +49,13 @@ extension GetItInjectableX on _i174.GetIt {
         signalsManager: gh<_i23.SignalsManager>(),
         computedsManager: gh<_i23.ComputedsManager>(),
       ),
+    );
+    await gh.singletonAsync<_i82.AssetManager>(
+      () => _i82.AssetManager.create(
+        gh<_i23.HiveService>(),
+        gh<_i23.SignalsManager>(),
+      ),
+      preResolve: true,
     );
     return this;
   }

@@ -43,20 +43,10 @@ class SessionManager with Logging {
       // been given. This way, we're never trying to deal from a deck that hasn't been
       // shuffled.
 
-      if (SignalsManager.shuffledDeck.value.isNotEmpty) {
-        verbose("  shuffledDeck.isNotEmpty");
+      final sD = SignalsManager.shuffledDeck.value;
 
-        final checkSlots = ComputedsManager.slotKeys.value.toList();
-        verbose("  checkSlots is ${checkSlots.length} items long");
-        verbose("  checkSlots is\n$checkSlots");
-
-        verbose("  setting cards to keys:");
-        for (var (index, key) in ComputedsManager.slotKeys.value.indexed) {
-          verbose("    key is '${key.currentState}'");
-          verbose("    index is $index");
-          verbose("    card is ${SignalsManager.shuffledDeck.value[index]}");
-          key.currentState?.setCard(SignalsManager.shuffledDeck.value[index]);
-        }
+      for (var (index, key) in ComputedsManager.slotKeys.value.indexed) {
+        key.currentState?.setCard(sD[index]);
       }
     }
   }

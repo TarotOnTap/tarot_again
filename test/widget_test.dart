@@ -14,18 +14,19 @@ import 'package:tarot_again/util/services.dart';
 import 'package:tarot_again/util/util.dart' hide test;
 
 void main() async {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  // get the logging service up and running, so we can use it!
-  // final String appName = "testing hive_service";
-  // initializeLoggingService();
+  await InitServices.initializeMain(test: true).run;
+  // TestWidgetsFlutterBinding.ensureInitialized();
+  // // get the logging service up and running, so we can use it!
+  // // final String appName = "testing hive_service";
+  // // initializeLoggingService();
 
-  // ignore: unused_local_variable
-  final getIt = GetIt.instance;
+  // // ignore: unused_local_variable
+  // final getIt = GetIt.instance;
 
-  // get the logging service up and running, so we can use it!
-  // WidgetsFlutterBinding.ensureInitialized();
+  // // get the logging service up and running, so we can use it!
+  // // WidgetsFlutterBinding.ensureInitialized();
 
-  await InitServices.initServices();
+  // await InitServices.initServices();
 
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.

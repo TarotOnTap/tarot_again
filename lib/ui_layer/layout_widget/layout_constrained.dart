@@ -3,21 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:tarot_again/ui_layer/card_widget/card_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
-class LayoutBackground extends StatelessWidget with Logging {
-  LayoutBackground({super.key, required this.parentSize}) {
-    verbose("LayoutBackground created, passed $parentSize");
-  }
-
-  final BoxConstraints parentSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: parentSize,
-      child: Container(color: Theme.of(context).focusColor),
-    );
-  }
-}
+// class LayoutBackground({super.key}) extends StatelessWidget with Logging {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(child: Container(color: Theme.of(context).focusColor));
+//   }
+// }
 
 class LayoutConstrained extends StatelessWidget with Logging {
   const LayoutConstrained({super.key, required this.layout});
@@ -27,6 +18,8 @@ class LayoutConstrained extends StatelessWidget with Logging {
   Widget _buildFromPosition({
     required PositionRepresentation pos,
     required int index,
+    required double cardWidth,
+    required double cardHeight,
   }) {
     return AlignPositioned.expand(
       alignment: pos.alignment,
@@ -41,8 +34,8 @@ class LayoutConstrained extends StatelessWidget with Logging {
       moveHorizontallyByChildHeight: pos.moveHorizontallyByChildHeight,
       moveVerticallyByContainerWidth: pos.moveVerticallyByContainerWidth,
       moveHorizontallyByContainerHeight: pos.moveHorizontallyByContainerHeight,
-      childWidth: pos.childWidth,
-      childHeight: pos.childHeight,
+      childWidth: cardWidth,
+      childHeight: cardHeight,
       minChildWidth: pos.minChildWidth,
       minChildHeight: pos.minChildHeight,
       maxChildWidth: pos.maxChildWidth,
@@ -52,7 +45,7 @@ class LayoutConstrained extends StatelessWidget with Logging {
       minChildWidthRatio: pos.minChildWidthRatio,
       minChildHeightRatio: pos.minChildHeightRatio,
       maxChildWidthRatio: pos.maxChildWidthRatio,
-      maxChildHeightRatio: pos.maxChildHeightRatio,
+      // maxChildHeightRatio: 0.9, // ratio of child height to container height // pos.maxChildHeightRatio,
       rotateDegrees: pos.rotateDegrees,
       // Matrix4Transform? matrix4Transform, // TODO: write a converter
       wins: pos.wins ?? Wins.min,
@@ -61,6 +54,8 @@ class LayoutConstrained extends StatelessWidget with Logging {
         key: ComputedsManager.slotKeys.value[index],
         slotName: pos.name,
         slotIndex: pos.positionIndex ?? index,
+        width: cardWidth,
+        height: cardHeight,
       ),
     );
   }
@@ -71,13 +66,27 @@ class LayoutConstrained extends StatelessWidget with Logging {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return Stack(
-          children: [
-            LayoutBackground(parentSize: constraints),
-            for (var (int index, PositionRepresentation pos)
-                in layoutOrder.indexed)
-              _buildFromPosition(pos: pos, index: index),
-          ],
+        verbose("LayoutConstrained.build: constraints are $constraints");
+        final double cardWidth = constraints.maxWidth / 10.0;
+        final double cardHeight = constraints.maxHeight / 10.0;
+        return Center(
+          child: SizedBox(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            child: Stack(
+              children: [
+                // LayoutBackground(),
+                for (var (int index, PositionRepresentation pos)
+                    in layoutOrder.indexed)
+                  _buildFromPosition(
+                    cardWidth: cardWidth,
+                    cardHeight: cardHeight,
+                    pos: pos,
+                    index: index,
+                  ),
+              ],
+            ),
+          ),
         );
       },
     );
