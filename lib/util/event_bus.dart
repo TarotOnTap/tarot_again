@@ -32,7 +32,7 @@ abstract class EventBase<T extends Object?> {
 
   /// once an event is created, using event.emit will send the event to the
   /// event bus; this getter returns the event.
-  EventBase get emit => this.also((it) => sl<EventBus>().fire(it));
+  EventBase get emit => also((it) => sl<EventBus>().fire(it));
 }
 
 // class _EmptyEvent extends EventBase {}

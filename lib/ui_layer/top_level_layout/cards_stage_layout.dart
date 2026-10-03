@@ -1,5 +1,5 @@
 import 'package:align_positioned/align_positioned.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tarot_again/ui_layer/layout_widget/layout_widget.dart';
 import 'package:tarot_again/ui_layer/layout_widget/layout_background.dart';
 import 'package:tarot_again/util/util.dart';

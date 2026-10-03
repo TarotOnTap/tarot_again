@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 // import 'package:path_provider_android/path_provider_android.dart';
 // import 'package:path_provider_windows/path_provider_windows.dart';
 // import 'package:platform/platform.dart';
 import 'package:tarot_again/ui_layer/card_detail_popup/detail_popup_main.dart';
 import 'package:tarot_again/util/services.dart';
-import 'package:tarot_again/util/util.dart' hide test;
 
 void main() async {
   await InitServices.initializeMain(test: true).run();

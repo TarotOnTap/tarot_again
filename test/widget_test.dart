@@ -11,10 +11,9 @@ import 'package:flutter_test/flutter_test.dart';
 // import 'package:platform/platform.dart';
 import 'package:tarot_again/main.dart';
 import 'package:tarot_again/util/services.dart';
-import 'package:tarot_again/util/util.dart' hide test;
 
 void main() async {
-  await InitServices.initializeMain(test: true).run;
+  InitServices.initializeMain(test: true).run;
   // TestWidgetsFlutterBinding.ensureInitialized();
   // // get the logging service up and running, so we can use it!
   // // final String appName = "testing hive_service";

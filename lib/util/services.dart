@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hivez_flutter/hivez_flutter.dart';
@@ -7,11 +7,7 @@ import 'package:tarot_again/hive/hive_registrar.g.dart';
 import 'package:tarot_again/util/register_singletons.dart';
 import 'package:tarot_again/util/util.dart';
 import 'package:tarot_again/util/pubspec.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:platform/platform.dart';
 
-import 'package:path_provider_android/path_provider_android.dart';
-import 'package:path_provider_windows/path_provider_windows.dart';
 
 // import 'package:platform/platform.dart';
 

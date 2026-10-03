@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tarot_again/ui_layer/card_widget/position_slot_widget.dart';
 import 'package:tarot_again/util/util.dart';
 import 'package:fpdart/fpdart.dart';

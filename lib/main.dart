@@ -1,12 +1,15 @@
-//// import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 // import 'package:platform/platform.dart';
 import 'package:toastification/toastification.dart';
+
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'util/flutter_util.dart';
 import 'util/services.dart';
 
-import 'util/util.dart';
+// import 'util/util.dart';
 
 void main(List<String> args) async {
   /// Initialize [GetIt] by acessing its singleton instance
@@ -60,6 +63,13 @@ class TarotAgainApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
           brightness: Brightness.light,
         ),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('en', 'US')],
       ),
     );
   }

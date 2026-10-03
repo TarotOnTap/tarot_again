@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:platform/testing.dart';
 // import 'package:path_provider_android/path_provider_android.dart';
 // import 'package:path_provider_windows/path_provider_windows.dart';
 // import 'package:platform/platform.dart';

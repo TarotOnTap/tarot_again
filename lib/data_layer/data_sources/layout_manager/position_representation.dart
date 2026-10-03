@@ -1,5 +1,5 @@
 import 'package:align_positioned/align_positioned.dart'; // to get a few types
-import 'package:flutter/material.dart' show Alignment;
+import 'package:material_ui/material_ui.dart' show Alignment;
 import 'package:tarot_again/util/util.dart';
 
 // that are used
