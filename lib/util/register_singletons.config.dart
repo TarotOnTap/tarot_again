@@ -35,27 +35,33 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i544.HiveService.create(),
       preResolve: true,
     );
-    gh.singleton<_i831.LayoutManager>(() => _i831.LayoutManager());
     gh.singleton<_i913.RandomsManager>(() => _i913.RandomsManager());
     gh.singleton<_i909.EventBus>(() => eventBusModule.eventBus);
     gh.singleton<_i271.SignalsManager>(
       () => _i271.SignalsManager(gh<_i23.HiveService>()),
     );
     gh.singleton<_i334.ComputedsManager>(
-      () => _i334.ComputedsManager(signalsManager: gh<_i23.SignalsManager>()),
-    );
-    gh.singleton<_i950.SessionManager>(
-      () => _i950.SessionManager(
-        signalsManager: gh<_i23.SignalsManager>(),
-        computedsManager: gh<_i23.ComputedsManager>(),
-      ),
+      () => _i334.ComputedsManager(gh<_i23.SignalsManager>()),
     );
     await gh.singletonAsync<_i82.AssetManager>(
       () => _i82.AssetManager.create(
         gh<_i23.HiveService>(),
         gh<_i23.SignalsManager>(),
+        gh<_i23.ComputedsManager>(),
       ),
       preResolve: true,
+    );
+    gh.singleton<_i831.LayoutManager>(
+      () => _i831.LayoutManager(
+        gh<_i23.SignalsManager>(),
+        gh<_i23.ComputedsManager>(),
+      ),
+    );
+    gh.singleton<_i950.SessionManager>(
+      () => _i950.SessionManager(
+        gh<_i23.SignalsManager>(),
+        gh<_i23.ComputedsManager>(),
+      ),
     );
     return this;
   }

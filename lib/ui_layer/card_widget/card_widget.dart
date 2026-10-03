@@ -123,7 +123,7 @@ class CardWidget extends SignalWidget {
   Widget build(BuildContext context) {
     return RotatedBox(
       quarterTurns:
-          SignalsManager.reversalsAllowed.value &&
+          sl<SignalsManager>().reversalsAllowed.value &&
               slotState.reversal == ReversalEnum.reversed
           ? 2
           : 0,

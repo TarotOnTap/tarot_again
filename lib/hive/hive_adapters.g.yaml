@@ -69,7 +69,7 @@ types:
         index: 1
   AssetManager:
     typeId: 8
-    nextIndex: 3
+    nextIndex: 4
     fields:
       hiveService:
         index: 0
@@ -77,6 +77,8 @@ types:
         index: 1
       assetPathHashBox:
         index: 2
+      computedsManager:
+        index: 3
   Alignment:
     typeId: 9
     nextIndex: 2

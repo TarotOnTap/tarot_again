@@ -15,7 +15,7 @@
       "positions": [
         {
           "name": "Top-left",
-          "alignment": "Alignment.centerLeft",
+          "alignment": "Alignment.topLeft",
           "moveByChildWidth": -0.5,
           "moveByChildHeight": -0.5,
           "moveByContainerWidth": 0.25,
@@ -26,10 +26,10 @@
         },
         {
           "name": "Top-right",
-          "alignment": "Alignment.centerLeft",
-          "moveByChildWidth": -0.5,
+          "alignment": "Alignment.topRight",
+          "moveByChildWidth": 0.5,
           "moveByChildHeight": -0.5,
-          "moveByContainerWidth": 0.75,
+          "moveByContainerWidth": -0.25,
           "moveByContainerHeight": 0.25,
           "wins": "Wins.min",
           "touch": "Touch.inside",
@@ -37,22 +37,22 @@
         },
         {
           "name": "Bottom-left",
-          "alignment": "Alignment.centerLeft",
+          "alignment": "Alignment.bottomLeft",
           "moveByChildWidth": -0.5,
-          "moveByChildHeight": -0.5,
+          "moveByChildHeight": 0.5,
           "moveByContainerWidth": 0.25,
-          "moveByContainerHeight": 0.75,
+          "moveByContainerHeight": -0.25,
           "wins": "Wins.min",
           "touch": "Touch.inside",
           "popUpDescription": "Bottom-left card"
         },
         {
           "name": "Bottom-right",
-          "alignment": "Alignment.centerLeft",
-          "moveByChildWidth": -0.5,
-          "moveByChildHeight": -0.5,
-          "moveByContainerWidth": 0.75,
-          "moveByContainerHeight": 0.75,
+          "alignment": "Alignment.bottomRight",
+          "moveByChildWidth": 0.5,
+          "moveByChildHeight": 0.5,
+          "moveByContainerWidth": -0.25,
+          "moveByContainerHeight": -0.25,
           "wins": "Wins.min",
           "touch": "Touch.inside",
           "popUpDescription": "Bottom-right card"

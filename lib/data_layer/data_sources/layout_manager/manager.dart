@@ -14,7 +14,10 @@ import 'package:tarot_again/util/util.dart';
 typedef LayoutAssetCache = IMap<String, TarotLayout>;
 
 @singleton
-class LayoutManager with Logging {
+class LayoutManager(
+  final SignalsManager signalsManager,
+  final ComputedsManager computedsManager,
+) with Logging {
   // LayoutManager() {
   //   verbose("LayoutManager.LayoutManager");
   // }
@@ -36,17 +39,17 @@ class LayoutManager with Logging {
   }
 
   TarotLayout getLayoutByLayoutName(String name) =>
-      SignalsManager.tarotLayoutsByName.value[name] ?? TarotLayout.nullLayout();
+      signalsManager.tarotLayoutsByName.value[name] ?? TarotLayout.nullLayout();
 
   void setLayoutByLayoutName(String name) =>
-      SignalsManager.tarotLayout.value = getLayoutByLayoutName(name);
+      signalsManager.tarotLayout.value = getLayoutByLayoutName(name);
 
   TarotLayout getLayoutByDisplayName(String displayName) =>
-      ComputedsManager.layoutsByDisplayName.value[displayName] ??
+      computedsManager.layoutsByDisplayName.value[displayName] ??
       TarotLayout.nullLayout();
 
   void setLayoutByDisplayName(String displayName) =>
-      SignalsManager.tarotLayout.value = getLayoutByDisplayName(displayName);
+      signalsManager.tarotLayout.value = getLayoutByDisplayName(displayName);
 
   Future<String> loadCurrentLayoutDescription() async {
     return Future.value("#Description#");

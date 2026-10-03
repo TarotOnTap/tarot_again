@@ -14,10 +14,11 @@ class CardsStageLayout extends StatelessWidget with Logging {
       builder: (context, constraints) {
         verbose("CardStateLayout.build: constraints are $constraints");
 
-        SignalsManager.cardWidth.value = constraints.maxWidth / 6;
-        SignalsManager.cardHeight.value = SignalsManager.cardWidth.value * 1.6;
+        sl<SignalsManager>().cardWidth.value = constraints.maxWidth / 6;
+        sl<SignalsManager>().cardHeight.value =
+            sl<SignalsManager>().cardWidth.value * 1.6;
         verbose(
-          "CardStateLayout.build: cardWidth is ${SignalsManager.cardWidth.value}, cardHeight is ${SignalsManager.cardHeight.value}",
+          "CardStateLayout.build: cardWidth is ${sl<SignalsManager>().cardWidth.value}, cardHeight is ${sl<SignalsManager>().cardHeight.value}",
         );
 
         return SizedBox(
@@ -34,7 +35,7 @@ class CardsStageLayout extends StatelessWidget with Logging {
                 touch: Touch.inside,
                 child: SignalBuilder(
                   builder: (context) => Text(
-                    SignalsManager.tarotLayout.value.displayName,
+                    sl<SignalsManager>().tarotLayout.value.displayName,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),

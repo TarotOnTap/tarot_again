@@ -22,7 +22,7 @@ class SelectSlotWidget extends StatelessWidget with Logging {
 
     return SignalBuilder(
       builder: (context) {
-        if (SignalsManager.allCardsFaceUp.value ||
+        if (sl<SignalsManager>().allCardsFaceUp.value ||
             slotState.showingFace == ShowingFaceEnum.front) {
           return CardWidget(slotState: slotState);
         } else {
@@ -110,8 +110,8 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> with Logging {
   @override
   Widget build(BuildContext context) => SignalBuilder(
     builder: (context) => SizedBox(
-      width: SignalsManager.cardWidth.value,
-      height: SignalsManager.cardHeight.value,
+      width: sl<SignalsManager>().cardWidth.value,
+      height: sl<SignalsManager>().cardHeight.value,
 
       child: Container(
         foregroundDecoration: BoxDecoration(

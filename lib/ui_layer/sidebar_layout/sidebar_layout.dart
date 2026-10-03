@@ -21,7 +21,7 @@ class LayoutDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignalBuilder(
       builder: (context) {
-        String markDown = switch (ComputedsManager
+        String markDown = switch (sl<ComputedsManager>()
             .tarotLayoutDescription
             .value) {
           AsyncData(value: final data) => data.fold(

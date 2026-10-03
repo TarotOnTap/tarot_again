@@ -52,12 +52,12 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
           "Select a Tarot Layout",
           // style: Theme.of(context).textTheme.headlineSmall,
         ),
-        actions: ComputedsManager.layoutDisplayNames.value
+        actions: sl<ComputedsManager>().layoutDisplayNames.value
             .map(
               (e) =>
                   _buildTarotLayoutChoiceChip(
                     context,
-                    signal: SignalsManager.tarotLayout,
+                    signal: sl<SignalsManager>().tarotLayout,
                     key: e,
                   ).also((chip) {
                     verbose("  chip widget created, key is $e");
@@ -82,9 +82,10 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
           builder: (BuildContext context) => ChoiceChip(
             label: Text(RandomGenerators.values[index].displayName),
             selected:
-                SignalsManager.currentRandomGenerator.value.index == index,
+                sl<SignalsManager>().currentRandomGenerator.value.index ==
+                index,
             onSelected: (bool selected) {
-              SignalsManager.currentRandomGenerator.value =
+              sl<SignalsManager>().currentRandomGenerator.value =
                   RandomGenerators.values[index];
               Navigator.of(context).pop();
             },
@@ -147,14 +148,14 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             icon: Badge(
               label: SignalBuilder(
                 builder: (BuildContext context) =>
-                    Text(SignalsManager.tarotLayout.value.displayName),
+                    Text(sl<SignalsManager>().tarotLayout.value.displayName),
               ),
               child: Icon(LucideIcons.layout_dashboard),
             ),
             selectedIcon: Badge(
               label: SignalBuilder(
                 builder: (BuildContext context) =>
-                    Text(SignalsManager.tarotLayout.value.displayName),
+                    Text(sl<SignalsManager>().tarotLayout.value.displayName),
               ),
               child: Icon(LucideIcons.layout_dashboard),
             ),
@@ -169,7 +170,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             icon: Badge(
               label: SignalBuilder(
                 builder: (BuildContext context) => Text(
-                  SignalsManager.currentRandomGenerator.value.displayName,
+                  sl<SignalsManager>().currentRandomGenerator.value.displayName,
                 ),
               ),
               child: Icon(LucideIcons.dices),
@@ -182,7 +183,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             icon: Badge(
               label: SignalBuilder(
                 builder: (BuildContext context) => Text(
-                  SignalsManager.currentRandomGenerator.value.displayName,
+                  sl<SignalsManager>().currentRandomGenerator.value.displayName,
                 ),
               ),
               child: Icon(LucideIcons.dices),

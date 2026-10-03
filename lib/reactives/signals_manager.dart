@@ -3,51 +3,54 @@ import 'package:tarot_again/util/util.dart';
 // import 'hivez_persisted_signal.dart';
 
 @singleton
-class SignalsManager {
-  static final Signal<Iterable<String>> allAssetPaths =
-      signal<Iterable<String>>(
-        [],
-        options: SignalOptions(name: "allAssetPaths"),
-      );
+class SignalsManager(final HiveService hiveService) with Logging {
+  this : assert(true) {
+    ensureSignals();
+  }
 
-  static final Signal<bool> allCardsFaceUp = signal<bool>(
+  final Signal<Iterable<String>> allAssetPaths = signal<Iterable<String>>(
+    [],
+    options: SignalOptions(name: "allAssetPaths"),
+  );
+
+  final Signal<bool> allCardsFaceUp = signal<bool>(
     false,
     options: SignalOptions(name: "allCardsFaceUp"),
   );
 
-  static final cardBackStyle = hivezPersistedSignal<String>(
+  final cardBackStyle = hivezPersistedSignal<String>(
     "cardBackStyle",
     "animated_solid_color",
   );
 
-  static final cardWidth = Signal<double>(
+  final cardWidth = Signal<double>(
     100.0,
     options: SignalOptions(name: "cardWidth"),
   );
 
-  static final cardHeight = Signal<double>(
+  final cardHeight = Signal<double>(
     150.0,
     options: SignalOptions(name: "cardHeight"),
   );
 
-  static final deckName = hivezPersistedSignal<StandardTarotDecks>(
+  final deckName = hivezPersistedSignal<StandardTarotDecks>(
     "deckName",
     StandardTarotDecks.rws,
   );
 
-  static final HivezPersistedSignal<DeckTypesEnum> deckType =
+  final HivezPersistedSignal<DeckTypesEnum> deckType =
       hivezPersistedSignal<DeckTypesEnum>(
         "deckType",
         DeckTypesEnum.standardTarot,
       );
 
-  static final HivezPersistedSignal<RandomGenerators> currentRandomGenerator =
+  final HivezPersistedSignal<RandomGenerators> currentRandomGenerator =
       hivezPersistedSignal<RandomGenerators>(
         "currentRandomGenerator",
         RandomGenerators.none,
       );
 
-  static final HivezPersistedSignal<IRandomsProvider> currentRandomProvider =
+  final HivezPersistedSignal<IRandomsProvider> currentRandomProvider =
       hivezPersistedSignal<IRandomsProvider>(
         "currentRandomsProvider",
         SecureRandom(),
@@ -56,34 +59,35 @@ class SignalsManager {
   // When this is true,
   // dealing out tarot cards will display cards as upright or reversed; setting
   // it false will deal out upright cards only.
-  static final HivezPersistedSignal<bool> reversalsAllowed =
+  final HivezPersistedSignal<bool> reversalsAllowed =
       hivezPersistedSignal<bool>("reversalsAllowed", true);
 
-  static final Signal<IList<TarotDeckCards>> shuffledDeck =
+  final Signal<IList<TarotDeckCards>> shuffledDeck =
       signal<IList<TarotDeckCards>>(
         const IList<TarotDeckCards>.empty(),
         options: SignalOptions(name: "shuffledDeck"),
       );
 
-  static final HivezPersistedSignal<TarotLayout> tarotLayout =
+  final HivezPersistedSignal<TarotLayout> tarotLayout =
       hivezPersistedSignal<TarotLayout>(
         "tarotLayout",
         TarotLayout.nullLayout(),
       );
 
-  static final Signal<IList<TarotLayout>> tarotLayouts =
-      signal<IList<TarotLayout>>(const IList<TarotLayout>.empty());
+  final Signal<IList<TarotLayout>> tarotLayouts = signal<IList<TarotLayout>>(
+    const IList<TarotLayout>.empty(),
+  );
 
-  static final Signal<IMap<String, TarotLayout>> tarotLayoutsByName =
+  final Signal<IMap<String, TarotLayout>> tarotLayoutsByName =
       signal<IMap<String, TarotLayout>>(
         const IMap<String, TarotLayout>.empty(),
         options: SignalOptions(name: "tarotLayoutsByName"),
       );
 
-  static final HivezPersistedSignal<String> tarotLayoutsHash =
+  final HivezPersistedSignal<String> tarotLayoutsHash =
       hivezPersistedSignal<String>("tarotLayoutsHash", "");
 
-  static final HivezPersistedMapSignal<String, TarotLayout> existingLayoutsBox =
+  final HivezPersistedMapSignal<String, TarotLayout> existingLayoutsBox =
       hivezPersistedMapSignal<String, TarotLayout>(
         "existingLayoutsBox",
         <String, TarotLayout>{},
@@ -91,7 +95,7 @@ class SignalsManager {
 
   late final EffectCleanup allAssetPathsEffectDisposer;
 
-  static void ensureSignals() {
+  void ensureSignals() {
     final toInitialize = <ReadonlySignal>[
       allAssetPaths,
       allCardsFaceUp,
@@ -111,12 +115,4 @@ class SignalsManager {
       var _ = init.value;
     }
   }
-
-  SignalsManager(this.hiveService) {
-    /// This effect is invoked when the allAssetPaths signal is changed, which happens
-
-    ensureSignals();
-  }
-
-  final HiveService hiveService;
 }

@@ -14,12 +14,10 @@ import '../card_widget/card_widget.dart';
 @immutable
 class DetailPopupMainWidget extends SignalWidget {
   DetailPopupMainWidget({super.key, required this.slotIndex}) {
-    if (slotIndex < 0 || slotIndex > ComputedsManager.slotKeys.value.length) {
-      throw RangeError.index(
-        slotIndex,
-        ComputedsManager.slotKeys.value.length,
-        'slotIndex',
-      );
+    final cm = sl<ComputedsManager>();
+
+    if (slotIndex < 0 || slotIndex > cm.slotKeys.value.length) {
+      throw RangeError.index(slotIndex, cm.slotKeys.value.length, 'slotIndex');
     }
   }
 
@@ -36,48 +34,49 @@ class DetailPopupMainWidget extends SignalWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ComputedsManager.slotKeys.value[slotIndex].currentState.letWithElse(
-      (PositionSlotWidgetState it) => UnconstrainedBox(
-        child: SizedBox(
-          width: 800,
-          height: 600,
-          child: Card(
-            color: Colors.white,
-            child: Center(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: CardWidget(slotState: it.slotState),
-                    ),
-                  ),
-                  // Gap(20),
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder:
-                          (
-                            BuildContext context,
-                            BoxConstraints viewportConstraints,
-                          ) => SingleChildScrollView(
-                            padding: EdgeInsetsGeometry.only(right: 10.0),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minHeight: viewportConstraints.maxHeight,
+    return sl<ComputedsManager>().slotKeys.value[slotIndex].currentState
+        .letWithElse(
+          (PositionSlotWidgetState it) => UnconstrainedBox(
+            child: SizedBox(
+              width: 800,
+              height: 600,
+              child: Card(
+                color: Colors.white,
+                child: Center(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: CardWidget(slotState: it.slotState),
+                        ),
+                      ),
+                      // Gap(20),
+                      Expanded(
+                        child: LayoutBuilder(
+                          builder:
+                              (
+                                BuildContext context,
+                                BoxConstraints viewportConstraints,
+                              ) => SingleChildScrollView(
+                                padding: EdgeInsetsGeometry.only(right: 10.0),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    minHeight: viewportConstraints.maxHeight,
+                                  ),
+                                  child: GptMarkdown(_displayMd(it)),
+                                ),
                               ),
-                              child: GptMarkdown(_displayMd(it)),
-                            ),
-                          ),
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      orElse: () => Placeholder(child: Text("Card data not found")),
-    );
+          orElse: () => Placeholder(child: Text("Card data not found")),
+        );
   }
 }
 

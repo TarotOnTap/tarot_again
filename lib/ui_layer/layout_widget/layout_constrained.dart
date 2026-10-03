@@ -12,10 +12,7 @@ class LayoutConstrained extends StatelessWidget with Logging {
     required PositionRepresentation pos,
     required int index,
   }) {
-    verbose(
-      "_buildFromPosition: building for position ${pos.name} at index $index with pos\n$pos",
-    );
-    final newAligned = AlignPositioned.expand(
+    return AlignPositioned.expand(
       alignment: pos.alignment,
       dx: pos.dx,
       dy: pos.dy,
@@ -28,8 +25,8 @@ class LayoutConstrained extends StatelessWidget with Logging {
       moveHorizontallyByChildHeight: pos.moveHorizontallyByChildHeight,
       moveVerticallyByContainerWidth: pos.moveVerticallyByContainerWidth,
       moveHorizontallyByContainerHeight: pos.moveHorizontallyByContainerHeight,
-      childWidth: SignalsManager.cardWidth.value,
-      childHeight: SignalsManager.cardHeight.value,
+      childWidth: sl<SignalsManager>().cardWidth.value,
+      childHeight: sl<SignalsManager>().cardHeight.value,
       // minChildWidth: pos.minChildWidth,
       // minChildHeight: pos.minChildHeight,
       // maxChildWidth: pos.maxChildWidth,
@@ -45,13 +42,11 @@ class LayoutConstrained extends StatelessWidget with Logging {
       wins: pos.wins ?? Wins.min,
       touch: pos.touch ?? Touch.inside,
       child: PositionSlotWidget(
-        key: ComputedsManager.slotKeys.value[index],
+        key: sl<ComputedsManager>().slotKeys.value[index],
         slotName: pos.name,
         slotIndex: pos.positionIndex ?? index,
       ),
     );
-
-    return newAligned;
   }
 
   @override

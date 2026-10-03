@@ -5,36 +5,29 @@ import 'package:tarot_again/util/util.dart';
 /// what deck is used, whether reversals are allowed, what layout is chosen,
 /// what cards are dealt into that layout, etc.
 @singleton
-class SessionManager with Logging {
-  SessionManager({
-    required this.signalsManager,
-    required this.computedsManager,
-  }) {
-    verbose("SessionManager.SessionManager()");
-  }
-
-  final SignalsManager signalsManager;
-  final ComputedsManager computedsManager;
-
+class SessionManager(
+  final SignalsManager signalsManager,
+  final ComputedsManager computedsManager,
+) with Logging {
   void _emptySlots() {
     verbose("SessionManager()._emptySlots");
 
-    for (var key in ComputedsManager.slotKeys.value) {
+    for (var key in computedsManager.slotKeys.value) {
       key.currentState?.setCard(TarotDeckCards.noneCard);
     }
   }
 
-  Future<void> dealCards() async {
+  void dealCards() {
     // requires that slots have already been laid out
     verbose("SessionManager().dealCards");
 
-    if (SignalsManager.tarotLayout.value is! NullLayout) {
-      verbose("  tarotLayout.value is ${SignalsManager.tarotLayout.value}");
+    if (signalsManager.tarotLayout.value is! NullLayout) {
+      verbose("  tarotLayout.value is ${signalsManager.tarotLayout.value}");
 
-      if (SignalsManager.tarotLayout.value is SimpleGrid) {
-        await StandardDeckProvider.unShuffleDeck();
+      if (signalsManager.tarotLayout.value is SimpleGrid) {
+        StandardDeckProvider.unShuffleDeck();
       } else {
-        await StandardDeckProvider.shuffleDeck();
+        StandardDeckProvider.shuffleDeck();
       }
 
       // after switching shuffledDeck on StandardDeckProvider to an asyncSignal,
@@ -43,34 +36,34 @@ class SessionManager with Logging {
       // been given. This way, we're never trying to deal from a deck that hasn't been
       // shuffled.
 
-      final sD = SignalsManager.shuffledDeck.value;
+      final sD = signalsManager.shuffledDeck.value;
 
-      for (var (index, key) in ComputedsManager.slotKeys.value.indexed) {
+      for (var (index, key) in computedsManager.slotKeys.value.indexed) {
         key.currentState?.setCard(sD[index]);
       }
     }
   }
 
   void changeDeckName(StandardTarotDecks newName) =>
-      SignalsManager.deckName.value = newName;
+      signalsManager.deckName.value = newName;
 
   void changeDeckType(DeckTypesEnum newType) =>
-      SignalsManager.deckType.value = newType;
+      signalsManager.deckType.value = newType;
 
   void changeCardBacks() {}
 
   void selectLayout() {}
 
-  void turnAllCardsFaceUp() => SignalsManager.allCardsFaceUp.value = true;
+  void turnAllCardsFaceUp() => signalsManager.allCardsFaceUp.value = true;
 
-  void turnAllCardsFaceDown() => SignalsManager.allCardsFaceUp.value = false;
+  void turnAllCardsFaceDown() => signalsManager.allCardsFaceUp.value = false;
 
-  void flipAllCardsFace() => SignalsManager.allCardsFaceUp.value =
-      !SignalsManager.allCardsFaceUp.value;
+  void flipAllCardsFace() => signalsManager.allCardsFaceUp.value =
+      !signalsManager.allCardsFaceUp.value;
 
-  void allowReversals() => SignalsManager.reversalsAllowed.value = true;
+  void allowReversals() => signalsManager.reversalsAllowed.value = true;
 
-  void disallowReversals() => SignalsManager.reversalsAllowed.value = false;
+  void disallowReversals() => signalsManager.reversalsAllowed.value = false;
 
   void freshSpread() {
     _emptySlots();

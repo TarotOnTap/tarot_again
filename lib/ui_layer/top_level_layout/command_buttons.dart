@@ -82,7 +82,7 @@ class CommandButtons extends StatelessWidget with Logging {
           ],
         ),
         ElevatedButton(
-          onPressed: () async => await sm.dealCards(),
+          onPressed: () async => sm.dealCards(),
 
           child: Text("Deal cards"),
         ),

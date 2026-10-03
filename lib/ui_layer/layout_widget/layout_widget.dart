@@ -12,7 +12,7 @@ class LayoutWidget extends StatelessWidget with Logging {
   @override
   Widget build(BuildContext context) {
     return SignalBuilder(
-      builder: (context) => switch (SignalsManager.tarotLayout.value) {
+      builder: (context) => switch (sl<SignalsManager>().tarotLayout.value) {
         // HorizontalLinear hl => LinearLayoutWidget(layoutDetails: hl),
         SimpleGrid sg => GridLayoutWidget(layoutDetails: sg),
         NullLayout _ => Placeholder(child: Text("No layout selected")),

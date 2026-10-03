@@ -13,24 +13,31 @@ class GridLayoutWidget extends StatelessWidget with Logging {
   Widget build(BuildContext context) => SignalBuilder(
     builder: (context) => LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        SignalsManager.cardWidth.value = constraints.maxWidth / 10.0;
-        SignalsManager.cardHeight.value = constraints.maxHeight / 10.0;
+        sl<SignalsManager>().cardWidth.value = constraints.maxWidth / 8.0;
+        sl<SignalsManager>().cardHeight.value =
+            sl<SignalsManager>().cardWidth.value * 1.6;
 
-        final int numCards = switch (SignalsManager.tarotLayout.value) {
+        final int numCards = switch (sl<SignalsManager>().tarotLayout.value) {
           // HorizontalLinear(:final numCards) => numCards,
           SimpleGrid(:final numCards) => numCards,
           NullLayout() => 0,
           NewTarotLayout(:final positions) => positions.length,
         };
 
-        int numColumns = (constraints.maxWidth / 110.0).toInt();
+        int numColumns =
+            (constraints.maxWidth / sl<SignalsManager>().cardWidth.value)
+                .toInt();
 
         int numRows = numCards ~/ numColumns + 1;
 
         return SingleChildScrollView(
           child: LayoutGrid(
-            columnSizes: repeat(numColumns, [100.px]),
-            rowSizes: repeat(numRows, [160.px]),
+            columnSizes: repeat(numColumns, [
+              sl<SignalsManager>().cardWidth.value.px,
+            ]),
+            rowSizes: repeat(numRows, [
+              sl<SignalsManager>().cardHeight.value.px,
+            ]),
             columnGap: 10.0,
             rowGap: 10,
             autoPlacement: AutoPlacement.rowDense,
@@ -39,7 +46,7 @@ class GridLayoutWidget extends StatelessWidget with Logging {
                   (index) => GridPlacement(
                     child: Center(
                       child: PositionSlotWidget(
-                        key: ComputedsManager.slotKeys.value[index],
+                        key: sl<ComputedsManager>().slotKeys.value[index],
                         slotIndex: index,
                         slotName: "slot $index",
                       ),

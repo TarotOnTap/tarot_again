@@ -39,12 +39,14 @@ typedef AssetManagerReturn<R> = TaskEither<ExceptionOf<AssetManager>, R>;
 class AssetManager(
   final HiveService hiveService,
   final SignalsManager signalsManager,
+  final ComputedsManager computedsManager,
   final BoxInterface<String, String> assetPathHashBox,
 ) with Logging {
   @FactoryMethod(preResolve: true)
   static Future<AssetManager> create(
     HiveService hiveService,
     SignalsManager signalsManager,
+    ComputedsManager computedsManager,
     // AppSettings appSettings,
   ) async {
     final BoxInterface<String, String> assetPathHashBox = await hiveService
@@ -56,6 +58,7 @@ class AssetManager(
     AssetManager retVal = AssetManager(
       hiveService,
       signalsManager,
+      computedsManager,
       assetPathHashBox,
     );
 
@@ -69,7 +72,7 @@ class AssetManager(
   Future<Unit> getAndSetAllAssetPaths() async {
     final paths = await AssetManifest.loadFromAssetBundle(rootBundle);
 
-    SignalsManager.allAssetPaths.value = paths.listAssets() as Iterable<String>;
+    signalsManager.allAssetPaths.value = paths.listAssets() as Iterable<String>;
 
     return unit;
   }
@@ -100,8 +103,8 @@ class AssetManager(
       IList<TarotLayout> ll,
       IMap<String, TarotLayout> mm,
     ) {
-      SignalsManager.tarotLayoutsByName.value = mm;
-      SignalsManager.tarotLayouts.value = ll;
+      signalsManager.tarotLayoutsByName.value = mm;
+      signalsManager.tarotLayouts.value = ll;
     });
 
     final layoutsJson = await loadStringAsset("assets/tarotLayouts.json").run();
@@ -188,7 +191,7 @@ class AssetManager(
       );
     }
 
-    return ComputedsManager.deckAssetPaths.value
+    return computedsManager.deckAssetPaths.value
         .where((String assetName) => assetName.contains(card.name))
         .let(
           (cardAssets) async => switch (cardAssets.isEmpty) {

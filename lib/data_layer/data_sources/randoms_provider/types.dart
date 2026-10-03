@@ -27,7 +27,7 @@ enum RandomGenerators {
 
 extension RandomInt on int {
   int get random =>
-      SignalsManager.currentRandomProvider.value.nextInt(this - 1);
+      sl<SignalsManager>().currentRandomProvider.value.nextInt(this - 1);
 }
 
 /// The [IRandomsProvider] gives the methods that must be present for any
@@ -86,37 +86,39 @@ class RandomsManager with Logging implements IRandomsProvider {
   void setRandomSource(String name) {
     // this *always* inserts a new random generator of the source type, even if it's
     // the same as the current source type.
-    SignalsManager.currentRandomGenerator.value = RandomGenerators.values
+    sl<SignalsManager>().currentRandomGenerator.value = RandomGenerators.values
         .firstWhere(
           (elem) => elem.displayName == name,
           orElse: () => RandomGenerators.none,
         );
 
-    SignalsManager.currentRandomProvider.value = SignalsManager
-        .currentRandomGenerator
-        .value
+    final sm = sl<SignalsManager>();
+
+    sm.currentRandomProvider.value = sm.currentRandomGenerator.value
         .genCreator();
   }
 
   @override
   int nextInt(int rangeHigh) =>
-      SignalsManager.currentRandomProvider.value.nextInt(rangeHigh);
+      sl<SignalsManager>().currentRandomProvider.value.nextInt(rangeHigh);
 
   @override
-  Iterable<int> nextIntFromCountdown(int rangeHigh) => SignalsManager
+  Iterable<int> nextIntFromCountdown(int rangeHigh) => sl<SignalsManager>()
       .currentRandomProvider
       .value
       .nextIntFromCountdown(rangeHigh);
 
   @override
   double nextDouble() =>
-      SignalsManager.currentRandomProvider.value.nextDouble();
+      sl<SignalsManager>().currentRandomProvider.value.nextDouble();
 
   @override
-  bool nextBool() => SignalsManager.currentRandomProvider.value.nextBool();
+  bool nextBool() =>
+      sl<SignalsManager>().currentRandomProvider.value.nextBool();
 
   Iterable<E> shuffleIterable<E>({required Iterable<E> remaining}) =>
-      IList<E>(remaining).shuffle(SignalsManager.currentRandomProvider.value);
+      IList<E>(remaining)
+          .shuffle(sl<SignalsManager>().currentRandomProvider.value);
 }
 
 /// class SecureRandom extends _AsyncRandomsImpl with Logging {

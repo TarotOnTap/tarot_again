@@ -19,13 +19,13 @@ class StandardDeckProvider {
   /// be useful for producing decks to study, etc. Async to match to signature
   /// of [shuffleDeck]
   static Future<void> unShuffleDeck() async =>
-      SignalsManager.shuffledDeck.value = TarotDeckCards.values.toIList();
+      sl<SignalsManager>().shuffledDeck.value = TarotDeckCards.values.toIList();
 
   /// [shuffleDeck] uses AsyncRandoms to shuffle the full standard tarot deck,
   /// and then sets the current deck to that. It also cancels the [currentShuffleQueue]
   /// to make sure we don't leak memory there.
-  static Future<void> shuffleDeck() async => SignalsManager.shuffledDeck.value =
-      (await sl<RandomsManager>().shuffleIterable<TarotDeckCards>(
+  static void shuffleDeck() async => sl<SignalsManager>().shuffledDeck.value =
+      (sl<RandomsManager>().shuffleIterable<TarotDeckCards>(
         remaining: TarotDeckCards.values,
       )).toIList();
 }

@@ -16,13 +16,13 @@ import 'package:tarot_again/util/util.dart';
 ///
 ///
 ///
-const String _PERSISTED_VALUE_KEY_ = "value";
-const String _PERSISTED_NAME_PREPEND = "__persisted__";
+const String persistedKeyValue = "value";
+const String persistedKeyPrepend = "__persisted__";
 
 /// This class is a persistent [Signal] using [Hivez](https://pub.dev/packages/hivez)
 ///
 /// It works using async magic to save and restore a value from a single [Hive]
-/// [Box] devoted to this one signal; the box has only one key [_PERSISTED_VALUE_KEY_]
+/// [Box] devoted to this one signal; the box has only one key [persistedKeyValue]
 /// and holds a value of type \<[Option]\<T?>> ([Option] from [fpdart]).
 ///
 /// Parameters:
@@ -54,9 +54,7 @@ class HivezPersistedSignal<T> extends Signal<T> with Logging {
     // try to fetch the value from storage if it exists. That logic is handled elsewhere
     effectDisposer = effect(() async {
       if (persistedValueLoaded) {
-        hiveBox.onResolve(
-          (hb) async => await hb.put(_PERSISTED_VALUE_KEY_, value),
-        );
+        hiveBox.onResolve((hb) async => await hb.put(persistedKeyValue, value));
       }
     });
   }
@@ -97,7 +95,7 @@ class HivezPersistedSignal<T> extends Signal<T> with Logging {
     required String name,
     required T initialValue,
   }) {
-    final String storageName = _PERSISTED_NAME_PREPEND + name;
+    final String storageName = persistedKeyPrepend + name;
 
     final hps2 = HivezPersistedSignal._(
       initialValue,
@@ -130,7 +128,7 @@ class HivezPersistedSignal<T> extends Signal<T> with Logging {
     // a null value for newValue will indicate that this is a first run for
     // this persisted signal, and that therefore the key and value don't
     // exist in the Box.  Values in the [Box] are not nullable.
-    T? newValue = await hb.get(_PERSISTED_VALUE_KEY_);
+    T? newValue = await hb.get(persistedKeyValue);
 
     // the logic - what to do if we have a new key-value (first run situation)
     if (newValue != null) {
@@ -141,7 +139,7 @@ class HivezPersistedSignal<T> extends Signal<T> with Logging {
       set(newValue);
       _persistedValueLoaded = true;
     } else {
-      await hb.put(_PERSISTED_VALUE_KEY_, initialValue);
+      await hb.put(persistedKeyValue, initialValue);
     }
   }
 }
@@ -219,7 +217,7 @@ class HivezPersistedMapSignal<K, V> extends MapSignal<K, V?> with Logging {
     required String name,
     required Map<K, V?> initialValue,
   }) {
-    final String storageName = _PERSISTED_NAME_PREPEND + name;
+    final String storageName = persistedKeyPrepend + name;
 
     final hps2 = HivezPersistedMapSignal._(
       initialValue,
