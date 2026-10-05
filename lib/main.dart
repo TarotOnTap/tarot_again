@@ -1,15 +1,26 @@
-// import 'package:flutter/material.dart';
-// import 'package:platform/platform.dart';
+// ignore_for_file: invalid_use_of_internal_member
+// ignore_for_file: implementation_imports
+//
+
+import 'dart:ui';
+
 import 'package:toastification/toastification.dart';
 
+import 'package:flutter/src/widgets/_window.dart';
+
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'util/flutter_util.dart';
 import 'util/services.dart';
 
-// import 'util/util.dart';
+class TarotAgainWindowDelegate with WindowControllerDelegate {
+  @override
+  void onWindowDestroyed() {
+    super.onWindowDestroyed();
+    ServicesBinding.instance.exitApplication(AppExitType.required);
+  }
+}
 
 void main(List<String> args) async {
   /// Initialize [GetIt] by acessing its singleton instance
@@ -27,14 +38,50 @@ void main(List<String> args) async {
   //   return ErrorWidget(details.exception);
   // };
 
-  runApp(TarotAgainApp());
+  runWidget(WindowingTarotAgainApp());
+
+  // runApp(TarotAgainApp());
 }
 
-@immutable
-class TarotAgainApp extends StatelessWidget {
-  const TarotAgainApp({super.key});
+Widget windowingTarotAgainAppPreviewWrapper(Widget child) =>
+    WindowingTarotAgainApp(child: child);
 
-  // This widget is the root of your application.
+class const WindowingTarotAgainApp({super.key, final Widget? child})
+    extends StatefulWidget {
+  @override
+  State<WindowingTarotAgainApp> createState() => _WindowingTarotAgainAppState();
+}
+
+class _WindowingTarotAgainAppState extends State<WindowingTarotAgainApp> {
+  final WindowController controller = WindowController(
+    size: const Size(800, 600),
+    title: 'Tarot Again app',
+    delegate: TarotAgainWindowDelegate(),
+  );
+  // final WindowSettings settings = RegularWindowSettings();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget? child = widget.child;
+    if (child != null) {
+      return Window(controller: controller, child: child);
+    } else {
+      return Window(controller: controller, child: TarotAgainApp());
+    }
+  }
+}
+
+@Preview(name: 'Tarot Again App', wrapper: windowingTarotAgainAppPreviewWrapper)
+Widget tarotAgainApp() => TarotAgainApp();
+
+@immutable
+class const TarotAgainApp({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToastificationWrapper(
@@ -63,10 +110,10 @@ class TarotAgainApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
           brightness: Brightness.light,
         ),
-        localizationsDelegates: const [
+        localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
+          // GlobalCupertinoLocalizations.delegate,
+          // GlobalWidgetsLocalizations.delegate,
           FlutterQuillLocalizations.delegate,
         ],
         supportedLocales: const [Locale('en', 'US')],

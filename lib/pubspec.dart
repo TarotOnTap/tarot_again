@@ -3,7 +3,7 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, avoid_classes_with_only_static_members
 
 mixin Pubspec {
-  static final buildDate = DateTime.utc(2026, 10, 2, 21, 16, 8);
+  static final buildDate = DateTime.utc(2026, 10, 4, 21, 53, 44);
 
   static const name = 'tarot_again';
 
@@ -42,7 +42,7 @@ mixin Pubspec {
     'choice': '^2.3.2',
     'equatable': '^2.0.7',
     'event_bus': '^2.0.1',
-    'fast_immutable_collections': '^11.0.3',
+    'fast_immutable_collections': '^12.0.0',
     'flutter_html': '^3.0.0',
     'flutter_svg': '^2.0.17',
     'fpdart': '^1.1.1',
@@ -97,16 +97,26 @@ mixin Pubspec {
     'rust': '^3.1.0',
     'anyhow': '^3.0.1',
     'randomness': '^0.2.1',
+    'flutter_quill': '^11.6.0',
+    'flutter_quill_extensions': '^11.0.0',
+    'vsc_quill_delta_to_html': '^1.0.5',
+    'flutter_quill_delta_from_html': '^1.5.3',
+    'flutter_quill_to_pdf': '^2.3.9',
+    'markdown_quill': '^4.3.0',
+    'flutter_quill_delta_easy_parser': '^1.1.8',
+    'flutter_localizations': <dynamic, dynamic>{
+      'sdk': 'flutter',
+    },
+    'material_ui': 'any',
+    'path_provider_platform_interface': 'any',
+    'plugin_platform_interface': 'any',
   };
 
   static const dev_dependencies = <dynamic, dynamic>{
-    'flutter_test': <dynamic, dynamic>{
-      'sdk': 'flutter',
-    },
     'flutter_lints': '^6.0.0',
     'build_runner': '^2.15.0',
     'test': '^1.25.15',
-    'freezed': '^3.2.0',
+    'freezed': '^4.0.2',
     'json_serializable': '^6.14.1',
     'hive_ce_generator': '^1.11.0',
     'injectable_generator': '^3.1.3',
@@ -114,6 +124,7 @@ mixin Pubspec {
     'pubspec_extract': '^2.2.0',
     'lean_builder': '^1.2.2',
     'flutter_gen_runner': null,
+    'test_api': 'any',
   };
 
   static const patrol = <dynamic, dynamic>{

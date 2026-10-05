@@ -5,10 +5,11 @@ import '../ui_layer.dart';
 import 'cards_stage_layout.dart';
 import 'main_scaffold.dart';
 
-@immutable
-class TopLevelLayout extends StatelessWidget {
-  const TopLevelLayout({super.key});
+@Preview(name: 'Top Level Layout')
+Widget topLevelLayoutPreview() => const TopLevelLayout();
 
+@immutable
+class const TopLevelLayout({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(

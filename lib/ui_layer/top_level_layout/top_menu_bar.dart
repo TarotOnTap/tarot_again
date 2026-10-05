@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tarot_again/util/util.dart';
+import 'package:tarot_again/util/flutter_util.dart';
 
 Future<void> saveGeneratedLayout() async {
   final directory = await getDownloadsDirectory();
@@ -18,10 +18,11 @@ Future<void> saveGeneratedLayout() async {
   }
 }
 
-/// this class builds the menu bar
-class TopMenuBar extends StatelessWidget {
-  const TopMenuBar({super.key});
+@Preview(name: 'Top Menu Bar')
+Widget topMenuBarPreview() => const TopMenuBar();
 
+/// this class builds the menu bar
+class const TopMenuBar({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
