@@ -5,14 +5,6 @@ import 'dart:math';
 // import 'package:tarot_again/util/event_bus.dart';
 import 'package:tarot_again/util/util.dart';
 
-// TODO: switch back to sync methods in all places.
-// future random generators from, say, the cloud, will use a Queue to manage the
-// async nature of the random requests - make the requests, and then stuff the results into the
-// random generator's queue for later retrieval.
-
-// This allows me to use the List.shuffle([Random source]) method. Random is an interface, and this
-// scheme will allow me to use the native feature instead of my cobbled-together solutions here.
-
 enum RandomGenerators {
   none(displayName: "Default", genCreator: SecureRandom.new),
   local(displayName: "Device", genCreator: SecureRandom.new);

@@ -12,15 +12,8 @@ import 'package:flutter_quill/flutter_quill.dart';
 
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
 import 'util/flutter_util.dart';
+import 'util/util.dart';
 import 'util/services.dart';
-
-class TarotAgainWindowDelegate with WindowControllerDelegate {
-  @override
-  void onWindowDestroyed() {
-    super.onWindowDestroyed();
-    ServicesBinding.instance.exitApplication(AppExitType.required);
-  }
-}
 
 void main(List<String> args) async {
   /// Initialize [GetIt] by acessing its singleton instance
@@ -38,86 +31,52 @@ void main(List<String> args) async {
   //   return ErrorWidget(details.exception);
   // };
 
-  runWidget(WindowingTarotAgainApp());
+  runApp(MultiWindowApp());
 
   // runApp(TarotAgainApp());
 }
 
-Widget windowingTarotAgainAppPreviewWrapper(Widget child) =>
-    WindowingTarotAgainApp(child: child);
-
-class const WindowingTarotAgainApp({super.key, final Widget? child})
-    extends StatefulWidget {
+class MainControllerWindowDelegate with WindowControllerDelegate {
   @override
-  State<WindowingTarotAgainApp> createState() => _WindowingTarotAgainAppState();
-}
-
-class _WindowingTarotAgainAppState extends State<WindowingTarotAgainApp> {
-  final WindowController controller = WindowController(
-    size: const Size(800, 600),
-    title: 'Tarot Again app',
-    delegate: TarotAgainWindowDelegate(),
-  );
-  // final WindowSettings settings = RegularWindowSettings();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget? child = widget.child;
-    if (child != null) {
-      return Window(controller: controller, child: child);
-    } else {
-      return Window(controller: controller, child: TarotAgainApp());
-    }
+  void onWindowDestroyed() {
+    super.onWindowDestroyed();
+    ServicesBinding.instance.exitApplication(AppExitType.required);
   }
 }
 
-@Preview(name: 'Tarot Again App', wrapper: windowingTarotAgainAppPreviewWrapper)
-Widget tarotAgainApp() => TarotAgainApp();
+class MultiWindowApp extends StatelessWidget {
+  const MultiWindowApp({super.key});
 
-@immutable
-class const TarotAgainApp({super.key}) extends StatelessWidget {
-  @override
   Widget build(BuildContext context) {
-    return ToastificationWrapper(
-      child: MaterialApp(
-        initialRoute: "/",
-        routes: <String, WidgetBuilder>{
-          '/': (BuildContext context) => const TopLevelLayout(),
-        },
-        title: 'Tarot Again',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // TRY THIS: Try running your application with "flutter run". You'll see
-          // the application has a purple toolbar. Then, without quitting the app,
-          // try changing the seedColor in the colorScheme below to Colors.green
-          // and then invoke "hot reload" (save your changes or press the "hot
-          // reload" button in a Flutter-supported IDE, or press "r" if you used
-          // the command line to start the app).
-          //
-          // Notice that the counter didn't reset back to zero; the application
-          // state is not lost during the reload. To reset the state, use hot
-          // restart instead.
-          //
-          // This works for code too, not just values: Most code changes can be
-          // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
-          brightness: Brightness.light,
-        ),
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          // GlobalCupertinoLocalizations.delegate,
-          // GlobalWidgetsLocalizations.delegate,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('en', 'US')],
+    return MaterialApp(
+      title: 'Tarot Again',
+      home: TopLevelLayout(),
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a purple toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
+        brightness: Brightness.light,
       ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        // GlobalCupertinoLocalizations.delegate,
+        // GlobalWidgetsLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en', 'US')],
     );
   }
 }

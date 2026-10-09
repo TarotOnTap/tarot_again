@@ -1,3 +1,8 @@
+// ignore_for_file: invalid_use_of_internal_member
+// ignore_for_file: implementation_imports
+//
+
+import 'package:flutter/src/widgets/_window.dart';
 import "package:material_ui/material_ui.dart";
 import 'package:tarot_again/util/logging.dart';
 
@@ -7,8 +12,13 @@ import 'top_menu_bar.dart';
 @immutable
 class MainScaffold extends StatelessWidget with Logging {
   final Widget child;
+  final WindowController windowController;
 
-  const MainScaffold({super.key, required this.child});
+  const MainScaffold({
+    super.key,
+    required this.child,
+    required this.windowController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,25 +27,19 @@ class MainScaffold extends StatelessWidget with Logging {
         title: Text("Cloud Tarot"),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          verbose("MainScaffold.build: constraints are $constraints");
-
-          return Column(
-            children: [
-              TopMenuBar(),
-              Expanded(
-                child: Row(
-                  children: [
-                    MainNavigationRail(),
-                    const VerticalDivider(thickness: 1, width: 1),
-                    Expanded(child: child),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          TopMenuBar(),
+          Expanded(
+            child: Row(
+              children: [
+                MainNavigationRail(),
+                const VerticalDivider(thickness: 1, width: 1),
+                Expanded(child: child),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

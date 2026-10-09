@@ -1,21 +1,40 @@
+// ignore_for_file: invalid_use_of_internal_member
+// ignore_for_file: implementation_imports
+//
+
 import 'dart:convert';
 import 'dart:io' as io show Directory, File;
 
-import 'package:flutter/foundation.dart';
+import 'package:tarot_again/util/flutter_util.dart';
+
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter/src/widgets/_window.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:tarot_again/util/util.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 // import 'package:flutter_quill_example/quill_delta_sample.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:path/path.dart' as path;
 
-class JournalEditor extends StatefulWidget {
-  const JournalEditor({super.key});
+class JournalEditor extends StatefulWidget with Logging {
+  JournalEditor({super.key}) {
+    verbose("JournalEditor constructor called");
+  }
+
+  // final WindowController windowController;
 
   @override
   State<JournalEditor> createState() => _JournalEditorState();
 }
 
-class _JournalEditorState extends State<JournalEditor> {
+class _JournalEditorState extends State<JournalEditor> with Logging {
+  // final WindowController windowController = WindowController(
+  //   size: const Size(800, 600),
+  //   title: 'Tarot Again app',
+  //   delegate: WindowControllerDelegate(),
+  // );
+  // final WindowSettings settings = RegularWindowSettings();
+
   final QuillController _controller = () {
     return QuillController.basic(
       config: QuillControllerConfig(
@@ -48,6 +67,7 @@ class _JournalEditorState extends State<JournalEditor> {
 
   @override
   void initState() {
+    verbose("_JournalEditorState initState called");
     super.initState();
     // Load document
     _controller.document = Document(); // empty document
@@ -55,6 +75,8 @@ class _JournalEditorState extends State<JournalEditor> {
 
   @override
   Widget build(BuildContext context) {
+    verbose("_JournalEditorState build() called");
+    // final windowController = WindowScope.of(context).windowController;
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Quill Example'),
@@ -165,9 +187,11 @@ class _JournalEditorState extends State<JournalEditor> {
 
   @override
   void dispose() {
+    verbose("_JournalEditorState dispose() called");
     _controller.dispose();
     _editorScrollController.dispose();
     _editorFocusNode.dispose();
+    // widget.windowController.dispose();
     super.dispose();
   }
 }

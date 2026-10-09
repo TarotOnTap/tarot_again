@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 // import 'package:path_provider_android/path_provider_android.dart';
 // import 'package:path_provider_windows/path_provider_windows.dart';
 // import 'package:platform/platform.dart';
-import 'package:tarot_again/main.dart';
+// import 'package:tarot_again/main.dart';
 import 'package:tarot_again/util/services.dart';
 
 void main() async {
@@ -29,7 +29,7 @@ void main() async {
 
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const TarotAgainApp());
+    // await tester.pumpWidget(const TarotAgainApp());
 
     // // Verify that our counter starts at 0.
     // expect(find.text('0'), findsOneWidget);

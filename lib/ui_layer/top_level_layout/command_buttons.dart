@@ -66,9 +66,7 @@ class CommandButtons extends StatelessWidget with Logging {
   Widget build(BuildContext context) {
     // final LayoutManager lm = sl<LayoutManager>();
     verbose('CommandButtons.build');
-    verbose('  getting session manager from GetIt using sl');
     final SessionManager sm = sl<SessionManager>();
-    verbose('  session manager is $sm');
 
     return Column(
       children: <Widget>[
