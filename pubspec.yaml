@@ -106,6 +106,14 @@ dependencies:
   # flutter_test: any
   path_provider_platform_interface: any
   plugin_platform_interface: any
+  cupertino_ui: ^1.1.2
+  flutter_test:
+    sdk: flutter
+  url_launcher: ^6.3.3
+  quill_native_bridge: ^11.2.0
+  flutter_keyboard_visibility_temp_fork: ^0.1.5
+  hive_ce: ^2.20.2
+  intl: any
 dev_dependencies:
   flutter_lints: ^6.0.0
   # build_runner: ^2.7.0

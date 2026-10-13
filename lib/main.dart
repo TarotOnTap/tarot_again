@@ -8,12 +8,25 @@ import 'package:toastification/toastification.dart';
 
 import 'package:flutter/src/widgets/_window.dart';
 
+// import 'package:material_ui/material_ui.dart' show GlobalMaterialLocalizations;
+import 'package:cupertino_ui/cupertino_ui.dart'
+    show GlobalCupertinoLocalizations;
+
+import 'package:flutter_localizations/flutter_localizations.dart'
+    show GlobalWidgetsLocalizations;
+
 import 'package:flutter_quill/flutter_quill.dart';
 
+// import 'package:fpdart/fpdart.dart' show Either;
+
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
+import 'ui_layer/top_level_layout/window_settings_accessor.dart';
 import 'util/flutter_util.dart';
 import 'util/util.dart';
 import 'util/services.dart';
+
+// import 'package:rust/rust.dart' show Result, Option;
+import 'package:anyhow/anyhow.dart';
 
 void main(List<String> args) async {
   /// Initialize [GetIt] by acessing its singleton instance
@@ -44,39 +57,108 @@ class MainControllerWindowDelegate with WindowControllerDelegate {
   }
 }
 
-class MultiWindowApp extends StatelessWidget {
+class MultiWindowApp extends StatefulWidget {
   const MultiWindowApp({super.key});
 
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Tarot Again',
-      home: TopLevelLayout(),
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
+  @override
+  State<MultiWindowApp> createState() => _MultiWindowAppState();
+}
+
+class _MultiWindowAppState extends State<MultiWindowApp> with Logging {
+  final WindowController controller = WindowController(
+    size: const Size(800, 600),
+    title: 'Tarot Again',
+    delegate: MainControllerWindowDelegate(),
+  );
+
+  final WindowSettings settings = WindowSettings();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  Widget _makeMaterialApp({required Widget child}) {
+    final String title = 'Tarot Again';
+
+    Result<ThemeData> themeData = guard(
+      () => ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
         brightness: Brightness.light,
       ),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        // GlobalCupertinoLocalizations.delegate,
-        // GlobalWidgetsLocalizations.delegate,
-        FlutterQuillLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('en', 'US')],
+    ).context("_makeMaterialApp: attempting to create ThemeData");
+
+    final tdMap = themeData
+        .map(
+          (td) => guard(
+            () => MaterialApp(
+              builder: (BuildContext context, Widget? child) {
+                return MaterialUiCompatibilityBridge(child: child!);
+              },
+              title: title,
+              home: child,
+              theme: td,
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                FlutterQuillLocalizations.delegate,
+              ],
+              supportedLocales: [Locale('en', 'US')],
+            ),
+          ).context("_makeMaterialApp: attempting to create MaterialApp"),
+        )
+        .flatten();
+
+    return switch (tdMap) {
+      Ok(v: var okay) => okay,
+      Err(v: var error) => Placeholder(child: Text("Error: $error")),
+    };
+  }
+
+  Result<Widget> _makeToastWrapper(BuildContext context) {
+    return guard(
+      () => ToastificationWrapper(
+        child: _makeMaterialApp(
+          child: TopLevelLayout(windowController: controller),
+        ),
+      ),
     );
+  }
+
+  WindowEntry _makeMainWindowEntry(BuildContext context) => WindowEntry(
+    controller: controller,
+    builder: (context) =>
+        _makeToastWrapper(context)
+            .context("_makeMainWindowEntry: builder anonymous function")
+            .unwrap(),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final mainWindowEntry = guard(() => _makeMainWindowEntry(context))
+        .context("_MultiWindowAppState.build: _makeMainWindowEntry");
+
+    final windowManager = mainWindowEntry
+        .map((mwe) => guard(() => WindowManager(initialWindows: [mwe])))
+        .flatten()
+        .context("_MultiWindowAppState.build: creating windowManager");
+
+    final windowSettingsAccessor = windowManager
+        .map(
+          (wm) => guard(
+            () => WindowSettingsAccessor(windowSettings: settings, child: wm),
+          ),
+        )
+        .flatten()
+        .context("_MultiWindowAppState.build: creating WindowSettingsAccessor");
+
+    return switch (windowSettingsAccessor) {
+      Ok(v: var okay) => okay,
+      Err(v: var error) => Placeholder(
+        child: Text("_MultiWindowAppState.build: Error: $error"),
+      ),
+    };
   }
 }

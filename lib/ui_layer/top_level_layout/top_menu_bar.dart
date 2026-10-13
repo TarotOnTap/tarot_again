@@ -3,6 +3,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tarot_again/util/util.dart';
 import 'package:tarot_again/util/flutter_util.dart';
 
+import 'package:flutter_quill/flutter_quill.dart';
+
 Future<void> saveGeneratedLayout() async {
   final directory = await getDownloadsDirectory();
 
@@ -22,9 +24,15 @@ Future<void> saveGeneratedLayout() async {
 Widget topMenuBarPreview() => const TopMenuBar();
 
 /// this class builds the menu bar
-class const TopMenuBar({super.key}) extends StatelessWidget {
+class const TopMenuBar({super.key}) extends StatelessWidget with Logging {
   @override
   Widget build(BuildContext context) {
+    verbose("Building TopMenuBar");
+
+    final fqLocalizations = FlutterQuillLocalizations.of(context);
+
+    verbose("  fqLocalizations: $fqLocalizations");
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[

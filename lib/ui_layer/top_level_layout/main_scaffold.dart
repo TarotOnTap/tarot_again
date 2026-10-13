@@ -6,8 +6,13 @@ import 'package:flutter/src/widgets/_window.dart';
 import "package:material_ui/material_ui.dart";
 import 'package:tarot_again/util/logging.dart';
 
-import 'main_navigation_rail.dart';
-import 'top_menu_bar.dart';
+// import 'main_navigation_rail.dart';
+// import 'top_menu_bar.dart';
+
+// import '../sidebar_layout/sidebar_layout.dart';
+
+// import '../ui_layer.dart';
+// import 'cards_stage_layout.dart';
 
 @immutable
 class MainScaffold extends StatelessWidget with Logging {
@@ -27,20 +32,7 @@ class MainScaffold extends StatelessWidget with Logging {
         title: Text("Cloud Tarot"),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: Column(
-        children: [
-          TopMenuBar(),
-          Expanded(
-            child: Row(
-              children: [
-                MainNavigationRail(),
-                const VerticalDivider(thickness: 1, width: 1),
-                Expanded(child: child),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: child,
     );
   }
 }

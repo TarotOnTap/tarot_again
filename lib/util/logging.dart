@@ -2,6 +2,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:tarot_again/util/util.dart';
 
+// import 'package:rust/rust.dart';
+import 'package:anyhow/anyhow.dart';
+
 enum LoggingLevels { debug, verbose, warning, error }
 
 typedef ET<T> = Either<Object, T>;
@@ -23,21 +26,30 @@ class BufferedLog {
     return this;
   }
 
-  /// tryAdd uses fpdart's Either class to attempt to run a function and print
-  /// a message. The function returns a record of itself and the Either result of
-  /// running the function. If the function does not throw an error, the message
-  /// is printed.
-  /// It is not possible to have the printed message reflect the value returned
-  /// by the function at this time.
-  (BufferedLog, Either<Object, T>) tryAdd<T>(T Function() runThis, Object msg) {
-    final either = ET<T>.tryCatch(runThis, (Object o, StackTrace s) => o);
+  Result<S> guardAdd<S>(S Function() runThis, Object msg) {
+    final res = guard<S>(() => runThis());
 
-    either.fold(
-      (Object o) => addln("  tryAdd's function raised error $o"),
-      (T value) => add(msg),
-    );
+    switch (res) {
+      case Ok(v: var okay):
+        add("Success: $msg");
+      case Err(v: var error):
+        add("Error: $error");
+    }
 
-    return (this, either);
+    return res;
+  }
+
+  Result<S> guardAddln<S>(S Function() runThis, Object msg) {
+    final res = guard<S>(() => runThis());
+
+    switch (res) {
+      case Ok(v: var okay):
+        addln("Success: $msg");
+      case Err(v: var error):
+        addln("Error: $error");
+    }
+
+    return res;
   }
 
   /// tryAdd uses fpdart's Either class to attempt to run a function and print
@@ -46,10 +58,29 @@ class BufferedLog {
   /// is printed.
   /// It is not possible to have the printed message reflect the value returned
   /// by the function at this time.
-  (BufferedLog, Either<Object, T>) tryAddln<T>(
-    T Function() runThis,
-    Object msg,
-  ) {
+  Either<(Object, StackTrace), T> tryAdd<T>(T Function() runThis, Object msg) {
+    final either = Either<(Object, StackTrace), T>.tryCatch(
+      runThis,
+      (Object o, StackTrace s) => (o, s),
+    );
+
+    either.fold(
+      (l) => addln(
+        "  tryAdd's function raised error ${l.$1} with StackTrace ${l.$2}",
+      ),
+      (T value) => add(msg),
+    );
+
+    return either;
+  }
+
+  /// tryAdd uses fpdart's Either class to attempt to run a function and print
+  /// a message. The function returns a record of itself and the Either result of
+  /// running the function. If the function does not throw an error, the message
+  /// is printed.
+  /// It is not possible to have the printed message reflect the value returned
+  /// by the function at this time.
+  Either<Object, T> tryAddln<T>(T Function() runThis, Object msg) {
     final either = ET<T>.tryCatch(runThis, (Object o, StackTrace s) => o);
 
     either.fold(
@@ -57,7 +88,7 @@ class BufferedLog {
       (T value) => addln(msg),
     );
 
-    return (this, either);
+    return either;
   }
 
   BufferedLog addln(Object msg) {

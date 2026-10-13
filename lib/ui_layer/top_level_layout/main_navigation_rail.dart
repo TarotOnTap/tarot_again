@@ -2,54 +2,29 @@
 // ignore_for_file: implementation_imports
 //
 
+// import 'package:material_ui/material_ui.dart';
+
 import 'package:flutter/src/widgets/_window.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart'
+// show GlobalWidgetsLocalizations;
+
+// import 'package:flutter_localizations/flutter_localizations.dart' show GlobalMaterialLocalizations, GlobalWidgetsLocalizations;
 
 import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:tarot_again/util/flutter_util.dart';
 import 'package:tarot_again/util/util.dart';
+import 'package:tarot_again/ui_layer/window_hello_world.dart';
+
+import 'package:anyhow/anyhow.dart';
 
 import '../journal_editor/journal_editor.dart';
 
-// NavigationRailDestination journalEditorWindowDestination(BuildContext context) {
-//   Logging.sVerbose("journalEditorWindowDestination called");
-
-//   final WindowRegistry windowRegistry = WindowRegistry.of(context);
-
-//   // final BaseWindowController windowController = WindowScope.of(context);
-
-//   return NavigationRailDestination(
-//     icon: IconButton(
-//       onPressed: () {
-//         Logging.sVerbose("journal button pushed");
-
-//         late final WindowEntry entry;
-//         // final WindowController controller;
-
-//         final controller = WindowController.shrinkWrap(
-//           delegate: CallbackWindowControllerDelegate(
-//             onDestroyed: () => windowRegistry.unregister(entry),
-//           ),
-//           title: 'Regular',
-//         );
-
-//         entry = WindowEntry(
-//           controller: controller,
-//           builder: (BuildContext context) =>
-//               JournalEditor(/* windowController: controller */),
-//         );
-//         windowRegistry.register(entry);
-//       },
-//       icon: Badge(child: Icon(Icons.book)),
-//     ),
-//     selectedIcon: Badge(child: Icon(Icons.book)),
-//     label: Text('Journal Editor'),
-//   );
-// }
-
 class MainNavigationRail extends StatefulWidget {
-  const MainNavigationRail({super.key});
+  const MainNavigationRail({super.key, required this.windowController});
+
+  final WindowController windowController;
 
   @override
   State<MainNavigationRail> createState() => _MainNavigationRailState();
@@ -65,6 +40,10 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
   void _journalEditorWindowBuilder() {
     verbose("_journalEditorWindowBuilder called");
 
+    final fqLocalizations = FlutterQuillLocalizations.of(context);
+
+    verbose("  fqLocalizations: $fqLocalizations");
+
     verbose("  creating WindowController");
     final windowController = WindowController(
       delegate: CallbackWindowControllerDelegate(
@@ -77,19 +56,22 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
 
     verbose("  creating JournalEditor");
     runWidget(
-      Window(
-        controller: windowController,
-        child: MaterialApp(
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            // GlobalCupertinoLocalizations.delegate,
-            // GlobalWidgetsLocalizations.delegate,
-            FlutterQuillLocalizations.delegate,
-          ],
-          home: JournalEditor(),
-        ),
+      Builder(
+        builder: (BuildContext context) =>
+            Window(controller: windowController, child: JournalEditor()),
       ),
     );
+
+    //   Localizations(
+    //   locale: const Locale('en', 'US'),
+    //   delegates: [
+    //     GlobalMaterialLocalizations.delegate,
+    //     // GlobalCupertinoLocalizations.delegate,
+    //     GlobalWidgetsLocalizations.delegate,
+    //     FlutterQuillLocalizations.delegate,
+    //   ],
+    //   child: JournalEditor(),
+    // ),
   }
 
   Widget _buildTarotLayoutChoiceChip(
@@ -184,6 +166,11 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
 
   @override
   Widget build(BuildContext context) {
+    verbose("Building MainNavigationRail");
+
+    final fqLocalizations = FlutterQuillLocalizations.of(context);
+
+    verbose("  fqLocalizations: $fqLocalizations");
     // final WindowRegistry windowRegistry = WindowRegistry.of(context);
 
     return NavigationRail(
@@ -201,7 +188,8 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             onPressed: () {
               verbose("journal button pushed");
 
-              _journalEditorWindowBuilder();
+              guard(() => runInSeparateWindow(child: JournalEditor()))
+                  .context("_MainNavigationRailState:build: runHelloWindow()");
             },
             icon: Badge(child: Icon(Icons.book)),
           ),

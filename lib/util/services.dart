@@ -8,17 +8,12 @@ import 'package:tarot_again/util/register_singletons.dart';
 import 'package:tarot_again/util/util.dart';
 import 'package:tarot_again/util/pubspec.dart';
 
-
-// import 'package:platform/platform.dart';
-
 /// A class to initialize services in the correct order
 ///
 /// This class uses the generated [Pubspec] class in order to get
 /// the application's name across all platforms, which is used to initialize
 /// [Hive].
 class InitServices with Pubspec {
-  /// Initialize services in the correct order.
-  ///
   /// returns the TaskEither to be [.run()] at a later time, with an await
   static TaskEither<ExceptionOf<InitServices>, Unit> initServices() {
     // get the logging service up and running, so we can use it!
@@ -50,7 +45,7 @@ class InitServices with Pubspec {
   /// Provide initialization for main() for both running and testing
   /// this app.
   ///
-  /// [test] whether we are running testing
+  /// [test] whether we are testing or running the app normally.
   static TaskEither<ExceptionOf<InitServices>, Unit> initializeMain({
     bool test = false,
   }) {
@@ -60,9 +55,10 @@ class InitServices with Pubspec {
 
     if (test) {
       TestWidgetsFlutterBinding.ensureInitialized();
-    } else {
-      WidgetsFlutterBinding.ensureInitialized();
     }
+    // } else {
+    //   WidgetsFlutterBinding.ensureInitialized();
+    // }
 
     return initServices().alt(() {
       ErrorWidget.builder = (FlutterErrorDetails details) {

@@ -2,30 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/util/util.dart';
 
-@immutable
-class CommandButton extends StatelessWidget {
-  final String buttonLabel;
-
-  // final BlocWidgetEvent event;
-  final TextStyle? textStyle;
-  final VoidCallback callback;
-
-  const CommandButton({
-    super.key,
-    required this.buttonLabel,
-    // required this.event,
-    this.textStyle,
-    required this.callback,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: callback,
-      child: Text(buttonLabel, style: textStyle),
-    );
-  }
-}
+import 'package:flutter_quill/flutter_quill.dart';
 
 @immutable
 class CommandButtonGroup extends StatelessWidget {
@@ -47,10 +24,9 @@ class CommandButtonGroup extends StatelessWidget {
         Column(
           children: [
             for (var (label, style, callback) in buttons)
-              CommandButton(
-                buttonLabel: label,
-                callback: callback,
-                textStyle: style,
+              ElevatedButton(
+                onPressed: callback,
+                child: Text(label, style: style),
               ),
           ],
         ),
@@ -64,6 +40,11 @@ class CommandButtons extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
+    verbose("Building CommandButtons");
+
+    final fqLocalizations = FlutterQuillLocalizations.of(context);
+
+    verbose("  fqLocalizations: $fqLocalizations");
     // final LayoutManager lm = sl<LayoutManager>();
     verbose('CommandButtons.build');
     final SessionManager sm = sl<SessionManager>();
@@ -79,6 +60,7 @@ class CommandButtons extends StatelessWidget with Logging {
             ("FaceUp off", null, sm.turnAllCardsFaceDown),
           ],
         ),
+        Gap(5.0),
         ElevatedButton(
           onPressed: () async => sm.dealCards(),
 

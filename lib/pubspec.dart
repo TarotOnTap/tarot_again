@@ -3,7 +3,7 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, avoid_classes_with_only_static_members
 
 mixin Pubspec {
-  static final buildDate = DateTime.utc(2026, 10, 4, 21, 53, 44);
+  static final buildDate = DateTime.utc(2026, 10, 12, 22, 30, 35);
 
   static const name = 'tarot_again';
 
@@ -110,6 +110,15 @@ mixin Pubspec {
     'material_ui': 'any',
     'path_provider_platform_interface': 'any',
     'plugin_platform_interface': 'any',
+    'cupertino_ui': '^1.1.2',
+    'flutter_test': <dynamic, dynamic>{
+      'sdk': 'flutter',
+    },
+    'url_launcher': '^6.3.3',
+    'quill_native_bridge': '^11.2.0',
+    'flutter_keyboard_visibility_temp_fork': '^0.1.5',
+    'hive_ce': '^2.20.2',
+    'intl': 'any',
   };
 
   static const dev_dependencies = <dynamic, dynamic>{

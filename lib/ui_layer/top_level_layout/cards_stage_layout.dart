@@ -4,15 +4,25 @@ import 'package:tarot_again/ui_layer/layout_widget/layout_widget.dart';
 import 'package:tarot_again/ui_layer/layout_widget/layout_background.dart';
 import 'package:tarot_again/util/util.dart';
 
+import 'package:flutter_quill/flutter_quill.dart';
+
 @immutable
 class CardsStageLayout extends StatelessWidget with Logging {
   const CardsStageLayout({super.key});
 
   @override
   Widget build(BuildContext context) {
+    verbose("Building CardsStageLayout");
+
+    final fqLocalizations = FlutterQuillLocalizations.of(context);
+    verbose("  fqLocalizations: $fqLocalizations");
+
     return LayoutBuilder(
       builder: (context, constraints) {
-        verbose("CardStateLayout.build: constraints are $constraints");
+        verbose("CardStateLayout.build builder: constraints are $constraints");
+
+        final fqLocalizations = FlutterQuillLocalizations.of(context);
+        verbose("  fqLocalizations: $fqLocalizations");
 
         sl<SignalsManager>().cardWidth.value = constraints.maxWidth / 6;
         sl<SignalsManager>().cardHeight.value =

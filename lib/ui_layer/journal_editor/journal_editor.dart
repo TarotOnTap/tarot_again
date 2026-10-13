@@ -21,8 +21,6 @@ class JournalEditor extends StatefulWidget with Logging {
     verbose("JournalEditor constructor called");
   }
 
-  // final WindowController windowController;
-
   @override
   State<JournalEditor> createState() => _JournalEditorState();
 }
@@ -76,113 +74,109 @@ class _JournalEditorState extends State<JournalEditor> with Logging {
   @override
   Widget build(BuildContext context) {
     verbose("_JournalEditorState build() called");
-    // final windowController = WindowScope.of(context).windowController;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Quill Example'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.output),
-            tooltip: 'Print Delta JSON to log',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'The JSON Delta has been printed to the console.',
-                  ),
+
+    final fqLocalizations = FlutterQuillLocalizations.of(context);
+
+    verbose("  fqLocalizations: $fqLocalizations");
+
+    Widget? editor;
+
+    try {
+      editor = Column(
+        children: [
+          QuillSimpleToolbar(
+            controller: _controller,
+            config: QuillSimpleToolbarConfig(
+              embedButtons: FlutterQuillEmbeds.toolbarButtons(),
+              showClipboardPaste: true,
+              showDirection: true,
+              customButtons: [
+                QuillToolbarCustomButtonOptions(
+                  icon: const Icon(Icons.add_alarm_rounded),
+                  onPressed: () {
+                    _controller.document.insert(
+                      _controller.selection.extentOffset,
+                      TimeStampEmbed(DateTime.now().toString()),
+                    );
+
+                    _controller.updateSelection(
+                      TextSelection.collapsed(
+                        offset: _controller.selection.extentOffset + 1,
+                      ),
+                      ChangeSource.local,
+                    );
+                  },
                 ),
-              );
-              debugPrint(jsonEncode(_controller.document.toDelta().toJson()));
-            },
+              ],
+              buttonOptions: QuillSimpleToolbarButtonOptions(
+                base: QuillToolbarBaseButtonOptions(
+                  afterButtonPressed: () {
+                    final isDesktop = {
+                      TargetPlatform.linux,
+                      TargetPlatform.windows,
+                      TargetPlatform.macOS,
+                    }.contains(defaultTargetPlatform);
+                    if (isDesktop) {
+                      _editorFocusNode.requestFocus();
+                    }
+                  },
+                ),
+                linkStyle: QuillToolbarLinkStyleButtonOptions(
+                  validateLink: (link) {
+                    // Treats all links as valid. When launching the URL,
+                    // `https://` is prefixed if the link is incomplete (e.g., `google.com` → `https://google.com`)
+                    // however this happens only within the editor.
+                    return true;
+                  },
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: QuillEditor(
+              focusNode: _editorFocusNode,
+              scrollController: _editorScrollController,
+              controller: _controller,
+              config: QuillEditorConfig(
+                placeholder: 'Start writing your notes...',
+                padding: const EdgeInsets.all(16),
+                embedBuilders: [
+                  ...FlutterQuillEmbeds.editorBuilders(
+                    imageEmbedConfig: QuillEditorImageEmbedConfig(
+                      imageProviderBuilder: (context, imageUrl) {
+                        // https://pub.dev/packages/flutter_quill_extensions#-image-assets
+                        if (imageUrl.startsWith('assets/')) {
+                          return AssetImage(imageUrl);
+                        }
+                        return null;
+                      },
+                    ),
+                    videoEmbedConfig: QuillEditorVideoEmbedConfig(
+                      customVideoBuilder: (videoUrl, readOnly) {
+                        // To load YouTube videos https://github.com/singerdmx/flutter-quill/releases/tag/v10.8.0
+                        return null;
+                      },
+                    ),
+                  ),
+                  TimeStampEmbedBuilder(),
+                ],
+              ),
+            ),
           ),
         ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            QuillSimpleToolbar(
-              controller: _controller,
-              config: QuillSimpleToolbarConfig(
-                embedButtons: FlutterQuillEmbeds.toolbarButtons(),
-                showClipboardPaste: true,
-                showDirection: true,
-                customButtons: [
-                  QuillToolbarCustomButtonOptions(
-                    icon: const Icon(Icons.add_alarm_rounded),
-                    onPressed: () {
-                      _controller.document.insert(
-                        _controller.selection.extentOffset,
-                        TimeStampEmbed(DateTime.now().toString()),
-                      );
+      );
+    } catch (e, stackTrace) {
+      verbose("Error building JournalEditor: $e\n$stackTrace");
 
-                      _controller.updateSelection(
-                        TextSelection.collapsed(
-                          offset: _controller.selection.extentOffset + 1,
-                        ),
-                        ChangeSource.local,
-                      );
-                    },
-                  ),
-                ],
-                buttonOptions: QuillSimpleToolbarButtonOptions(
-                  base: QuillToolbarBaseButtonOptions(
-                    afterButtonPressed: () {
-                      final isDesktop = {
-                        TargetPlatform.linux,
-                        TargetPlatform.windows,
-                        TargetPlatform.macOS,
-                      }.contains(defaultTargetPlatform);
-                      if (isDesktop) {
-                        _editorFocusNode.requestFocus();
-                      }
-                    },
-                  ),
-                  linkStyle: QuillToolbarLinkStyleButtonOptions(
-                    validateLink: (link) {
-                      // Treats all links as valid. When launching the URL,
-                      // `https://` is prefixed if the link is incomplete (e.g., `google.com` → `https://google.com`)
-                      // however this happens only within the editor.
-                      return true;
-                    },
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: QuillEditor(
-                focusNode: _editorFocusNode,
-                scrollController: _editorScrollController,
-                controller: _controller,
-                config: QuillEditorConfig(
-                  placeholder: 'Start writing your notes...',
-                  padding: const EdgeInsets.all(16),
-                  embedBuilders: [
-                    ...FlutterQuillEmbeds.editorBuilders(
-                      imageEmbedConfig: QuillEditorImageEmbedConfig(
-                        imageProviderBuilder: (context, imageUrl) {
-                          // https://pub.dev/packages/flutter_quill_extensions#-image-assets
-                          if (imageUrl.startsWith('assets/')) {
-                            return AssetImage(imageUrl);
-                          }
-                          return null;
-                        },
-                      ),
-                      videoEmbedConfig: QuillEditorVideoEmbedConfig(
-                        customVideoBuilder: (videoUrl, readOnly) {
-                          // To load YouTube videos https://github.com/singerdmx/flutter-quill/releases/tag/v10.8.0
-                          return null;
-                        },
-                      ),
-                    ),
-                    TimeStampEmbedBuilder(),
-                  ],
-                ),
-              ),
-            ),
-          ],
+      editor = Center(
+        child: Text(
+          "Error building JournalEditor; error is $e and stackTrace is $stackTrace",
         ),
-      ),
-    );
+      );
+    }
+
+    // final windowController = WindowScope.of(context).windowController;
+    return editor;
   }
 
   @override
