@@ -2,6 +2,7 @@ export 'dart:async' hide AsyncError;
 export 'dart:developer';
 
 // export 'package:async/async.dart';
+export 'package:anyhow/anyhow.dart';
 export 'package:async_extension/async_extension.dart' hide AsyncError;
 export 'package:change_case/change_case.dart';
 export 'package:collection/collection.dart';

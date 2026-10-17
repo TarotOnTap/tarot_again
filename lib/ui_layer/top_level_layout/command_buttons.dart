@@ -1,8 +1,9 @@
+// import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/util/util.dart';
 
-import 'package:flutter_quill/flutter_quill.dart';
+// import 'package:flutter_quill/flutter_quill.dart';
 
 @immutable
 class CommandButtonGroup extends StatelessWidget {
@@ -10,6 +11,12 @@ class CommandButtonGroup extends StatelessWidget {
   final Iterable<(String, TextStyle?, VoidCallback)> buttons;
 
   const CommandButtonGroup({
+    super.key,
+    required this.groupLabel,
+    required this.buttons,
+  });
+
+  const CommandButtonGroup.preview({
     super.key,
     required this.groupLabel,
     required this.buttons,
@@ -40,13 +47,6 @@ class CommandButtons extends StatelessWidget with Logging {
 
   @override
   Widget build(BuildContext context) {
-    verbose("Building CommandButtons");
-
-    final fqLocalizations = FlutterQuillLocalizations.of(context);
-
-    verbose("  fqLocalizations: $fqLocalizations");
-    // final LayoutManager lm = sl<LayoutManager>();
-    verbose('CommandButtons.build');
     final SessionManager sm = sl<SessionManager>();
 
     return Column(

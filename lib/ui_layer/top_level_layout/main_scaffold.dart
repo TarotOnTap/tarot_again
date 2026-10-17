@@ -2,7 +2,7 @@
 // ignore_for_file: implementation_imports
 //
 
-import 'package:flutter/src/widgets/_window.dart';
+// import 'package:flutter/src/widgets/_window.dart';
 import "package:material_ui/material_ui.dart";
 import 'package:tarot_again/util/logging.dart';
 
@@ -17,12 +17,11 @@ import 'package:tarot_again/util/logging.dart';
 @immutable
 class MainScaffold extends StatelessWidget with Logging {
   final Widget child;
-  final WindowController windowController;
 
   const MainScaffold({
     super.key,
     required this.child,
-    required this.windowController,
+    // required this.windowController,
   });
 
   @override

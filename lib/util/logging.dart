@@ -30,7 +30,7 @@ class BufferedLog {
     final res = guard<S>(() => runThis());
 
     switch (res) {
-      case Ok(v: var okay):
+      case Ok():
         add("Success: $msg");
       case Err(v: var error):
         add("Error: $error");
@@ -43,7 +43,7 @@ class BufferedLog {
     final res = guard<S>(() => runThis());
 
     switch (res) {
-      case Ok(v: var okay):
+      case Ok():
         addln("Success: $msg");
       case Err(v: var error):
         addln("Error: $error");

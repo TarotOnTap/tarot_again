@@ -1,30 +1,13 @@
-// ignore_for_file: invalid_use_of_internal_member
-// ignore_for_file: implementation_imports
-//
-
-// import 'package:material_ui/material_ui.dart';
-
-import 'package:flutter/src/widgets/_window.dart';
-// import 'package:flutter_localizations/flutter_localizations.dart'
-// show GlobalWidgetsLocalizations;
-
-// import 'package:flutter_localizations/flutter_localizations.dart' show GlobalMaterialLocalizations, GlobalWidgetsLocalizations;
-
 import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:tarot_again/util/flutter_util.dart';
 import 'package:tarot_again/util/util.dart';
-import 'package:tarot_again/ui_layer/window_hello_world.dart';
-
-import 'package:anyhow/anyhow.dart';
 
 import '../journal_editor/journal_editor.dart';
 
 class MainNavigationRail extends StatefulWidget {
-  const MainNavigationRail({super.key, required this.windowController});
-
-  final WindowController windowController;
+  const MainNavigationRail({super.key});
 
   @override
   State<MainNavigationRail> createState() => _MainNavigationRailState();
@@ -36,43 +19,6 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
   bool showLeading = false;
   bool showTrailing = false;
   double groupAlignment = -1.0;
-
-  void _journalEditorWindowBuilder() {
-    verbose("_journalEditorWindowBuilder called");
-
-    final fqLocalizations = FlutterQuillLocalizations.of(context);
-
-    verbose("  fqLocalizations: $fqLocalizations");
-
-    verbose("  creating WindowController");
-    final windowController = WindowController(
-      delegate: CallbackWindowControllerDelegate(
-        onDestroyed: () {
-          verbose("Unregistering journal editor window entry");
-        },
-      ),
-      size: const Size(700, 500),
-    );
-
-    verbose("  creating JournalEditor");
-    runWidget(
-      Builder(
-        builder: (BuildContext context) =>
-            Window(controller: windowController, child: JournalEditor()),
-      ),
-    );
-
-    //   Localizations(
-    //   locale: const Locale('en', 'US'),
-    //   delegates: [
-    //     GlobalMaterialLocalizations.delegate,
-    //     // GlobalCupertinoLocalizations.delegate,
-    //     GlobalWidgetsLocalizations.delegate,
-    //     FlutterQuillLocalizations.delegate,
-    //   ],
-    //   child: JournalEditor(),
-    // ),
-  }
 
   Widget _buildTarotLayoutChoiceChip(
     BuildContext context, {
@@ -188,8 +134,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             onPressed: () {
               verbose("journal button pushed");
 
-              guard(() => runInSeparateWindow(child: JournalEditor()))
-                  .context("_MainNavigationRailState:build: runHelloWindow()");
+              runWidget(JournalEditor());
             },
             icon: Badge(child: Icon(Icons.book)),
           ),

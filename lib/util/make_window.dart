@@ -5,9 +5,10 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/_window.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:material_ui/material_ui.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
+
 import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart'
@@ -23,16 +24,33 @@ class ExitOnCloseDelegate with WindowControllerDelegate {
   }
 }
 
-void runInSeparateWindow({required Widget child}) {
+void runInSeparateWindow({
+  bool exitOnClose = false,
+  required String windowTitle,
+  required Widget child,
+}) {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runWidget(SeparateWindow(child: child));
+  runWidget(
+    SeparateWindow(
+      windowTitle: windowTitle,
+      exitOnClose: exitOnClose,
+      child: child,
+    ),
+  );
 }
 
 /// Displays a window and owns its [WindowController].
 class SeparateWindow extends StatefulWidget {
-  const SeparateWindow({super.key, required this.child});
+  const SeparateWindow({
+    super.key,
+    required this.windowTitle,
+    required this.exitOnClose,
+    required this.child,
+  });
 
+  final bool exitOnClose;
+  final String windowTitle;
   final Widget child;
 
   @override
@@ -40,11 +58,18 @@ class SeparateWindow extends StatefulWidget {
 }
 
 class _SeparateWindowState extends State<SeparateWindow> with Logging {
-  final WindowController _controller = WindowController(
-    size: const Size(600, 400),
-    title: 'MyApp',
-    delegate: ExitOnCloseDelegate(),
-  );
+  late final WindowController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = WindowController(
+      size: const Size(800, 800),
+      title: widget.windowTitle,
+      delegate: widget.exitOnClose ? ExitOnCloseDelegate() : null,
+    );
+  }
 
   @override
   void dispose() {
@@ -54,7 +79,7 @@ class _SeparateWindowState extends State<SeparateWindow> with Logging {
 
   @override
   Widget build(BuildContext context) {
-    verbose("_HelloWindowState.build");
+    verbose("_SeparateWindowState.build");
 
     return Window(
       controller: _controller,

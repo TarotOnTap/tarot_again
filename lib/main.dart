@@ -1,32 +1,28 @@
 // ignore_for_file: invalid_use_of_internal_member
 // ignore_for_file: implementation_imports
 //
-
 import 'dart:ui';
 
-import 'package:toastification/toastification.dart';
-
 import 'package:flutter/src/widgets/_window.dart';
+import 'package:flutter/services.dart';
 
-// import 'package:material_ui/material_ui.dart' show GlobalMaterialLocalizations;
-import 'package:cupertino_ui/cupertino_ui.dart'
-    show GlobalCupertinoLocalizations;
+import 'package:material_ui/material_ui.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+
+import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart'
     show GlobalWidgetsLocalizations;
 
-import 'package:flutter_quill/flutter_quill.dart';
-
-// import 'package:fpdart/fpdart.dart' show Either;
-
 import 'ui_layer/top_level_layout/toplevel_layout.dart';
-import 'ui_layer/top_level_layout/window_settings_accessor.dart';
-import 'util/flutter_util.dart';
+
 import 'util/util.dart';
 import 'util/services.dart';
 
+// import 'util/make_window.dart';
+
 // import 'package:rust/rust.dart' show Result, Option;
-import 'package:anyhow/anyhow.dart';
+// import 'package:anyhow/anyhow.dart';
 
 void main(List<String> args) async {
   /// Initialize [GetIt] by acessing its singleton instance
@@ -44,9 +40,26 @@ void main(List<String> args) async {
   //   return ErrorWidget(details.exception);
   // };
 
-  runApp(MultiWindowApp());
+  runApp(
+    MaterialApp(
+      builder: (BuildContext context, Widget? child) {
+        return MaterialUiCompatibilityBridge(child: child!);
+      },
+      localizationsDelegates: <LocalizationsDelegate>[
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
+      home: TopLevelLayout(),
+    ),
+  );
 
-  // runApp(TarotAgainApp());
+  // runInSeparateWindow(
+  //   windowTitle: "Tarot Again",
+  //   exitOnClose: true,
+  //   child: TopLevelLayout(),
+  // );
 }
 
 class MainControllerWindowDelegate with WindowControllerDelegate {
@@ -64,14 +77,23 @@ class MultiWindowApp extends StatefulWidget {
   State<MultiWindowApp> createState() => _MultiWindowAppState();
 }
 
-class _MultiWindowAppState extends State<MultiWindowApp> with Logging {
+class _MultiWindowAppState extends State<MultiWindowApp> {
   final WindowController controller = WindowController(
     size: const Size(800, 600),
     title: 'Tarot Again',
     delegate: MainControllerWindowDelegate(),
   );
 
-  final WindowSettings settings = WindowSettings();
+  @override
+  void initState() {
+    super.initState();
+
+    sl.registerSingleton<WindowController>(
+      controller,
+      instanceName: "mainWindowController",
+    );
+  }
+  // final WindowSettings settings = WindowSettings();
 
   @override
   void dispose() {
@@ -79,86 +101,20 @@ class _MultiWindowAppState extends State<MultiWindowApp> with Logging {
     super.dispose();
   }
 
-  Widget _makeMaterialApp({required Widget child}) {
-    final String title = 'Tarot Again';
-
-    Result<ThemeData> themeData = guard(
-      () => ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
-        brightness: Brightness.light,
-      ),
-    ).context("_makeMaterialApp: attempting to create ThemeData");
-
-    final tdMap = themeData
-        .map(
-          (td) => guard(
-            () => MaterialApp(
-              builder: (BuildContext context, Widget? child) {
-                return MaterialUiCompatibilityBridge(child: child!);
-              },
-              title: title,
-              home: child,
-              theme: td,
-              localizationsDelegates: [
-                GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                FlutterQuillLocalizations.delegate,
-              ],
-              supportedLocales: [Locale('en', 'US')],
-            ),
-          ).context("_makeMaterialApp: attempting to create MaterialApp"),
-        )
-        .flatten();
-
-    return switch (tdMap) {
-      Ok(v: var okay) => okay,
-      Err(v: var error) => Placeholder(child: Text("Error: $error")),
-    };
-  }
-
-  Result<Widget> _makeToastWrapper(BuildContext context) {
-    return guard(
-      () => ToastificationWrapper(
-        child: _makeMaterialApp(
-          child: TopLevelLayout(windowController: controller),
-        ),
-      ),
-    );
-  }
-
-  WindowEntry _makeMainWindowEntry(BuildContext context) => WindowEntry(
-    controller: controller,
-    builder: (context) =>
-        _makeToastWrapper(context)
-            .context("_makeMainWindowEntry: builder anonymous function")
-            .unwrap(),
-  );
-
   @override
   Widget build(BuildContext context) {
-    final mainWindowEntry = guard(() => _makeMainWindowEntry(context))
-        .context("_MultiWindowAppState.build: _makeMainWindowEntry");
-
-    final windowManager = mainWindowEntry
-        .map((mwe) => guard(() => WindowManager(initialWindows: [mwe])))
-        .flatten()
-        .context("_MultiWindowAppState.build: creating windowManager");
-
-    final windowSettingsAccessor = windowManager
-        .map(
-          (wm) => guard(
-            () => WindowSettingsAccessor(windowSettings: settings, child: wm),
+    return WindowManager(
+      initialWindows: [
+        WindowEntry(
+          controller: controller,
+          builder: (context) => MaterialApp(
+            builder: (BuildContext context, Widget? child) {
+              return MaterialUiCompatibilityBridge(child: child!);
+            },
+            home: TopLevelLayout(),
           ),
-        )
-        .flatten()
-        .context("_MultiWindowAppState.build: creating WindowSettingsAccessor");
-
-    return switch (windowSettingsAccessor) {
-      Ok(v: var okay) => okay,
-      Err(v: var error) => Placeholder(
-        child: Text("_MultiWindowAppState.build: Error: $error"),
-      ),
-    };
+        ),
+      ],
+    );
   }
 }
