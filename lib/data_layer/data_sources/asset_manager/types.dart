@@ -90,13 +90,3 @@ const TCModelAssets emptyTCModelAssets = (
   uprightMeaning: Option.none(),
   image: Option.none(),
 );
-
-// @Freezed(fromJson: false, toJson: false)
-// abstract class TCModelAssets with _$TCModelAssets {
-//   const factory TCModelAssets({
-//     @Default(Option<String>.none()) Option<String> description,
-//     @Default(Option<String>.none()) Option<String> reversedMeaning,
-//     @Default(Option<String>.none()) Option<String> uprightMeaning,
-//     @Default(Option<AssetGenImage>.none()) Option<AssetGenImage> image,
-//   }) = _TCModelAssets;
-// }

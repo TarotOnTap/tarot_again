@@ -55,20 +55,14 @@ class ComputedsManager(final SignalsManager signalsManager) with Logging {
               (index) =>
                   GlobalKey<PositionSlotWidgetState>(debugLabel: "slot $index"),
             )
-            .toIList()
-            .also((it) {
-              Logging.sVerbose("slotKeys for SimpleGrid: $it");
-            }),
+            .toIList(),
       NewTarotLayout nt =>
         nt.positions
             .map(
               (position) =>
                   GlobalKey<PositionSlotWidgetState>(debugLabel: position.name),
             )
-            .toIList()
-            .also((it) {
-              Logging.sVerbose("slotKeys for NewTarotLayout: $it");
-            }),
+            .toIList(),
     }),
   );
 

@@ -1,6 +1,4 @@
-// import 'package:align_positioned/align_positioned.dart';
 import 'package:material_ui/material_ui.dart';
-// import 'package:tarot_again/ui_layer/card_widget/card_widget.dart';
 import 'package:tarot_again/util/util.dart';
 
 class LayoutBackground({super.key}) extends StatelessWidget with Logging {

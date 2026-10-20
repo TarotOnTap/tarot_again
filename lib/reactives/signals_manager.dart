@@ -1,4 +1,7 @@
 import 'package:tarot_again/util/util.dart';
+import 'package:tarot_again/util/flutter_util.dart' show TopLevelDisplay;
+
+import 'package:tarot_again/ui_layer/ui_layer.dart';
 
 // import 'hivez_persisted_signal.dart';
 
@@ -87,10 +90,22 @@ class SignalsManager(final HiveService hiveService) with Logging {
   final HivezPersistedSignal<String> tarotLayoutsHash =
       hivezPersistedSignal<String>("tarotLayoutsHash", "");
 
+  final HivezPersistedSignal<TopLevelDisplay> topLevelDisplay =
+      hivezPersistedSignal<TopLevelDisplay>(
+        "TopLevelDisplay",
+        TopLevelDisplay.cardStage,
+      );
+
   final HivezPersistedMapSignal<String, TarotLayout> existingLayoutsBox =
       hivezPersistedMapSignal<String, TarotLayout>(
         "existingLayoutsBox",
         <String, TarotLayout>{},
+      );
+
+  final HivezPersistedSignal<DestinationPaths> scaffoldChildWidget =
+      hivezPersistedSignal<DestinationPaths>(
+        "ScaffoldChildWidget",
+        DestinationPaths.cardsStageLayout,
       );
 
   late final EffectCleanup allAssetPathsEffectDisposer;

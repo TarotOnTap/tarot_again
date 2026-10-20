@@ -16,12 +16,10 @@ class HiveService with Logging {
   /// Storage options for [Hivez]
   late final BoxConfig baseOptions;
 
-  // late final Box<Object, Object?> preferences;
-
-  /// This constructor initializes the BoxConfig options necessary to
+  /// Initialize the BoxConfig options necessary to
   /// create and obtain [Hivez] boxes.
   HiveService() {
-    baseOptions = BoxConfig("", logger: hDebug, path: ".hive");
+    baseOptions = BoxConfig("", /* logger: hDebug, */ path: ".hive");
   }
 
   /// Initializes the box used to store [AssetStorageRep] instances, to maybe

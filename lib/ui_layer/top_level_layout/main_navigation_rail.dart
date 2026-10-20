@@ -1,11 +1,11 @@
-import 'package:flutter_quill/flutter_quill.dart';
-
 import 'package:flutter_lucide/flutter_lucide.dart';
+
 import 'package:tarot_again/util/flutter_util.dart';
 import 'package:tarot_again/util/util.dart';
 
-import '../journal_editor/journal_editor.dart';
+import 'package:tarot_again/ui_layer/ui_layer.dart';
 
+/// Create a navigation interface along the left side of the top-level layout.
 class MainNavigationRail extends StatefulWidget {
   const MainNavigationRail({super.key});
 
@@ -20,104 +20,79 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
   bool showTrailing = false;
   double groupAlignment = -1.0;
 
-  Widget _buildTarotLayoutChoiceChip(
-    BuildContext context, {
-    required HivezPersistedSignal<TarotLayout> signal,
-    required String key,
-  }) => SignalBuilder(
-    builder: (BuildContext context) => ChoiceChip(
-      label: Text(key),
-      selected: signal.value.displayName == key,
-      onSelected: (bool selected) {
-        if (selected) {
-          signal.value = sl<LayoutManager>().getLayoutByDisplayName(key);
-        }
+  List<Widget> _layoutOptions(BuildContext context) => sl<ComputedsManager>()
+      .layoutDisplayNames
+      .value
+      .map(
+        (e) => SimpleDialogOption(
+          onPressed: () => Navigator.pop(context, e),
+          child: Text(e),
+        ),
+      )
+      .toList();
+
+  Future<TarotLayout?> _tarotSelectionDialog(BuildContext context) async {
+    final result = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Select a layout option:'),
+          children: _layoutOptions(context),
+        );
       },
-    ),
-  );
+    );
 
-  Future<void> _tarotLayoutsDialogBuilder(BuildContext context) => showDialog(
-    context: context,
-    builder: (BuildContext context) => SignalBuilder(
-      builder: (BuildContext context) => AlertDialog.adaptive(
-        title: Text(
-          "Select a Tarot Layout",
-          // style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        content: Wrap(
-          spacing: 5.0,
-          children: sl<ComputedsManager>().layoutDisplayNames.value
-              .map(
-                (e) => _buildTarotLayoutChoiceChip(
-                  context,
-                  signal: sl<SignalsManager>().tarotLayout,
-                  key: e,
-                ),
-              )
-              .toList(),
-        ),
+    if (result != null) {
+      return sl<LayoutManager>().getLayoutByDisplayName(result);
+    }
 
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    ),
-  );
+    return null;
+  }
 
-  Future<void> _randomSourceDialogBuilder(BuildContext context) => showDialog(
-    context: context,
-    builder: (BuildContext context) => AlertDialog.adaptive(
-      title: Text(
-        "Select the source of randomness",
-        style: Theme.of(context).textTheme.headlineSmall,
+  List<Widget> _randomSourceOptions(BuildContext context) {
+    return List<Widget>.generate(
+      RandomGenerators.values.length,
+      (int index) => SimpleDialogOption(
+        onPressed: () => Navigator.pop(context, RandomGenerators.values[index]),
+        child: Text(RandomGenerators.values[index].displayName),
       ),
-      content: Wrap(
-        spacing: 5.0,
-        children: List<Widget>.generate(
-          RandomGenerators.values.length,
-          (int index) => SignalBuilder(
-            builder: (BuildContext context) => ChoiceChip(
-              label: Text(RandomGenerators.values[index].displayName),
-              selected:
-                  sl<SignalsManager>().currentRandomGenerator.value.index ==
-                  index,
-              onSelected: (bool selected) {
-                sl<SignalsManager>().currentRandomGenerator.value =
-                    RandomGenerators.values[index];
-                // Navigator.of(context).pop();
-              },
-            ),
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
+    );
+  }
+
+  Future<RandomGenerators?> _randomSourceDialogBuilder(
+    BuildContext context,
+  ) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Select a layout option:'),
+          children: _randomSourceOptions(context),
+        );
+      },
+    );
+
+    return result;
+  }
+
+  // Widget _navigatorIconButton(
+  //   BuildContext context,
+  //   Icon icon,
+  //   DestinationPaths destination,
+  // ) {
+  //   return IconButton(
+  //     onPressed: () {
+  //       verbose("journal button pushed");
+
+  //       context.go(destination.path);
+  //     },
+  //     icon: Badge(child: icon),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     verbose("Building MainNavigationRail");
-
-    final fqLocalizations = FlutterQuillLocalizations.of(context);
-
-    verbose("  fqLocalizations: $fqLocalizations");
-    // final WindowRegistry windowRegistry = WindowRegistry.of(context);
 
     return NavigationRail(
       selectedIndex: _selectedIndex,
@@ -129,45 +104,91 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
       },
       labelType: labelType,
       destinations: <NavigationRailDestination>[
-        NavigationRailDestination(
-          icon: IconButton(
-            onPressed: () {
-              verbose("journal button pushed");
+        for (final destination in DestinationPaths.values)
+          destination.destinationBuilder(context),
+        // NavigationRailDestination(
+        //   icon: _navigatorIconButton(
+        //     context,
+        //     Icon(Icons.home_outlined),
+        //     "/cardsStage",
+        //   ),
+        //   selectedIcon: _navigatorIconButton(
+        //     context,
+        //     Icon(Icons.home),
+        //     "/cardsState",
+        //   ),
+        //   label: Text('Cards'),
+        // ),
+        // NavigationRailDestination(
+        //   icon: _navigatorIconButton(
+        //     context,
+        //     Icon(Icons.book),
+        //     "/journalEditor",
+        //   ),
 
-              runWidget(JournalEditor());
-            },
-            icon: Badge(child: Icon(Icons.book)),
-          ),
-          selectedIcon: Badge(child: Icon(Icons.book)),
-          label: Text('Journal Editor'),
+        //   selectedIcon: _navigatorIconButton(
+        //     context,
+        //     Icon(Icons.book_outlined),
+        //     "/journalEditor",
+        //   ),
+        //   label: Text('Journal Editor'),
+        // ),
+        // NavigationRailDestination(
+        //   icon: _navigatorIconButton(
+        //     context,
+        //     Icon(Icons.design_services_outlined),
+        //     "/layoutEdit",
+        //   ),
+        //   selectedIcon: _navigatorIconButton(
+        //     context,
+        //     Icon(Icons.design_services),
+        //     "/layoutEdit",
+        //   ),
+        //   label: Text("Layout Editor"),
+        // ),
+        NavigationRailDestination(
+          icon: SizedBox(width: 0, height: 0),
+          selectedIcon: SizedBox(width: 0, height: 0),
+          label: Divider(height: 5, thickness: 2, color: Colors.black),
         ),
+
         NavigationRailDestination(
           icon: IconButton(
-            onPressed: () {
+            onPressed: () async {
               verbose("tarot layouts button pushed");
-              _tarotLayoutsDialogBuilder(context);
+              final result = await _tarotSelectionDialog(context);
+
+              verbose("  result was $result");
+
+              if (result != null) {
+                sl<SignalsManager>().tarotLayout.value = result;
+              }
             },
             icon: Badge(
               label: SignalBuilder(
                 builder: (BuildContext context) =>
                     Text(sl<SignalsManager>().tarotLayout.value.displayName),
               ),
-              child: Icon(LucideIcons.layout_dashboard),
+              child: Icon(Icons.dashboard_customize_outlined),
             ),
             selectedIcon: Badge(
               label: SignalBuilder(
                 builder: (BuildContext context) =>
                     Text(sl<SignalsManager>().tarotLayout.value.displayName),
               ),
-              child: Icon(LucideIcons.layout_dashboard),
+              child: Icon(Icons.dashboard_customize),
             ),
           ),
           label: Text('Layouts'),
         ),
         NavigationRailDestination(
           icon: IconButton(
-            onPressed: () {
-              _randomSourceDialogBuilder(context);
+            onPressed: () async {
+              final result = await _randomSourceDialogBuilder(context);
+
+              if (result != null) {
+                sl<SignalsManager>().currentRandomGenerator.value = result;
+              }
             },
             icon: Badge(
               label: SignalBuilder(
@@ -179,8 +200,12 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
             ),
           ),
           selectedIcon: IconButton(
-            onPressed: () {
-              _randomSourceDialogBuilder(context);
+            onPressed: () async {
+              final result = await _randomSourceDialogBuilder(context);
+
+              if (result != null) {
+                sl<SignalsManager>().currentRandomGenerator.value = result;
+              }
             },
             icon: Badge(
               label: SignalBuilder(

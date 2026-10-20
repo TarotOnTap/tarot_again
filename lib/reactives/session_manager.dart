@@ -10,8 +10,6 @@ class SessionManager(
   final ComputedsManager computedsManager,
 ) with Logging {
   void _emptySlots() {
-    verbose("SessionManager()._emptySlots");
-
     for (var key in computedsManager.slotKeys.value) {
       key.currentState?.setCard(TarotDeckCards.noneCard);
     }
@@ -19,11 +17,8 @@ class SessionManager(
 
   void dealCards() {
     // requires that slots have already been laid out
-    verbose("SessionManager().dealCards");
 
     if (signalsManager.tarotLayout.value is! NullLayout) {
-      verbose("  tarotLayout.value is ${signalsManager.tarotLayout.value}");
-
       if (signalsManager.tarotLayout.value is SimpleGrid) {
         StandardDeckProvider.unShuffleDeck();
       } else {

@@ -26,7 +26,6 @@ class SelectSlotWidget extends StatelessWidget with Logging {
             slotState.showingFace == ShowingFaceEnum.front) {
           return CardWidget(slotState: slotState);
         } else {
-          // verbose("  returning CardColorBack()");
           return CardColorBack();
         }
       },
@@ -39,14 +38,6 @@ class const PositionSlotWidget({
   required final String slotName,
   required final int slotIndex,
 }) extends StatefulWidget {
-  // const PositionSlotWidget({
-  //   super.key,
-  //   required this.slotName,
-  //   required this.slotIndex,
-  //   required this.width,
-  //   required this.height,
-  // });
-
   @override
   State<PositionSlotWidget> createState() => PositionSlotWidgetState();
 }
@@ -129,12 +120,14 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> with Logging {
                 onLongPress: () => switch (slotState.assets.description) {
                   Some<String>(value: final String description) =>
                     toastification.show(
+                      context: context,
                       title: Text("Description"),
                       style: ToastificationStyle.flat,
                       autoCloseDuration: const Duration(seconds: 10),
                       description: RichText(text: TextSpan(text: description)),
                     ),
                   None() => toastification.show(
+                    context: context,
                     title: Text("Description"),
                     style: ToastificationStyle.flat,
                     autoCloseDuration: const Duration(seconds: 10),
@@ -147,6 +140,7 @@ class PositionSlotWidgetState extends State<PositionSlotWidget> with Logging {
                     .push(DetailPopupMain<void>(slotIndex: widget.slotIndex)),
                 onDoubleTap: () => setFaceUp(ShowingFaceEnum.front),
                 onSecondaryTap: () => toastification.show(
+                  context: context,
                   title: Text("onSecondaryTap handler"),
                   style: ToastificationStyle.flat,
                   autoCloseDuration: const Duration(seconds: 3),

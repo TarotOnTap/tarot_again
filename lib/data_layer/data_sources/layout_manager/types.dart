@@ -2,10 +2,7 @@ import 'package:tarot_again/util/util.dart';
 
 export 'position_representation.dart';
 
-// that are used
-
-part 'types.freezed.dart'; // j
-//
+part 'types.freezed.dart';
 part 'types.g.dart';
 
 class LayoutSlot {

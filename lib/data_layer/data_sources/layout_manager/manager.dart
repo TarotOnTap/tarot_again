@@ -18,14 +18,9 @@ class LayoutManager(
   final SignalsManager signalsManager,
   final ComputedsManager computedsManager,
 ) with Logging {
-  // LayoutManager() {
-  //   verbose("LayoutManager.LayoutManager");
-  // }
-
   Future<void> generateLayoutsFile(String? fileName) async {
     if (fileName != null) {
       final layoutString = generateLayouts();
-      verbose(" generated layout: layout string is\n$layoutString");
 
       File outputFile = File(fileName);
       try {

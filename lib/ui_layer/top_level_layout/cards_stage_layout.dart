@@ -4,52 +4,55 @@ import 'package:tarot_again/ui_layer/layout_widget/layout_widget.dart';
 import 'package:tarot_again/ui_layer/layout_widget/layout_background.dart';
 import 'package:tarot_again/util/util.dart';
 
-import 'package:flutter_quill/flutter_quill.dart';
+import '../sidebar_layout/sidebar_layout.dart';
+import 'command_buttons.dart';
 
 @immutable
 class CardsStageLayout extends StatelessWidget with Logging {
   const CardsStageLayout({super.key});
 
+  Widget _buildCardsState(BuildContext context, BoxConstraints constraints) =>
+      SizedBox(
+        width: constraints.maxWidth,
+        height: constraints.maxHeight,
+        child: Stack(
+          children: <Widget>[
+            Center(child: LayoutBackground()),
+            Center(child: LayoutWidget()),
+            AlignPositioned(
+              alignment: Alignment.topLeft,
+              dx: 5,
+              dy: 5,
+              touch: Touch.inside,
+              child: SignalBuilder(
+                builder: (context) => Text(
+                  sl<SignalsManager>().tarotLayout.value.displayName,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     verbose("Building CardsStageLayout");
 
-    final fqLocalizations = FlutterQuillLocalizations.of(context);
-    verbose("  fqLocalizations: $fqLocalizations");
-
     return LayoutBuilder(
       builder: (context, constraints) {
-        verbose("CardStateLayout.build builder: constraints are $constraints");
-
-        final fqLocalizations = FlutterQuillLocalizations.of(context);
-        verbose("  fqLocalizations: $fqLocalizations");
+        verbose("CardStageLayout.build builder: constraints are $constraints");
 
         sl<SignalsManager>().cardWidth.value = constraints.maxWidth / 6;
         sl<SignalsManager>().cardHeight.value =
             sl<SignalsManager>().cardWidth.value * 1.6;
-        verbose(
-          "CardStateLayout.build: cardWidth is ${sl<SignalsManager>().cardWidth.value}, cardHeight is ${sl<SignalsManager>().cardHeight.value}",
-        );
 
-        return SizedBox(
-          width: constraints.maxWidth,
-          height: constraints.maxHeight,
-          child: Stack(
+        return Expanded(
+          child: Row(
             children: <Widget>[
-              Center(child: LayoutBackground()),
-              Center(child: LayoutWidget()),
-              AlignPositioned(
-                alignment: Alignment.topLeft,
-                dx: 5,
-                dy: 5,
-                touch: Touch.inside,
-                child: SignalBuilder(
-                  builder: (context) => Text(
-                    sl<SignalsManager>().tarotLayout.value.displayName,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ),
-              ),
+              Flexible(child: CommandButtons()),
+              Expanded(flex: 3, child: _buildCardsState(context, constraints)),
+              Expanded(flex: 1, child: SidebarLayout()),
             ],
           ),
         );

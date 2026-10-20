@@ -6,7 +6,10 @@ class NoCardDealt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO I think I would prefer to display an icon here to plain text.
-    return SizedBox(width: 70, height: 120, child: Center(child: Text("?")));
+    return SizedBox(
+      width: 70,
+      height: 120,
+      child: Center(child: Icon(Icons.question_mark)),
+    );
   }
 }

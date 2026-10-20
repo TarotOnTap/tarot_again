@@ -42,7 +42,7 @@ class HivezPersistedSignal<T> extends Signal<T> with Logging {
       persistedName,
       path: ".persistedStorage",
       collection: "persistedStorage",
-      logger: hDebug,
+      // logger: hDebug,
     );
 
     hiveBox = sl<HiveService>().ensureBox<String, T>(

@@ -1,34 +1,16 @@
-// ignore_for_file: invalid_use_of_internal_member
-// ignore_for_file: implementation_imports
-//
-
-import 'package:flutter/src/widgets/_window.dart';
-
 import 'dart:convert';
 import 'dart:io' as io show Directory, File;
 
-// import 'package:flutter/src/widgets/_window.dart';
-
 import 'package:tarot_again/util/flutter_util.dart';
 
-// import 'package:material_ui/material_ui.dart';
-import 'package:cupertino_ui/cupertino_ui.dart';
-
 import 'package:flutter_quill/flutter_quill.dart';
-
-import 'package:flutter_localizations/flutter_localizations.dart'
-    show GlobalWidgetsLocalizations;
 
 import 'package:tarot_again/util/util.dart';
 
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:path/path.dart' as path;
 
-class JournalEditor extends StatefulWidget with Logging {
-  JournalEditor({super.key}) {
-    verbose("JournalEditor constructor called");
-  }
-
+class const JournalEditor({super.key}) extends StatefulWidget with Logging {
   // final WindowController windowController;
 
   @override
@@ -36,18 +18,6 @@ class JournalEditor extends StatefulWidget with Logging {
 }
 
 class _JournalEditorState extends State<JournalEditor> with Logging {
-  // final WindowController windowController = WindowController(
-  //   size: const Size(800, 600),
-  //   title: 'Tarot Again app',
-  //   delegate: WindowControllerDelegate(),
-  // );
-  // final WindowSettings settings = RegularWindowSettings();
-
-  final subWindowController = WindowController.shrinkWrap(
-    delegate: CallbackWindowControllerDelegate(onDestroyed: () {}),
-    title: 'Journal Editor',
-  );
-
   final QuillController _controller = () {
     Logging.sVerbose(
       "_JournalEditorState: initializer creating QuillController _controller",
@@ -94,108 +64,96 @@ class _JournalEditorState extends State<JournalEditor> with Logging {
   Widget build(BuildContext context) {
     verbose("_JournalEditorState build() called");
 
-    Widget editor = MaterialApp(
-      builder: (BuildContext context, Widget? child) {
-        return MaterialUiCompatibilityBridge(child: child!);
-      },
-      localizationsDelegates: <LocalizationsDelegate>[
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        FlutterQuillLocalizations.delegate,
-      ],
-      home: Scaffold(
-        body: Column(
-          children: [
-            QuillSimpleToolbar(
-              controller: _controller,
-              config: QuillSimpleToolbarConfig(
-                embedButtons: FlutterQuillEmbeds.toolbarButtons(),
-                showClipboardPaste: true,
-                showDirection: true,
-                customButtons: [
-                  QuillToolbarCustomButtonOptions(
-                    icon: const Icon(Icons.add_alarm_rounded),
-                    onPressed: () {
-                      _controller.document.insert(
-                        _controller.selection.extentOffset,
-                        TimeStampEmbed(DateTime.now().toString()),
-                      );
+    Widget editor = Column(
+      children: [
+        QuillSimpleToolbar(
+          controller: _controller,
+          config: QuillSimpleToolbarConfig(
+            embedButtons: FlutterQuillEmbeds.toolbarButtons(),
+            showClipboardPaste: true,
+            showDirection: true,
+            customButtons: [
+              QuillToolbarCustomButtonOptions(
+                icon: const Icon(Icons.add_alarm_rounded),
+                onPressed: () {
+                  _controller.document.insert(
+                    _controller.selection.extentOffset,
+                    TimeStampEmbed(DateTime.now().toString()),
+                  );
 
-                      _controller.updateSelection(
-                        TextSelection.collapsed(
-                          offset: _controller.selection.extentOffset + 1,
-                        ),
-                        ChangeSource.local,
-                      );
-                    },
-                  ),
-                ],
-                buttonOptions: QuillSimpleToolbarButtonOptions(
-                  base: QuillToolbarBaseButtonOptions(
-                    afterButtonPressed: () {
-                      final isDesktop = {
-                        TargetPlatform.linux,
-                        TargetPlatform.windows,
-                        TargetPlatform.macOS,
-                      }.contains(defaultTargetPlatform);
-                      if (isDesktop) {
-                        _editorFocusNode.requestFocus();
-                      }
-                    },
-                  ),
-                  linkStyle: QuillToolbarLinkStyleButtonOptions(
-                    validateLink: (link) {
-                      // Treats all links as valid. When launching the URL,
-                      // `https://` is prefixed if the link is incomplete (e.g., `google.com` → `https://google.com`)
-                      // however this happens only within the editor.
-                      return true;
-                    },
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: QuillEditor(
-                focusNode: _editorFocusNode,
-                scrollController: _editorScrollController,
-                controller: _controller,
-                config: QuillEditorConfig(
-                  placeholder: 'Start writing your notes...',
-                  padding: const EdgeInsets.all(16),
-                  embedBuilders: [
-                    ...FlutterQuillEmbeds.editorBuilders(
-                      imageEmbedConfig: QuillEditorImageEmbedConfig(
-                        imageProviderBuilder: (context, imageUrl) {
-                          // https://pub.dev/packages/flutter_quill_extensions#-image-assets
-                          if (imageUrl.startsWith('assets/')) {
-                            return AssetImage(imageUrl);
-                          }
-                          return null;
-                        },
-                      ),
-                      videoEmbedConfig: QuillEditorVideoEmbedConfig(
-                        customVideoBuilder: (videoUrl, readOnly) {
-                          // To load YouTube videos https://github.com/singerdmx/flutter-quill/releases/tag/v10.8.0
-                          return null;
-                        },
-                      ),
+                  _controller.updateSelection(
+                    TextSelection.collapsed(
+                      offset: _controller.selection.extentOffset + 1,
                     ),
-                    TimeStampEmbedBuilder(),
-                  ],
-                ),
+                    ChangeSource.local,
+                  );
+                },
+              ),
+            ],
+            buttonOptions: QuillSimpleToolbarButtonOptions(
+              base: QuillToolbarBaseButtonOptions(
+                afterButtonPressed: () {
+                  final isDesktop = {
+                    TargetPlatform.linux,
+                    TargetPlatform.windows,
+                    TargetPlatform.macOS,
+                  }.contains(defaultTargetPlatform);
+                  if (isDesktop) {
+                    _editorFocusNode.requestFocus();
+                  }
+                },
+              ),
+              linkStyle: QuillToolbarLinkStyleButtonOptions(
+                validateLink: (link) {
+                  // Treats all links as valid. When launching the URL,
+                  // `https://` is prefixed if the link is incomplete (e.g., `google.com` → `https://google.com`)
+                  // however this happens only within the editor.
+                  return true;
+                },
               ),
             ),
-          ],
+          ),
         ),
-      ),
+        Expanded(
+          child: QuillEditor(
+            focusNode: _editorFocusNode,
+            scrollController: _editorScrollController,
+            controller: _controller,
+            config: QuillEditorConfig(
+              placeholder: 'Start writing your notes...',
+              padding: const EdgeInsets.all(16),
+              embedBuilders: [
+                ...FlutterQuillEmbeds.editorBuilders(
+                  imageEmbedConfig: QuillEditorImageEmbedConfig(
+                    imageProviderBuilder: (context, imageUrl) {
+                      // https://pub.dev/packages/flutter_quill_extensions#-image-assets
+                      if (imageUrl.startsWith('assets/')) {
+                        return AssetImage(imageUrl);
+                      }
+                      return null;
+                    },
+                  ),
+                  videoEmbedConfig: QuillEditorVideoEmbedConfig(
+                    customVideoBuilder: (videoUrl, readOnly) {
+                      // To load YouTube videos https://github.com/singerdmx/flutter-quill/releases/tag/v10.8.0
+                      return null;
+                    },
+                  ),
+                ),
+                TimeStampEmbedBuilder(),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
 
     verbose(
       "  MaterialApp for journal editor created; calling Window with that as the child",
     );
 
-    return Window(controller: subWindowController, child: editor);
+    return editor;
+    // return Window(controller: subWindowController, child: editor);
   }
 
   @override
@@ -205,7 +163,7 @@ class _JournalEditorState extends State<JournalEditor> with Logging {
     _editorScrollController.dispose();
     _editorFocusNode.dispose();
     verbose("  calling subWindowController.destroy");
-    subWindowController.destroy();
+    // subWindowController.destroy();
     super.dispose();
   }
 }

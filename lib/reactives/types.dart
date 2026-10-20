@@ -1,34 +1,18 @@
-enum StandardTarotDecks {
-  rws("RWS Tarot Deck");
-
-  const StandardTarotDecks(this.displayName);
-
-  final String displayName;
+enum StandardTarotDecks(final String displayName) {
+  rws("RWS Tarot Deck"),
 }
 
-enum DeckTypesEnum {
+enum DeckTypesEnum(final String displayName) {
   standardTarot("StandardTarot"),
-  standardPlayingCards("StandardPlayingCards");
-
-  const DeckTypesEnum(this.displayName);
-
-  final String displayName;
+  standardPlayingCards("StandardPlayingCards"),
 }
 
-enum ShowingFaceEnum {
+enum ShowingFaceEnum(final String displayName) {
   back("Back"),
-  front("Front");
-
-  const ShowingFaceEnum(this.displayName);
-
-  final String displayName;
+  front("Front"),
 }
 
-enum ReversalEnum {
+enum ReversalEnum(final String displayName) {
   upright("Upright"),
-  reversed("Reversed");
-
-  const ReversalEnum(this.displayName);
-
-  final String displayName;
+  reversed("Reversed"),
 }

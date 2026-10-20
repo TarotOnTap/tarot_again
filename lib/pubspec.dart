@@ -3,7 +3,7 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, avoid_classes_with_only_static_members
 
 mixin Pubspec {
-  static final buildDate = DateTime.utc(2026, 10, 17, 22, 29, 52);
+  static final buildDate = DateTime.utc(2026, 10, 20, 23, 7, 42);
 
   static const name = 'tarot_again';
 
@@ -69,7 +69,7 @@ mixin Pubspec {
     'gpt_markdown': '^1.1.2',
     'path_provider': '^2.1.6',
     'sqlite3_flutter_libs': '^0.6.0+eol',
-    'go_router': '^18.0.0',
+    'go_router': '^18.1.0',
     'floating_dialog': '^1.1.1+1',
     'flutter_lucide': '^1.7.0',
     'flutter_settings_screens': '^0.3.4',

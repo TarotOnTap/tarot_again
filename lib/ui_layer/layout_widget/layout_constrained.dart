@@ -56,7 +56,6 @@ class LayoutConstrained extends StatelessWidget with Logging {
     return Center(
       child: Stack(
         children: [
-          // LayoutBackground(),
           for (var (int index, PositionRepresentation pos)
               in layoutOrder.indexed)
             _buildFromPosition(pos: pos, index: index),

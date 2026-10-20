@@ -3,22 +3,30 @@ import 'package:fpdart/fpdart.dart';
 import 'package:gap/gap.dart';
 import 'package:tarot_again/util/util.dart';
 
-class PlaintextArcanaWidget extends StatelessWidget with Logging {
-  final TarotDeckCards card;
-  final Iterable<String> names;
-
-  PlaintextArcanaWidget({super.key, required this.card, required this.names});
+class PlaintextArcanaWidget({
+  super.key,
+  required final TarotDeckCards card,
+  required final Iterable<String> names,
+}) extends StatelessWidget with Logging {
+  Iterable<Widget> genGap(Widget exist) sync* {
+    yield exist;
+    yield Gap(5);
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = TextTheme.of(context);
 
-    final List<Widget> columnChildren = [];
+    // final List<Widget> columnChildren = [ for (var item in names) (Text(item, style: theme.titleSmall), Gap(5)) ];
 
-    for (var item in names) {
-      columnChildren.add(Text(item, style: theme.titleSmall));
-      columnChildren.add(Gap(5));
-    }
+    final List<Widget> columnChildren = [
+      for (var item in names) Text(item, style: theme.titleSmall),
+    ].expand(genGap).toList();
+
+    // for (var item in names) {
+    //   columnChildren.add(Text(item, style: theme.titleSmall));
+    //   columnChildren.add(Gap(5));
+    // }
 
     if (card.romanNumber != RomanNumerals.none) {
       columnChildren.add(
