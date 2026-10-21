@@ -1,5 +1,5 @@
 export 'computeds_manager.dart';
-export 'effects_manager.dart';
+// export 'effects_manager.dart';
 export 'future_signals_manager.dart';
 export 'hivez_persisted_signal.dart';
 export 'session_manager.dart';

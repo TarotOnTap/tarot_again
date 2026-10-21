@@ -64,7 +64,7 @@ class _JournalEditorState extends State<JournalEditor> with Logging {
   Widget build(BuildContext context) {
     verbose("_JournalEditorState build() called");
 
-    Widget editor = Column(
+    return Column(
       children: [
         QuillSimpleToolbar(
           controller: _controller,
@@ -148,11 +148,11 @@ class _JournalEditorState extends State<JournalEditor> with Logging {
       ],
     );
 
-    verbose(
-      "  MaterialApp for journal editor created; calling Window with that as the child",
-    );
+    // verbose(
+    //   "  MaterialApp for journal editor created; calling Window with that as the child",
+    // );
 
-    return editor;
+    // return editor;
     // return Window(controller: subWindowController, child: editor);
   }
 

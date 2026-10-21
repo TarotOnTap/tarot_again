@@ -51,16 +51,18 @@ class CommandButtons extends StatelessWidget with Logging {
 
     return Column(
       children: <Widget>[
-        CommandButtonGroup(
-          groupLabel: "Bulk Command",
-          buttons: [
-            ("Allow reversals", null, sm.allowReversals),
-            ("Disallow reversals", null, sm.disallowReversals),
-            ("FaceUp on", null, sm.turnAllCardsFaceUp),
-            ("FaceUp off", null, sm.turnAllCardsFaceDown),
-          ],
+        Expanded(
+          child: CommandButtonGroup(
+            groupLabel: "Bulk Command",
+            buttons: [
+              ("Allow reversals", null, sm.allowReversals),
+              ("Disallow reversals", null, sm.disallowReversals),
+              ("FaceUp on", null, sm.turnAllCardsFaceUp),
+              ("FaceUp off", null, sm.turnAllCardsFaceDown),
+            ],
+          ),
         ),
-        Gap(5.0),
+        Gap(10.0),
         ElevatedButton(
           onPressed: () async => sm.dealCards(),
 

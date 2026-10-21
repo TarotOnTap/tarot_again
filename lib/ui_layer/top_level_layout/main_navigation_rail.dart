@@ -106,46 +106,7 @@ class _MainNavigationRailState extends State<MainNavigationRail> with Logging {
       destinations: <NavigationRailDestination>[
         for (final destination in DestinationPaths.values)
           destination.destinationBuilder(context),
-        // NavigationRailDestination(
-        //   icon: _navigatorIconButton(
-        //     context,
-        //     Icon(Icons.home_outlined),
-        //     "/cardsStage",
-        //   ),
-        //   selectedIcon: _navigatorIconButton(
-        //     context,
-        //     Icon(Icons.home),
-        //     "/cardsState",
-        //   ),
-        //   label: Text('Cards'),
-        // ),
-        // NavigationRailDestination(
-        //   icon: _navigatorIconButton(
-        //     context,
-        //     Icon(Icons.book),
-        //     "/journalEditor",
-        //   ),
 
-        //   selectedIcon: _navigatorIconButton(
-        //     context,
-        //     Icon(Icons.book_outlined),
-        //     "/journalEditor",
-        //   ),
-        //   label: Text('Journal Editor'),
-        // ),
-        // NavigationRailDestination(
-        //   icon: _navigatorIconButton(
-        //     context,
-        //     Icon(Icons.design_services_outlined),
-        //     "/layoutEdit",
-        //   ),
-        //   selectedIcon: _navigatorIconButton(
-        //     context,
-        //     Icon(Icons.design_services),
-        //     "/layoutEdit",
-        //   ),
-        //   label: Text("Layout Editor"),
-        // ),
         NavigationRailDestination(
           icon: SizedBox(width: 0, height: 0),
           selectedIcon: SizedBox(width: 0, height: 0),
